@@ -1,59 +1,110 @@
-# MyMemos
+# Memoirly — Personal Journal App
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.26.
+A modern full-stack journaling platform built with Angular, NestJS, Prisma, and PostgreSQL.
 
-## Development server
+---
 
-To start a local development server, run:
+## Overview
 
-```bash
-ng serve
+Memoirly is a premium personal journaling application designed as a portfolio-quality SaaS project.
+
+The goal is to showcase:
+
+- Modern frontend architecture
+- Scalable backend design
+- Clean UI/UX
+- Offline-first capabilities
+- AI-powered experiences
+
+---
+
+## Tech Stack
+
+### Frontend
+- Angular
+- TailwindCSS
+- Angular Signals
+- TipTap Editor
+
+### Backend
+- NestJS
+- Prisma ORM
+- PostgreSQL
+
+### Infrastructure
+- Vercel
+- Railway
+- Neon
+- Cloudinary
+
+---
+
+## Core Features
+
+- Rich journal editor
+- Mood tracking
+- Timeline UI
+- Full-text search
+- AI-powered summaries
+- Offline-first support
+- Calendar heatmap
+- Dark mode UI
+
+---
+
+## Frontend Structure
+
+```txt
+src/
+├── app/
+│   ├── core/
+│   ├── shared/
+│   ├── layout/
+│   ├── features/
+│   ├── pages/
+│   └── store/
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+---
 
-## Code scaffolding
+## Backend Structure
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
+```txt
+src/
+├── common/
+├── config/
+├── database/
+├── modules/
+├── prisma/
+└── main.ts
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+---
 
-```bash
-ng generate --help
-```
+## AI Features
 
-## Building
+- Weekly summaries
+- Emotional pattern detection
+- Smart title generation
+- Semantic search
 
-To build the project run:
+---
 
-```bash
-ng build
-```
+## Portfolio Goals
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+This project demonstrates:
 
-## Running unit tests
+- Enterprise architecture
+- Clean code organization
+- Reusable UI systems
+- Modern Angular patterns
+- Scalable NestJS modules
+- Responsive UI/UX
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+---
 
-```bash
-ng test
-```
+## Future Improvements
 
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- End-to-end encryption
+- AI companion
+- Mobile app support
