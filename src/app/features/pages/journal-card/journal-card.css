@@ -1,27 +1,37 @@
 @reference "tailwindcss";
 
 .journal-card-container {
-  @apply bg-white rounded-[2.5rem] p-6 md:p-8
+  /* Usamos variables para fondo, borde y color de texto */
+  background-color: var(--bg-card);
+  border-color: var(--border-color);
+  color: var(--text-main);
+
+  @apply rounded-[2.5rem] p-6 md:p-8
          flex items-center md:items-start gap-6 md:gap-10
          shadow-sm hover:shadow-xl hover:-translate-y-1
          transition-all duration-300 cursor-pointer
-         border border-transparent hover:border-gray-50;
+         border hover:border-gray-50/10;
 
-  box-shadow: 8px 8px 24px #f0f0f0, -8px -8px 24px #ffffff;
+  /* Sombra dinámica: en Dark Mode debe ser más sutil o invisible */
+  box-shadow: 8px 8px 24px var(--shadow-color);
 }
 
 .date-column {
+  /* El borde separador también debe ser dinámico */
+  border-color: var(--border-color);
   @apply flex flex-col items-center min-w-[50px] md:min-w-[70px]
-         md:border-r md:border-gray-100 md:pr-10;
+         md:border-r md:pr-10;
 }
 
 .day-number {
-  @apply text-2xl md:text-4xl font-bold text-[#6B5E4F]
-         group-hover:text-[#8E7C68] transition-colors;
+  /* Usamos la variable de acento para el número */
+  color: var(--accent-brown);
+  @apply text-2xl md:text-4xl font-bold transition-colors;
 }
 
 .day-name {
-  @apply text-[10px] font-black text-gray-300 uppercase tracking-tighter;
+  color: var(--text-muted);
+  @apply text-[10px] font-black uppercase tracking-tighter;
 }
 
 .content-area {
@@ -33,20 +43,24 @@
 }
 
 .card-title {
-  @apply font-bold text-base md:text-lg text-[#4A3F35];
+  color: var(--text-main);
+  @apply font-bold text-base md:text-lg;
 }
 
 .card-time {
-  @apply text-[10px] font-bold text-gray-300 md:opacity-0
+  color: var(--text-muted);
+  @apply text-[10px] font-bold md:opacity-0
          group-hover:opacity-100 transition-opacity;
 }
 
 .card-body {
-  @apply text-gray-400 text-xs md:text-sm leading-relaxed
+  color: var(--text-muted);
+  @apply text-xs md:text-sm leading-relaxed
          line-clamp-2 md:line-clamp-none;
 }
 
 .options-icon {
-  @apply absolute right-0 top-0 text-gray-200
+  color: var(--border-color);
+  @apply absolute right-0 top-0
          group-hover:text-gray-400 hidden md:block;
 }

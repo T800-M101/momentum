@@ -1,14 +1,40 @@
 @reference "tailwindcss";
-/* Mobile Nav Styles */
+
 .mobile-nav-container {
   @apply fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-sm z-50;
 }
+
 .mobile-nav-box {
-  @apply bg-white/90 backdrop-blur-xl rounded-[2.5rem] shadow-xl border border-white p-2;
+  /* Fondo dinámico con desenfoque */
+  background-color: color-mix(in srgb, var(--bg-card), transparent 15%);
+  border-color: var(--border-color);
+  @apply backdrop-blur-xl rounded-[2.5rem] shadow-2xl border p-2 transition-all duration-300;
 }
+
 .mobile-nav-item {
-  @apply flex flex-col items-center gap-1 py-2 px-4 rounded-full text-gray-300 transition-all;
+  @apply flex flex-col items-center gap-1 py-2 px-4 rounded-full text-gray-400 transition-all cursor-pointer;
 }
-.mobile-nav-item.active { @apply text-[#8E7C68] bg-[#F2EDE9]/50; }
-.mobile-nav-item i { @apply text-xl; }
-.mobile-nav-item span { @apply text-[9px] font-bold uppercase; }
+
+.mobile-nav-item i {
+  @apply text-xl;
+}
+
+.mobile-nav-item span {
+  @apply text-[9px] font-bold uppercase tracking-wider;
+}
+
+/* Estado activo usando variables */
+.mobile-nav-item.active {
+  background-color: var(--accent-light);
+  color: var(--accent-brown);
+}
+
+/* Estilo especial para el toggle en móvil */
+.theme-toggle-mobile {
+  @apply text-[#8E7C68] active:scale-95 transition-transform;
+}
+
+.theme-toggle-mobile i {
+  /* Un pequeño efecto de brillo para el sol/luna */
+  text-shadow: 0 0 10px rgba(142, 124, 104, 0.2);
+}
