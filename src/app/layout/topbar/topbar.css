@@ -1,0 +1,4 @@
+@reference "tailwindcss";
+.search-input {
+  @apply w-full bg-[#F5F5F5] border-none rounded-full py-3.5 pl-12 pr-4 text-sm focus:ring-2 focus:ring-[#8E7C68]/20 outline-none transition-all;
+}

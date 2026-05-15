@@ -1,0 +1,10 @@
+@reference "tailwindcss";
+
+.month-label {
+  @apply text-[10px] font-black text-gray-300 uppercase tracking-[0.2em] mb-8;
+}
+
+.custom-scrollbar::-webkit-scrollbar { width: 5px; }
+.custom-scrollbar::-webkit-scrollbar-thumb { @apply bg-gray-100 rounded-full; }
+
+

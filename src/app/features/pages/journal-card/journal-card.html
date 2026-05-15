@@ -1,1 +1,17 @@
-<p>journal-card works!</p>
+<div class="journal-card-container group">
+
+  <div class="date-column">
+    <span class="day-number">{{ day() }}</span>
+    <span class="day-name">{{ dayName() }}</span>
+  </div>
+
+  <div class="content-area">
+    <div class="card-header">
+      <h4 class="card-title">{{ title() }}</h4>
+      <span class="card-time">{{ time() }}</span>
+    </div>
+    <p class="card-body">{{ content() }}</p>
+    <i class="options-icon"></i>
+  </div>
+
+</div>
