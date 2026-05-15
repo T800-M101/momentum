@@ -1,9 +1,9 @@
 @reference "tailwindcss";
 
 .sidebar-container {
-  @apply w-72 flex flex-col p-8 border-r border-gray-100 hidden md:flex bg-white h-full;
-  /* Mantenemos la sombra consistente con el diseño neumórfico */
-  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.02);
+  background-color: var(--bg-sidebar);
+  border-color: var(--border-color);
+  @apply w-72 flex flex-col p-8 border-r hidden md:flex h-full transition-colors duration-300;
 }
 
 .sidebar-logo-section {
@@ -15,7 +15,8 @@
 }
 
 .sidebar-title {
-  @apply font-bold text-2xl tracking-tight text-[#4A3F35];
+  color: var(--text-main);
+  @apply font-bold text-2xl tracking-tight;
 }
 
 .nav-menu {
@@ -26,20 +27,25 @@
   @apply flex items-center gap-4 px-5 py-4 rounded-2xl text-gray-400 font-medium transition-all cursor-pointer;
 }
 
-.nav-item:hover {
-  @apply bg-[#FDFCFB] text-[#8E7C68];
+.nav-item.active {
+  background-color: var(--accent-light);
+  color: var(--accent-brown);
+  @apply font-bold;
 }
 
-.nav-item.active {
-  @apply bg-[#F2EDE9] text-[#6B5E4F] font-bold;
+.nav-item:hover {
+  background-color: color-mix(in srgb, var(--bg-toggle-card), transparent 50%);
+  color: var(--accent-brown);
 }
 
 .footer-section {
-  @apply space-y-6 pt-6 border-t border-gray-50;
+  border-top: 1px solid var(--border-color);
+  @apply space-y-6 pt-6;
 }
 
 .theme-toggle-card {
-  @apply flex items-center justify-between px-4 py-3 bg-[#F8F6F4] rounded-2xl;
+  background-color: var(--bg-toggle-card);
+  @apply flex items-center justify-between px-4 py-3 rounded-2xl transition-colors;
 }
 
 .toggle-label {
@@ -67,7 +73,8 @@
 }
 
 .profile-name {
-  @apply text-sm font-bold text-[#4A3F35];
+  color: var(--text-main);
+  @apply text-sm font-bold;
 }
 
 .profile-email {

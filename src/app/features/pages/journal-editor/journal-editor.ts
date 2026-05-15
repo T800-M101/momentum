@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-journal-editor',
   imports: [],
   templateUrl: './journal-editor.html',
-  styleUrl: './journal-editor.scss',
+  styleUrl: './journal-editor.css',
 })
 export class JournalEditor {
 

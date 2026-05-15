@@ -29,9 +29,14 @@
   <div class="footer-section">
 
     <div class="theme-toggle-card">
-      <span class="toggle-label">Light Mode</span>
-      <div class="toggle-switch">
-        <div class="toggle-dot"></div>
+      <span class="toggle-label">
+        {{ themeService.darkMode() ? 'Dark Mode' : 'Light Mode' }}
+      </span>
+
+      <div class="toggle-switch" (click)="themeService.toggleTheme()">
+        <div class="toggle-dot transition-all duration-300" [class.translate-x-0]="!themeService.darkMode()"
+          [class.-translate-x-5]="themeService.darkMode()">
+        </div>
       </div>
     </div>
 
