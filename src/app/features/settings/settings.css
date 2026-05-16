@@ -1,0 +1,52 @@
+@reference "tailwindcss";
+
+.settings-container {
+  @apply w-full max-w-2xl mr-auto ml-0 p-6 md:p-12;
+}
+
+.settings-title {
+  color: var(--text-main);
+  @apply text-2xl font-bold mb-8 text-left;
+}
+
+.settings-group {
+  @apply mb-10;
+}
+
+.setting-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  @apply flex items-center justify-start gap-6 p-5 rounded-3xl
+         cursor-pointer transition-all hover:shadow-md;
+}
+
+.setting-info {
+  @apply flex items-center justify-between flex-1;
+}
+
+.icon-box {
+  background-color: var(--accent-light);
+  color: var(--accent-brown);
+  @apply p-3 rounded-2xl;
+}
+
+.setting-label {
+  color: var(--text-main);
+  @apply font-bold text-sm;
+}
+
+.setting-description {
+  color: var(--text-muted);
+  @apply text-xs;
+}
+
+/* TOGGLE LOGIC */
+.toggle-switch {
+  background-color: var(--accent-brown);
+  @apply w-12 h-7 rounded-full relative flex items-center px-1 transition-colors flex-shrink-0;
+}
+
+.toggle-dot {
+  background-color: white;
+  @apply w-5 h-5 rounded-full shadow-sm transition-transform duration-300;
+}

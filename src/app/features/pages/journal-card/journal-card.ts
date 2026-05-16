@@ -33,6 +33,7 @@ export class JournalCard {
   }
 
   entry = input.required<JournalEntry>();
+
   readonly icons = {
     Images,
     Ellipsis,

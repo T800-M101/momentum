@@ -1,56 +1,41 @@
 <div class="md:hidden mobile-nav-container">
 
-  @if (showSettingsMenu()) {
-  <div class="mobile-settings-menu">
-
-    <div class="mobile-settings-item">
-
-      <div class="flex items-center gap-3">
-
-        <lucide-icon [img]="themeService.darkMode() ? icons.Moon : icons.Sun" class="mobile-theme-icon h-4 w-4">
-        </lucide-icon>
-
-        <span class="mobile-theme-label">Theme</span>
-
-      </div>
-
-      <div class="mobile-theme-switch" (click)="themeService.toggleTheme(); $event.stopPropagation()">
-
-        <div class="mobile-theme-dot" [class.translate-x-4]="themeService.darkMode()"
-          [class.translate-x-0]="!themeService.darkMode()">
-        </div>
-
-      </div>
-
-    </div>
-  </div>
-  }
-
   <nav class="mobile-nav-box">
 
     <ul class="flex justify-around items-center">
 
-      <li class="mobile-nav-item active">
+      <!-- ENTRIES -->
+      <li class="mobile-nav-item" routerLink="/entries" routerLinkActive="active" [routerLinkActiveOptions]="{
+          exact: true
+        }">
+
         <lucide-icon [img]="icons.NotebookTabs" class="h-5 w-5"></lucide-icon>
         <span>Entries</span>
       </li>
 
-      <li class="mobile-nav-item">
+      <!-- JUMP -->
+      <li class="mobile-nav-item" routerLink="/jump" routerLinkActive="active">
+
         <lucide-icon [img]="icons.CalendarDays" class="h-5 w-5"></lucide-icon>
         <span>Jump</span>
       </li>
 
-      <li class="mobile-nav-item" [class.mobile-nav-item-open]="showSettingsMenu()" (click)="toggleSettingsMenu()">
+      <!-- SETTINGS -->
+      <li class="mobile-nav-item" routerLink="/settings" routerLinkActive="active">
 
         <lucide-icon [img]="icons.Settings" class="h-5 w-5"></lucide-icon>
         <span>Settings</span>
       </li>
 
-      <li class="mobile-nav-item">
+      <!-- NEW -->
+      <li class="mobile-nav-item" routerLink="/new" routerLinkActive="active">
+
         <lucide-icon [img]="icons.SquarePen" class="h-5 w-5"></lucide-icon>
         <span>New</span>
       </li>
 
     </ul>
+
   </nav>
+
 </div>

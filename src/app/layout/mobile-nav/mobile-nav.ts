@@ -10,19 +10,20 @@ import {
   Moon,
   Sun,
 } from 'lucide-angular';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-mobile-nav',
-  imports: [LucideAngularModule],
+  imports: [LucideAngularModule, RouterModule],
   templateUrl: './mobile-nav.html',
   styleUrl: './mobile-nav.css',
 })
 export class MobileNav {
   themeService = inject(ThemeService);
-
   showSettingsMenu = signal(false);
 
-  icons = {
+  readonly icons = {
     NotebookPen,
     NotebookTabs,
     CalendarDays,

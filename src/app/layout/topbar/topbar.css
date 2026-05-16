@@ -1,12 +1,41 @@
 @reference "tailwindcss";
 
+.header-container {
+  @apply p-6 md:p-10 flex flex-col md:flex-row md:justify-end items-start md:items-center gap-4;
+}
+
+.search-wrapper {
+  @apply relative w-full md:w-80 flex items-center;
+}
+
+.search-icon {
+  color: var(--text-muted);
+  position: absolute;
+  left: 1.25rem;
+
+  top: 50%;
+  transform: translateY(-50%);
+
+  @apply h-4 w-4 pointer-events-none transition-colors
+         group-focus-within:text-[#8E7C68];
+
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
 .search-input {
   background-color: var(--bg-input);
   color: var(--text-main);
-  @apply w-full border-none rounded-full py-3.5 pl-12 pr-4 text-sm
+  @apply w-full border-none rounded-full py-3 pl-12 pr-4 text-sm
          focus:ring-2 focus:ring-[#8E7C68]/20 outline-none transition-all;
+
+  height: 2.75rem;
+  display: flex;
+  align-items: center;
 }
 
 .search-input::placeholder {
   color: var(--text-muted);
+  line-height: normal;
 }

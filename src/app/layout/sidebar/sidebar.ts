@@ -1,5 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { ThemeService } from '../../core/services/theme-service';
+import { RouterModule } from '@angular/router';
+
 import { LucideAngularModule } from 'lucide-angular';
 import {
   NotebookPen,
@@ -13,13 +15,13 @@ import {
 
 @Component({
   selector: 'app-sidebar',
-  imports: [LucideAngularModule],
+  imports: [LucideAngularModule, RouterModule ],
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.css',
 })
 export class Sidebar {
   themeService = inject(ThemeService);
-  
+
   readonly icons = {
     NotebookPen,
     NotebookTabs,
@@ -27,6 +29,6 @@ export class Sidebar {
     Settings,
     SquarePen,
     Moon,
-    Sun,
+    Sun
   };
 }

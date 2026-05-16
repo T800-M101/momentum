@@ -1,0 +1,22 @@
+<div class="mb-12">
+
+  <h3 class="month-label">
+    Jan 2023
+  </h3>
+
+  <div class="grid gap-5">
+
+    @for (
+      item of entries();
+      track item.id
+    ) {
+
+      <app-journal-card
+        [entry]="item">
+      </app-journal-card>
+
+    }
+
+  </div>
+
+</div>

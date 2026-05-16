@@ -6,14 +6,9 @@
     <app-topbar />
 
     <div class="flex-1 overflow-y-auto px-6 md:px-10 pb-32 md:pb-10 custom-scrollbar">
-      <div class="mb-12">
-        <h3 class="month-label">Jan 2023</h3>
-        <div class="grid gap-5">
-          @for (item of entries(); track item.id) {
-          <app-journal-card [entry]="item"></app-journal-card>
-          }
-        </div>
-      </div>
+
+      <router-outlet />
+
     </div>
 
     <app-mobile-nav />

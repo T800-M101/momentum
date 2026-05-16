@@ -1,0 +1,29 @@
+<div class="settings-container">
+  <h2 class="settings-title">Settings</h2>
+
+  <section class="settings-group">
+    <div class="setting-card" (click)="themeService.toggleTheme()">
+
+      <div class="toggle-switch">
+        <div class="toggle-dot"
+             [class.translate-x-5]="themeService.darkMode()"
+             [class.translate-x-0]="!themeService.darkMode()">
+        </div>
+      </div>
+
+      <div class="setting-info">
+        <div>
+          <p class="setting-label">{{themeService.darkMode() ? 'Dark Mode' : 'Light Mode'}}</p>
+          <p class="setting-description">Adjust theme color</p>
+        </div>
+        <div class="icon-box">
+          <lucide-icon
+            [img]="themeService.darkMode() ? icons.Moon : icons.Sun"
+            class="h-5 w-5">
+          </lucide-icon>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</div>
