@@ -1,6 +1,8 @@
 <header class="header-container">
-  <div class="search-wrapper group">
-    <lucide-icon [img]="icons.Search" class="search-icon"></lucide-icon>
-    <input type="text" placeholder="Search entries..." class="search-input">
-  </div>
+  @if(showSearch()){
+    <div class="search-wrapper group">
+      <lucide-icon [img]="icons.Search" class="search-icon"></lucide-icon>
+      <input type="text" placeholder="Search entries..." class="search-input">
+    </div>
+  }
 </header>
