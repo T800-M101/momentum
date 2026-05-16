@@ -1,24 +1,46 @@
 <div class="md:hidden mobile-nav-container">
+
+  @if (showSettingsMenu()) {
+  <div class="settings-popover">
+    <div class="settings-item">
+      <div class="flex items-center gap-3">
+        <lucide-icon [img]="themeService.darkMode() ? icons.Moon : icons.Sun" class="h-4 w-4 text-[#8E7C68]">
+        </lucide-icon>
+        <span class="toggle-label">Theme</span>
+      </div>
+
+      <div class="toggle-switch" (click)="themeService.toggleTheme(); $event.stopPropagation()">
+        <div class="toggle-dot" [class.translate-x-4]="themeService.darkMode()"
+          [class.translate-x-0]="!themeService.darkMode()">
+        </div>
+      </div>
+    </div>
+  </div>
+  }
+
   <nav class="mobile-nav-box">
     <ul class="flex justify-around items-center">
+
       <li class="mobile-nav-item active">
-        <i class="pi pi-list"></i>
+        <lucide-icon [img]="icons.NotebookTabs" class="h-5 w-5"></lucide-icon>
         <span>Entries</span>
       </li>
+
       <li class="mobile-nav-item">
-        <i class="pi pi-calendar"></i>
+        <lucide-icon [img]="icons.CalendarDays" class="h-5 w-5"></lucide-icon>
         <span>Jump</span>
       </li>
 
-      <li class="mobile-nav-item theme-toggle-mobile" (click)="themeService.toggleTheme()">
-        <i [class]="themeService.darkMode() ? 'pi pi-sun' : 'pi pi-moon'"></i>
-        <span>{{ themeService.darkMode() ? 'Light' : 'Dark' }}</span>
+      <li class="mobile-nav-item" [class.text-[#8E7C68]]="showSettingsMenu()" (click)="toggleSettingsMenu()">
+        <lucide-icon [img]="icons.Settings" class="h-5 w-5"></lucide-icon>
+        <span>Settings</span>
       </li>
 
       <li class="mobile-nav-item">
-        <i class="pi pi-plus"></i>
+        <lucide-icon [img]="icons.SquarePen" class="h-5 w-5"></lucide-icon>
         <span>New</span>
       </li>
+
     </ul>
   </nav>
 </div>

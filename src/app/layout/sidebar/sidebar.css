@@ -57,7 +57,7 @@
 }
 
 .toggle-dot {
-  @apply bg-white w-3.5 h-3.5 rounded-full ml-auto shadow-sm;
+  @apply bg-white w-3.5 h-3.5 rounded-full shadow-sm;
 }
 
 .profile-section {

@@ -1,11 +1,10 @@
 @reference "tailwindcss";
 
-.mobile-nav-container {
+mobile-nav-container {
   @apply fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-sm z-50;
 }
 
 .mobile-nav-box {
-  /* Fondo dinámico con desenfoque */
   background-color: color-mix(in srgb, var(--bg-card), transparent 15%);
   border-color: var(--border-color);
   @apply backdrop-blur-xl rounded-[2.5rem] shadow-2xl border p-2 transition-all duration-300;
@@ -15,26 +14,40 @@
   @apply flex flex-col items-center gap-1 py-2 px-4 rounded-full text-gray-400 transition-all cursor-pointer;
 }
 
-.mobile-nav-item i {
-  @apply text-xl;
-}
-
 .mobile-nav-item span {
   @apply text-[9px] font-bold uppercase tracking-wider;
 }
 
-/* Estado activo usando variables */
 .mobile-nav-item.active {
   background-color: var(--accent-light);
   color: var(--accent-brown);
 }
 
-/* Estilo especial para el toggle en móvil */
-.theme-toggle-mobile {
-  @apply text-[#8E7C68] active:scale-95 transition-transform;
+.settings-popover {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  @apply absolute bottom-24 right-4 rounded-3xl shadow-2xl p-5 min-w-[200px] z-50 transition-all;
+  animation: popIn 0.2s ease-out;
 }
 
-.theme-toggle-mobile i {
-  /* Un pequeño efecto de brillo para el sol/luna */
-  text-shadow: 0 0 10px rgba(142, 124, 104, 0.2);
+.settings-item {
+  @apply flex items-center justify-between gap-4;
+}
+
+.toggle-label {
+  color: var(--text-main);
+  @apply text-sm font-semibold;
+}
+
+.toggle-switch {
+  @apply w-10 h-6 bg-[#8E7C68] rounded-full relative flex items-center px-1 cursor-pointer;
+}
+
+.toggle-dot {
+  @apply bg-white w-4 h-4 rounded-full shadow-sm transition-transform duration-300;
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: translateY(10px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
