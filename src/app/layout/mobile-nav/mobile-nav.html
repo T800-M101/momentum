@@ -1,24 +1,33 @@
 <div class="md:hidden mobile-nav-container">
 
   @if (showSettingsMenu()) {
-  <div class="settings-popover">
-    <div class="settings-item">
+  <div class="mobile-settings-menu">
+
+    <div class="mobile-settings-item">
+
       <div class="flex items-center gap-3">
-        <lucide-icon [img]="themeService.darkMode() ? icons.Moon : icons.Sun" class="h-4 w-4 text-[#8E7C68]">
+
+        <lucide-icon [img]="themeService.darkMode() ? icons.Moon : icons.Sun" class="mobile-theme-icon h-4 w-4">
         </lucide-icon>
-        <span class="toggle-label">Theme</span>
+
+        <span class="mobile-theme-label">Theme</span>
+
       </div>
 
-      <div class="toggle-switch" (click)="themeService.toggleTheme(); $event.stopPropagation()">
-        <div class="toggle-dot" [class.translate-x-4]="themeService.darkMode()"
+      <div class="mobile-theme-switch" (click)="themeService.toggleTheme(); $event.stopPropagation()">
+
+        <div class="mobile-theme-dot" [class.translate-x-4]="themeService.darkMode()"
           [class.translate-x-0]="!themeService.darkMode()">
         </div>
+
       </div>
+
     </div>
   </div>
   }
 
   <nav class="mobile-nav-box">
+
     <ul class="flex justify-around items-center">
 
       <li class="mobile-nav-item active">
@@ -31,7 +40,8 @@
         <span>Jump</span>
       </li>
 
-      <li class="mobile-nav-item" [class.text-[#8E7C68]]="showSettingsMenu()" (click)="toggleSettingsMenu()">
+      <li class="mobile-nav-item" [class.mobile-nav-item-open]="showSettingsMenu()" (click)="toggleSettingsMenu()">
+
         <lucide-icon [img]="icons.Settings" class="h-5 w-5"></lucide-icon>
         <span>Settings</span>
       </li>

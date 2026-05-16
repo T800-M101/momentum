@@ -1,9 +1,17 @@
 export interface JournalEntry {
   id: string;
+  day: number;
+  dayName: string;
   title: string;
   content: string;
-  mood?: string;
-  tags?: string[];
-  createdAt: Date;
-  updatedAt: Date;
+  time: string;
+  mood: 'happy' | 'productive' | 'sad' | 'neutral';
+  mediaCount?: number;
+}
+
+export interface MoodOption {
+  value: string;
+  emoji: string;
+  label: string;
+  color: string; 
 }

@@ -1,30 +1,21 @@
 @reference "tailwindcss";
 
 .journal-card-container {
-  /* Usamos variables para fondo, borde y color de texto */
   background-color: var(--bg-card);
   border-color: var(--border-color);
   color: var(--text-main);
-
-  @apply rounded-[2.5rem] p-6 md:p-8
-         flex items-center md:items-start gap-6 md:gap-10
-         shadow-sm hover:shadow-xl hover:-translate-y-1
-         transition-all duration-300 cursor-pointer
-         border hover:border-gray-50/10;
-
-  /* Sombra dinámica: en Dark Mode debe ser más sutil o invisible */
+  @apply rounded-[2.5rem] p-6 md:p-8 flex items-center md:items-start gap-6 md:gap-10
+         shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300
+         cursor-pointer border hover:border-gray-50/10;
   box-shadow: 8px 8px 24px var(--shadow-color);
 }
 
 .date-column {
-  /* El borde separador también debe ser dinámico */
   border-color: var(--border-color);
-  @apply flex flex-col items-center min-w-[50px] md:min-w-[70px]
-         md:border-r md:pr-10;
+  @apply flex flex-col items-center min-w-[50px] md:min-w-[70px] md:border-r md:pr-10;
 }
 
 .day-number {
-  /* Usamos la variable de acento para el número */
   color: var(--accent-brown);
   @apply text-2xl md:text-4xl font-bold transition-colors;
 }
@@ -34,12 +25,17 @@
   @apply text-[10px] font-black uppercase tracking-tighter;
 }
 
+.mood-emoji-container {
+  @apply mt-4 text-xl md:text-2xl transition-transform duration-300 group-hover:scale-125;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+}
+
 .content-area {
   @apply flex-1 relative pr-8;
 }
 
 .card-header {
-  @apply flex flex-col md:flex-row md:justify-between md:items-center mb-2 gap-1;
+  @apply flex flex-col md:flex-row md:justify-between md:items-center mb-3 gap-1;
 }
 
 .card-title {
@@ -47,20 +43,143 @@
   @apply font-bold text-base md:text-lg;
 }
 
+.card-meta {
+  @apply flex items-center gap-3;
+}
+
+.media-indicator {
+  color: #16a34a;
+
+  @apply flex items-center
+  gap-1
+  text-[11px]
+  font-bold
+  transition-all
+  duration-300;
+}
+
+.journal-card-container:hover .media-indicator {
+  color: #15803d;
+
+  @apply scale-105;
+}
+
 .card-time {
   color: var(--text-muted);
-  @apply text-[10px] font-bold md:opacity-0
-         group-hover:opacity-100 transition-opacity;
+  @apply text-[10px] font-bold md:opacity-0 group-hover:opacity-100 transition-opacity;
+}
+
+.text-fade-container {
+  position: relative;
+  max-height: 4.5rem;
+  overflow: hidden;
+  mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
 }
 
 .card-body {
   color: var(--text-muted);
-  @apply text-xs md:text-sm leading-relaxed
-         line-clamp-2 md:line-clamp-none;
+  @apply text-xs md:text-sm leading-relaxed;
 }
 
 .options-icon {
   color: var(--border-color);
-  @apply absolute right-0 top-0
+  @apply absolute right-0 top-0 transition-colors
          group-hover:text-gray-400 hidden md:block;
+}
+
+.options-wrapper {
+  @apply absolute top-0 right-0;
+}
+
+.options-button {
+  color: var(--text-muted);
+
+  @apply rounded-full
+  p-1.5
+  transition-all
+  duration-200;
+}
+
+.options-button:hover {
+  background-color: color-mix(
+    in srgb,
+    var(--bg-card),
+    black 4%
+  );
+
+  color: var(--text-main);
+
+  @apply scale-105;
+}
+
+.entry-menu {
+  background-color: color-mix(
+    in srgb,
+    var(--bg-card),
+    transparent 5%
+  );
+
+  border: 1px solid var(--border-color);
+
+  @apply absolute
+  right-0
+  top-10
+  w-52
+  rounded-[1.75rem]
+  p-2
+  shadow-2xl
+  backdrop-blur-xl
+  z-50;
+
+  animation: menu-pop .18s ease-out;
+}
+
+.menu-item {
+  @apply flex items-center
+  gap-3
+  w-full
+  px-4
+  py-3
+  rounded-2xl
+  text-sm
+  transition-all
+  duration-200;
+}
+
+.menu-item:hover {
+  background-color: rgba(0,0,0,.04);
+}
+
+.menu-item.add {
+  color: #16a34a;
+}
+
+.menu-item.edit {
+  color: #2563eb;
+}
+
+.menu-item.remove {
+  color: #dc2626;
+}
+
+.menu-item.remove:hover {
+  background: rgba(220,38,38,.08);
+}
+
+@keyframes menu-pop {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+:host-context(.dark) .media-indicator {
+  background-color: rgba(168, 149, 129, 0.15);
+  border-color: rgba(168, 149, 129, 0.2);
 }

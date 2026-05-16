@@ -1,17 +1,61 @@
 <div class="journal-card-container group">
 
   <div class="date-column">
-    <span class="day-number">{{ day() }}</span>
-    <span class="day-name">{{ dayName() }}</span>
+    <span class="day-number">{{ entry().day }}</span>
+    <span class="day-name">{{ entry().dayName }}</span>
+
+    <div class="mood-emoji-container">{{ moodInfo()?.emoji }}</div>
   </div>
 
   <div class="content-area">
     <div class="card-header">
-      <h4 class="card-title">{{ title() }}</h4>
-      <span class="card-time">{{ time() }}</span>
-    </div>
-    <p class="card-body">{{ content() }}</p>
-    <i class="options-icon"></i>
-  </div>
+      <h4 class="card-title">{{ entry().title }}</h4>
 
+      <div class="card-meta">
+        @if(entry().mediaCount) {
+        <div class="media-indicator">
+          <lucide-icon [img]="icons.Images" class="h-3.5 w-3.5">
+          </lucide-icon>
+          <span>{{ entry().mediaCount }}</span>
+        </div>
+        }
+        <span class="card-time">{{ entry().time }}</span>
+      </div>
+    </div>
+
+    <div class="text-fade-container">
+      <p class="card-body">
+        {{ entry().content }}
+      </p>
+    </div>
+
+    <div class="options-wrapper">
+
+      <button class="options-button" (click)="toggleMenu($event)">
+        <lucide-icon [img]="icons.EllipsisVertical" class="h-5 w-4"></lucide-icon>
+      </button>
+
+      @if(showMenu()) {
+      <div class="entry-menu" (click)="$event.stopPropagation()">
+
+        <button class="menu-item add">
+          <lucide-icon [img]="icons.ImagePlus" class="h-4 w-4"></lucide-icon>
+          <span>Add photos</span>
+        </button>
+
+        <button class="menu-item edit">
+          <lucide-icon [img]="icons.Pencil" class="h-4 w-4"></lucide-icon>
+          <span>Edit entry</span>
+        </button>
+
+        <button class="menu-item remove">
+          <lucide-icon [img]="icons.Trash2" class="h-4 w-4"></lucide-icon>
+          <span>Remove</span>
+        </button>
+
+      </div>
+      }
+
+    </div>
+  </div>
 </div>

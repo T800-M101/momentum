@@ -11,6 +11,11 @@
   --accent-light: #F2EDE9;
   --border-color: #F3F4F6;
   --shadow-color: rgba(0, 0, 0, 0.05);
+  --nav-hover-bg: color-mix(
+    in srgb,
+    var(--bg-toggle-card),
+    transparent 50%
+  );
 }
 
 .dark {
@@ -37,4 +42,8 @@ body {
   background-color: var(--bg-main);
   color: var(--text-main);
   transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+button, [role="button"], .menu-item, .action-icon {
+  cursor: pointer;
 }

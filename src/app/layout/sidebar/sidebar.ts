@@ -19,7 +19,8 @@ import {
 })
 export class Sidebar {
   themeService = inject(ThemeService);
-  icons = {
+  
+  readonly icons = {
     NotebookPen,
     NotebookTabs,
     CalendarDays,

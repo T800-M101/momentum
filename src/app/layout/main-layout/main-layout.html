@@ -1,5 +1,4 @@
-<div class="flex h-screen overflow-hidden transition-colors duration-300"
-     style="background-color: var(--bg-main);">
+<div class="flex h-screen overflow-hidden transition-colors duration-300" style="background-color: var(--bg-main);">
 
   <app-sidebar></app-sidebar>
 
@@ -10,8 +9,8 @@
       <div class="mb-12">
         <h3 class="month-label">Jan 2023</h3>
         <div class="grid gap-5">
-          @for (day of [30, 25, 21, 20]; track day) {
-            <app-journal-card [day]="day" ... />
+          @for (item of entries(); track item.id) {
+          <app-journal-card [entry]="item"></app-journal-card>
           }
         </div>
       </div>

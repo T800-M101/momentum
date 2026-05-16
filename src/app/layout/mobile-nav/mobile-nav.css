@@ -1,21 +1,61 @@
 @reference "tailwindcss";
 
-mobile-nav-container {
-  @apply fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-sm z-50;
+/* ==========================================
+   MOBILE NAV CONTAINER
+========================================== */
+
+.mobile-nav-container {
+  @apply fixed
+  bottom-6
+  left-1/2
+  -translate-x-1/2
+  w-[90%]
+  max-w-sm
+  z-50;
 }
 
 .mobile-nav-box {
-  background-color: color-mix(in srgb, var(--bg-card), transparent 15%);
+  background-color: color-mix(
+    in srgb,
+    var(--bg-card),
+    transparent 15%
+  );
+
   border-color: var(--border-color);
-  @apply backdrop-blur-xl rounded-[2.5rem] shadow-2xl border p-2 transition-all duration-300;
+
+  @apply backdrop-blur-xl
+  rounded-[2.5rem]
+  shadow-2xl
+  border
+  p-2
+  transition-all
+  duration-300;
 }
 
+
+/* ==========================================
+   MOBILE NAV ITEMS
+========================================== */
+
 .mobile-nav-item {
-  @apply flex flex-col items-center gap-1 py-2 px-4 rounded-full text-gray-400 transition-all cursor-pointer;
+  @apply flex
+  flex-col
+  items-center
+  gap-1
+  py-2
+  px-4
+  rounded-full
+  text-gray-400
+  transition-all
+  duration-300
+  cursor-pointer;
 }
 
 .mobile-nav-item span {
-  @apply text-[9px] font-bold uppercase tracking-wider;
+  @apply text-[9px]
+  font-bold
+  uppercase
+  tracking-wider;
 }
 
 .mobile-nav-item.active {
@@ -23,31 +63,98 @@ mobile-nav-container {
   color: var(--accent-brown);
 }
 
-.settings-popover {
+.mobile-nav-item:hover {
+ background-color: var(--nav-hover-bg);
+  color: var(--accent-brown);
+}
+
+.mobile-nav-item-open {
+  color: #8E7C68;
+}
+
+
+/* ==========================================
+   SETTINGS MENU
+========================================== */
+
+.mobile-settings-menu {
   background-color: var(--bg-card);
   border: 1px solid var(--border-color);
-  @apply absolute bottom-24 right-4 rounded-3xl shadow-2xl p-5 min-w-[200px] z-50 transition-all;
-  animation: popIn 0.2s ease-out;
+
+  @apply absolute
+  bottom-24
+  right-4
+  rounded-3xl
+  shadow-2xl
+  p-5
+  min-w-[200px]
+  z-50
+  transition-all
+  duration-300;
+
+  animation: popIn .2s ease-out;
 }
 
-.settings-item {
-  @apply flex items-center justify-between gap-4;
+.mobile-settings-item {
+  @apply flex
+  items-center
+  justify-between
+  gap-4;
 }
 
-.toggle-label {
+
+/* ==========================================
+   MOBILE THEME SWITCH
+========================================== */
+
+.mobile-theme-label {
   color: var(--text-main);
-  @apply text-sm font-semibold;
+
+  @apply text-sm
+  font-semibold;
 }
 
-.toggle-switch {
-  @apply w-10 h-6 bg-[#8E7C68] rounded-full relative flex items-center px-1 cursor-pointer;
+.mobile-theme-icon {
+  color: #8E7C68;
 }
 
-.toggle-dot {
-  @apply bg-white w-4 h-4 rounded-full shadow-sm transition-transform duration-300;
+.mobile-theme-switch {
+  background-color: #8E7C68;
+
+  @apply w-10
+  h-6
+  rounded-full
+  relative
+  flex
+  items-center
+  px-1
+  cursor-pointer;
 }
+
+.mobile-theme-dot {
+  background-color: white;
+
+  @apply w-4
+  h-4
+  rounded-full
+  shadow-sm
+  transition-transform
+  duration-300;
+}
+
+
+/* ==========================================
+   ANIMATIONS
+========================================== */
 
 @keyframes popIn {
-  from { opacity: 0; transform: translateY(10px) scale(0.95); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }

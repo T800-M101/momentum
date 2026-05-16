@@ -1,71 +1,170 @@
 @reference "tailwindcss";
 
+/* ==========================================
+   SIDEBAR CONTAINER
+========================================== */
+
 .sidebar-container {
   background-color: var(--bg-sidebar);
   border-color: var(--border-color);
-  @apply w-72 flex flex-col p-8 border-r hidden md:flex h-full transition-colors duration-300;
+
+  @apply w-72
+  h-full
+  hidden
+  md:flex
+  flex-col
+  p-8
+  border-r
+  transition-colors
+  duration-300;
 }
 
+
+/* ==========================================
+   BRAND / LOGO
+========================================== */
+
 .sidebar-logo-section {
-  @apply flex items-center gap-3 mb-12 px-2;
+  @apply flex
+  items-center
+  gap-3
+  mb-12
+  px-2;
 }
 
 .logo-box {
-  @apply bg-[#8E7C68] p-2 rounded-xl text-white shadow-lg;
+  @apply bg-[#8E7C68]
+  p-2
+  rounded-xl
+  text-white
+  shadow-lg;
 }
 
 .sidebar-title {
   color: var(--text-main);
-  @apply font-bold text-2xl tracking-tight;
+
+  @apply text-2xl
+  font-bold
+  tracking-tight;
 }
 
+
+/* ==========================================
+   NAVIGATION
+========================================== */
+
 .nav-menu {
-  @apply flex-1 space-y-3;
+  @apply flex-1
+  space-y-3;
 }
 
 .nav-item {
-  @apply flex items-center gap-4 px-5 py-4 rounded-2xl text-gray-400 font-medium transition-all cursor-pointer;
+  @apply flex
+  items-center
+  gap-4
+  px-5
+  py-4
+  rounded-2xl
+  text-gray-400
+  font-medium
+  transition-all
+  cursor-pointer;
 }
 
 .nav-item.active {
   background-color: var(--accent-light);
   color: var(--accent-brown);
+
   @apply font-bold;
 }
 
 .nav-item:hover {
-  background-color: color-mix(in srgb, var(--bg-toggle-card), transparent 50%);
+  background-color: var(--nav-hover-bg);
   color: var(--accent-brown);
 }
 
+
+/* ==========================================
+   FOOTER SECTION
+========================================== */
+
 .footer-section {
   border-top: 1px solid var(--border-color);
-  @apply space-y-6 pt-6;
+
+  @apply pt-6
+  space-y-6;
 }
+
+
+/* ==========================================
+   THEME TOGGLE CARD
+========================================== */
 
 .theme-toggle-card {
   background-color: var(--bg-toggle-card);
-  @apply flex items-center justify-between px-4 py-3 rounded-2xl transition-colors;
+
+  @apply flex
+  items-center
+  justify-between
+  px-4
+  py-3
+  rounded-2xl
+  transition-colors;
 }
 
 .toggle-label {
-  @apply text-[10px] font-black uppercase tracking-widest text-gray-400;
+  @apply text-[10px]
+  font-black
+  uppercase
+  tracking-widest
+  text-gray-400;
 }
 
 .toggle-switch {
-  @apply w-10 h-5 bg-[#8E7C68] rounded-full relative flex items-center px-1 cursor-pointer;
+  background-color: #8E7C68;
+
+  @apply w-10
+  h-5
+  rounded-full
+  relative
+  flex
+  items-center
+  px-1
+  cursor-pointer;
 }
 
 .toggle-dot {
-  @apply bg-white w-3.5 h-3.5 rounded-full shadow-sm;
+  background-color: white;
+
+  @apply w-3.5
+  h-3.5
+  rounded-full
+  shadow-sm;
 }
 
+
+/* ==========================================
+   PROFILE SECTION
+========================================== */
+
 .profile-section {
-  @apply flex items-center gap-4 px-2;
+  @apply flex
+  items-center
+  gap-4
+  px-2;
 }
 
 .avatar {
-  @apply w-11 h-11 rounded-full bg-[#D1C7BD] flex items-center justify-center text-white font-bold shadow-inner;
+  @apply w-11
+  h-11
+  rounded-full
+  bg-[#D1C7BD]
+  flex
+  items-center
+  justify-center
+  text-white
+  font-bold
+  shadow-inner;
 }
 
 .profile-info {
@@ -74,9 +173,12 @@
 
 .profile-name {
   color: var(--text-main);
-  @apply text-sm font-bold;
+
+  @apply text-sm
+  font-bold;
 }
 
 .profile-email {
-  @apply text-[11px] text-gray-400;
+  @apply text-[11px]
+  text-gray-400;
 }
