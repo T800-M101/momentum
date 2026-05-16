@@ -1,1 +1,95 @@
-<p>jump works!</p>
+<h2>Jump to a specific date to read your memories</h2>
+<div class="date-picker" [class.is-open]="isOpen()">
+
+  <!-- Input -->
+  <div class="date-picker__input-wrapper">
+    <input
+      #inputRef
+      type="text"
+      [value]="displayValue()"
+      [placeholder]="placeholder"
+      class="date-picker__input"
+      readonly
+      (focus)="handleInputFocus()"
+      (click)="handleInputClick($event)"
+      (keydown)="handleInputKeydown($event)"
+    />
+
+    @if (displayValue() && showClearButton) {
+      <button type="button" class="date-picker__clear-btn" (click)="handleClear()" aria-label="Clear date">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    }
+
+    <button type="button" class="date-picker__calendar-btn" (click)="$event.stopPropagation(); toggleCalendar()" aria-label="Open calendar">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+        <line x1="16" y1="2" x2="16" y2="6"></line>
+        <line x1="8" y1="2" x2="8" y2="6"></line>
+        <line x1="3" y1="10" x2="21" y2="10"></line>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Popover -->
+  @if (isOpen()) {
+    <div class="date-picker__popover" #popoverRef (keydown.escape)="handleEscapeKey()">
+
+      <!-- Header -->
+      <div class="date-picker__header">
+        <button type="button" class="date-picker__nav-btn" (click)="handlePrevYear()" aria-label="Previous year">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+        <button type="button" class="date-picker__nav-btn" (click)="handlePrevMonth()" aria-label="Previous month">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+
+        <div class="date-picker__month-year">
+          <span class="date-picker__month">{{ monthName() }}</span>
+          <span class="date-picker__year">{{ year() }}</span>
+        </div>
+
+        <button type="button" class="date-picker__nav-btn" (click)="handleNextMonth()" aria-label="Next month">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+        <button type="button" class="date-picker__nav-btn" (click)="handleNextYear()" aria-label="Next year">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+      </div>
+
+      <!-- Weekday headers -->
+      <div class="date-picker__weekdays">
+        @for (day of weekDayHeaders(); track $index) {
+          <div class="date-picker__weekday">{{ day }}</div>
+        }
+      </div>
+
+      <!-- Grid -->
+      <div class="date-picker__grid">
+        @for (day of flatGrid(); track $index) {
+          <button
+            [tabindex]="$index === focusedIndex() ? 0 : -1"
+            [ngClass]="dayClasses(day, $index)"
+            [disabled]="day.isDisabled"
+            [attr.aria-label]="'Select ' + day.date.toString()"
+            [attr.aria-selected]="day.isSelected"
+            (click)="handleDateSelect(day)"
+            (keydown)="handleCalendarKeydown($event)"
+          >{{ day.date.day }}</button>
+        }
+      </div>
+
+      <!-- Footer -->
+      <div class="date-picker__footer">
+        <button type="button" class="date-picker__footer-btn" (click)="handleGoToToday()">Today</button>
+        <button type="button" class="date-picker__footer-btn" (click)="handleClearSelection()">Clear</button>
+      </div>
+
+    </div>
+  }
+</div>

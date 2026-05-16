@@ -28,6 +28,7 @@
     "@angular/forms": "^20.3.0",
     "@angular/platform-browser": "^20.3.0",
     "@angular/router": "^20.3.0",
+    "@js-temporal/polyfill": "^0.5.1",
     "@tailwindcss/typography": "^0.5.19",
     "lucide-angular": "^1.0.0",
     "rxjs": "~7.8.0",
