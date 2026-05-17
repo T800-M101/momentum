@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 export class AuthService {
   private _loggedIn = signal(!!sessionStorage.getItem('auth'));
   router = inject(Router);
+  closing = signal(false);
 
   isLoggedIn = this._loggedIn.asReadonly();
 
@@ -22,6 +23,11 @@ export class AuthService {
   logout() {
     sessionStorage.removeItem('auth');
     this._loggedIn.set(false);
+    this.closing.set(true);
+
+    setTimeout(() => {
+      this.closing.set(false);
+    }, 600);
     this.router.navigate(['/login']);
   }
 

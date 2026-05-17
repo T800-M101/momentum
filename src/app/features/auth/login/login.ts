@@ -10,15 +10,17 @@ import { Router } from '@angular/router';
   styleUrl: './login.css',
 })
 export class Login {
-  private auth = inject(AuthService);
-  private router = inject(Router);
-
+  authService = inject(AuthService);
   unlocking = signal(false);
-  turning = signal(false);
-  open = signal(false);
-  username = signal('');
-  password = signal('');
-  error = signal('');
+  turning   = signal(false);
+  open      = signal(false);
+  username  = signal('');
+  password  = signal('');
+  error     = signal('');
+
+  private router = inject(Router);
+  private shaking = signal(false);
+  isShaking = this.shaking.asReadonly();
 
   tryLogin() {
     if (!this.username() || !this.password()) {
@@ -26,15 +28,15 @@ export class Login {
       return;
     }
 
-    const ok = this.auth.login(this.username(), this.password());
+    const ok = this.authService.login(this.username(), this.password());
 
     if (ok) {
       this.error.set('');
       this.unlocking.set(true);
 
-      setTimeout(() => this.turning.set(true), 600);
-      setTimeout(() => this.open.set(true), 1000);
-      setTimeout(() => this.router.navigate(['/']), 2400);
+      setTimeout(() => this.turning.set(true), 500);
+      setTimeout(() => this.open.set(true), 800);
+      setTimeout(() => this.router.navigate(['/']), 2200);
     } else {
       this.error.set('Invalid credentials.');
       this.shake();
@@ -44,9 +46,6 @@ export class Login {
   onKeydown(event: KeyboardEvent) {
     if (event.key === 'Enter') this.tryLogin();
   }
-
-  private shaking = signal(false);
-  isShaking = this.shaking.asReadonly();
 
   private shake() {
     this.shaking.set(true);

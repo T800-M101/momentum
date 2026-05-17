@@ -2,48 +2,57 @@
 
   <!-- COVER -->
   @if(!open()) {
-  <div class="cover" [class.turning]="turning()">
+    <div class="cover"
+         [class.turning]="turning()"
+         [class.falling]="authService.closing()">
 
-    <div class="cover-header">
-      <span class="cover-title">My Journal</span>
-      <div class="cover-divider"></div>
-    </div>
-
-    <div class="padlock">
-      <div class="lock-shackle" [class.lock-shackle--open]="unlocking()"></div>
-      <div class="lock-body">
-        <div class="lock-keyhole"></div>
+      <div class="cover-header">
+        <span class="cover-title">My Journal</span>
+        <div class="cover-divider"></div>
       </div>
+
+      <div class="padlock">
+        <div class="lock-shackle" [class.lock-shackle--open]="unlocking()"></div>
+        <div class="lock-body">
+          <div class="lock-keyhole"></div>
+        </div>
+      </div>
+
+      <div class="login-box" [class.shake]="isShaking()">
+        <input
+          type="text"
+          placeholder="Username"
+          [value]="username()"
+          (input)="username.set($any($event.target).value)"
+          (keydown)="onKeydown($event)"
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          [value]="password()"
+          (input)="password.set($any($event.target).value)"
+          (keydown)="onKeydown($event)"
+        />
+        <button (click)="tryLogin()">Unlock</button>
+        @if(error()) {
+          <p class="error">{{ error() }}</p>
+        }
+      </div>
+
     </div>
-
-    <div class="login-box" [class.shake]="isShaking()">
-
-      <input type="text" placeholder="Username" [value]="username()" (input)="username.set($any($event.target).value)"
-        (keydown)="onKeydown($event)" />
-
-      <input type="password" placeholder="Password" [value]="password()"
-        (input)="password.set($any($event.target).value)" (keydown)="onKeydown($event)" />
-
-      <button (click)="tryLogin()">Unlock</button>
-
-      @if(error()) {
-      <p class="error">{{ error() }}</p>
-      }
-
-    </div>
-
-  </div>
   }
 
   <!-- INNER PAGE -->
-  <div class="app-page" [class.visible]="open()">
+  <div class="app-page"
+       [class.visible]="open()"
+       [class.falling]="authService.closing()">
 
     <span class="app-page-title">My Journal</span>
 
     <div class="app-page-lines">
       @for (line of [90, 70, 85, 60, 75]; track $index) {
-      <div class="app-page-line"></div>
-      <div class="app-page-entry" [style.width.%]="line"></div>
+        <div class="app-page-line"></div>
+        <div class="app-page-entry" [style.width.%]="line"></div>
       }
       <div class="app-page-line"></div>
     </div>

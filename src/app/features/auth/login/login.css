@@ -1,21 +1,14 @@
-/* ==========================================
-   MAIN CONTAINER
-   ========================================== */
+@reference "tailwindcss";
 
 .journal {
   position: relative;
   width: 100%;
   height: 100vh;
   overflow: hidden;
-  perspective: 1200px;
   background: #f5f1e8;
 }
 
-/* ==========================================
-   COVER SECTION - Login Screen
-   ========================================== */
-
-/* Main cover container */
+/* ── Cover ─────────────────────────────────────────── */
 .cover {
   position: absolute;
   inset: 0;
@@ -25,64 +18,49 @@
   align-items: center;
   justify-content: center;
   gap: 2rem;
-  transform-origin: left;
-  transition: transform 0.9s ease, opacity 0.6s ease;
-  pointer-events: auto;
-  z-index: 10;
-}
-
-/* Cover turning animation (when unlocking) */
-.cover.turning {
-  transform: rotateY(-110deg);
-  opacity: 0;
-  transition: transform 0.8s ease, opacity 0.5s ease;
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* Ensure inputs remain interactive while cover is visible */
-.cover:not(.turning) .login-box input,
-.cover:not(.turning) .login-box button {
-  pointer-events: auto;
-  position: relative;
   z-index: 20;
+  pointer-events: auto;
+
+  transform: translateY(0);
+  transition: transform 1s cubic-bezier(0.76, 0, 0.24, 1),
+              opacity 0.6s ease;
 }
 
-/* Cover header section */
+/* Login: cover slides fully off the top */
+.cover.turning {
+  transform: translateY(-100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Logout: cover slams back down from top */
+.cover.falling {
+  animation: slamDown 1.1s cubic-bezier(0.87, -0.41, 0.19, 1.44) forwards;
+}
+
+/* ── Cover header ──────────────────────────────────── */
 .cover-header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
+  @apply flex flex-col items-center gap-3;
 }
 
 .cover-title {
-  font-family: Georgia, 'Times New Roman', serif;
+  font-family: Georgia, serif;
   color: #C9A96E;
-  font-size: 26px;
-  font-weight: normal;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
+  @apply text-3xl font-light tracking-[0.2em] uppercase;
 }
 
 .cover-divider {
-  width: 64px;
+  width: 80px;
   height: 1px;
   background: #C9A96E;
-  opacity: 0.6;
+  @apply opacity-40;
 }
 
-/* ==========================================
-   PADLOCK - Pure CSS Lock Icon
-   ========================================== */
-
+/* ── Padlock ───────────────────────────────────────── */
 .padlock {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  @apply flex flex-col items-center mb-4;
 }
 
-/* Lock shackle (top loop of the lock) */
 .lock-shackle {
   width: 44px;
   height: 36px;
@@ -90,194 +68,144 @@
   border-bottom: none;
   border-radius: 22px 22px 0 0;
   margin-bottom: -4px;
-  transition: transform 0.4s ease;
   box-sizing: border-box;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-/* Open state for the shackle - rotates and moves */
 .lock-shackle--open {
-  transform: rotate(40deg) translateX(14px) translateY(-10px);
+  transform: rotate(45deg) translateX(12px) translateY(-10px);
 }
 
-/* Lock body (main rectangular part) */
 .lock-body {
   width: 80px;
   height: 68px;
   background: #C9A96E;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @apply rounded-xl flex items-center justify-center;
 }
 
-/* Keyhole - circular top part */
 .lock-keyhole {
   width: 14px;
   height: 14px;
   background: #2b1d16;
-  border-radius: 50%;
-  position: relative;
+  @apply rounded-full relative;
 }
 
-/* Keyhole - rectangular bottom part */
 .lock-keyhole::after {
   content: '';
-  position: absolute;
-  left: 50%;
-  top: 10px;
-  transform: translateX(-50%);
-  width: 7px;
-  height: 14px;
+  @apply absolute left-1/2 -translate-x-1/2 top-[10px] w-2 h-4 rounded-b-sm;
   background: #2b1d16;
-  border-radius: 0 0 4px 4px;
 }
 
-/* ==========================================
-   LOGIN FORM
-   ========================================== */
-
+/* ── Login form ────────────────────────────────────── */
 .login-box {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  width: 260px;
-  position: relative;
-  z-index: 15;
+  @apply flex flex-col gap-3 w-[280px] relative z-30;
 }
 
-/* Input fields styling */
 .login-box input {
-  padding: 0.65rem 1rem;
-  border-radius: 8px;
-  border: 1px solid rgba(201, 169, 110, 0.35);
-  background: rgba(255, 255, 255, 0.07);
+  @apply px-4 py-3 rounded-xl border transition-all outline-none text-sm;
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(201, 169, 110, 0.3);
   color: #f5f1e8;
-  font-size: 14px;
-  font-family: inherit;
-  outline: none;
-  transition: border-color 0.2s;
-  user-select: text;
-  -webkit-user-select: text;
 }
 
-/* Input placeholder text */
 .login-box input::placeholder {
-  color: rgba(201, 169, 110, 0.5);
+  color: rgba(201, 169, 110, 0.4);
 }
 
-/* Input focus state */
 .login-box input:focus {
+  background: rgba(255, 255, 255, 0.1);
   border-color: #C9A96E;
-  background: rgba(255, 255, 255, 0.12);
+  @apply shadow-[0_0_15px_rgba(201,169,110,0.2)];
 }
 
-/* Submit button */
 .login-box button {
-  padding: 0.65rem;
-  border-radius: 8px;
-  border: none;
+  @apply mt-2 p-3 rounded-xl font-bold uppercase tracking-widest transition-all cursor-pointer;
   background: #C9A96E;
   color: #2b1d16;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: opacity 0.2s;
-  margin-top: 4px;
+  font-size: 12px;
 }
 
-/* Button hover effect */
-.login-box button:hover {
-  opacity: 0.88;
-}
+.login-box button:hover  { @apply brightness-110 scale-[1.02]; }
+.login-box button:active { @apply scale-95; }
 
-/* Button active/click effect */
-.login-box button:active {
-  transform: scale(0.98);
-}
-
-/* Error message styling */
 .error {
-  color: #E07070;
-  font-size: 11px;
-  text-align: center;
-  margin: 0;
-  letter-spacing: 0.04em;
+  @apply text-red-400 text-[11px] text-center mt-2 font-medium;
 }
 
-/* ==========================================
-   SHAKE ANIMATION - For error feedback
-   ========================================== */
-
-.shake {
-  animation: shake 0.4s ease;
-}
-
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  20%      { transform: translateX(-8px); }
-  40%      { transform: translateX(8px); }
-  60%      { transform: translateX(-6px); }
-  80%      { transform: translateX(6px); }
-}
-
-/* ==========================================
-   APP PAGE - Main content (revealed after unlock)
-   ========================================== */
-
-/* Main app page container */
+/* ── App page ──────────────────────────────────────── */
 .app-page {
   position: absolute;
   inset: 0;
   background: #F5F0E8;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
+  @apply flex flex-col items-center justify-center gap-6 p-8;
   z-index: 1;
-  padding: 2rem;
+
   opacity: 0;
-  transform: scale(0.98);
-  transition: 0.6s ease;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease,
+              transform 0.8s cubic-bezier(0.76, 0, 0.24, 1);
 }
 
-/* Visible state for the app page */
 .app-page.visible {
   opacity: 1;
-  transform: scale(1);
+  transform: translateY(0);
   z-index: 5;
 }
 
-/* Page title styling */
+/* Logout: page slides down off screen */
+.app-page.falling {
+  opacity: 0;
+  transform: translateY(100%);
+  transition: opacity 0.5s ease,
+              transform 0.9s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+/* ── App page content ──────────────────────────────── */
 .app-page-title {
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: 20px;
-  color: #3D2B1F;
-  letter-spacing: 0.08em;
-  margin-bottom: 8px;
+  font-family: Georgia, serif;
+  @apply text-2xl font-bold text-[#3D2B1F] tracking-wide;
 }
 
-/* Container for the decorative lines */
 .app-page-lines {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 70%;
+  @apply flex flex-col gap-4 w-3/4 max-w-md;
 }
 
-/* Thin divider lines */
 .app-page-line {
   height: 1px;
   background: #C9A96E;
-  opacity: 0.4;
+  @apply opacity-30;
 }
 
-/* Thick entry indicator lines */
 .app-page-entry {
-  height: 8px;
+  height: 10px;
   background: #8B6F47;
-  opacity: 0.18;
-  border-radius: 4px;
+  @apply opacity-10 rounded-full;
 }
+
+/* ── Shake ─────────────────────────────────────────── */
+.shake {
+  animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+@keyframes shake {
+  10%, 90% { transform: translate3d(-1px, 0, 0); }
+  20%, 80% { transform: translate3d(2px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+  40%, 60%  { transform: translate3d(4px, 0, 0); }
+}
+
+@keyframes slamDown {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  40% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
