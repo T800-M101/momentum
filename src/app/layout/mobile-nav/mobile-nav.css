@@ -2,8 +2,7 @@
 
 /* ==========================================
    MOBILE NAV CONTAINER
-   ========================================== */
-
+========================================== */
 .mobile-nav-container {
   @apply fixed
   bottom-6
@@ -15,11 +14,7 @@
 }
 
 .mobile-nav-box {
-  background-color: color-mix(
-    in srgb,
-    var(--bg-card),
-    transparent 15%
-  );
+  background-color: color-mix(in srgb, var(--bg-card), transparent 15%);
   border-color: var(--border-color);
   @apply backdrop-blur-xl
   rounded-[2.5rem]
@@ -31,9 +26,8 @@
 }
 
 /* ==========================================
-   MOBILE NAV ITEMS - Adjusted for 5 items
-   ========================================== */
-
+   MOBILE NAV ITEMS
+========================================== */
 .mobile-nav-item {
   @apply flex
   flex-col
@@ -57,29 +51,24 @@
   tracking-wider;
 }
 
-.mobile-nav-item.active {
+.mobile-nav-item.active,
+.mobile-nav-item:focus,
+.mobile-nav-item:focus-visible {
   background-color: var(--accent-light);
   color: var(--accent-brown);
+  @apply font-bold;
+  filter: drop-shadow(0 2px 4px rgba(142, 124, 104, 0.3));
+  outline: none;
 }
 
-.mobile-nav-item:hover {
-  background-color: var(--nav-hover-bg);
-  color: var(--accent-brown);
-}
-
-.mobile-nav-item:active {
-  transform: scale(0.95);
-}
 
 /* ==========================================
-   LOGOUT BUTTON STYLES
-   ========================================== */
-
+   LOGOUT BUTTON
+========================================== */
 .mobile-nav-item-logout {
   color: #E07070;
   position: relative;
 }
-
 .mobile-nav-item-logout:hover {
   background-color: rgba(224, 112, 112, 0.15);
   color: #E07070;
@@ -101,10 +90,23 @@
   border-radius: 1px;
 }
 
-/* ==========================================
-   RESPONSIVE ADJUSTMENTS
-   ========================================== */
+.mobile-nav-item-logout:focus,
+.mobile-nav-item-logout:focus-visible {
+  background-color: rgba(224, 112, 112, 0.15);
+  color: #E07070;
+  filter: drop-shadow(0 2px 4px rgba(224, 112, 112, 0.3));
+  outline: none;
+  transform: none;
+}
 
+.mobile-nav-item-logout:active {
+  transform: scale(0.95);
+}
+
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
 @media (max-width: 480px) {
   .mobile-nav-item {
     @apply px-1.5 py-1;
@@ -137,17 +139,11 @@
   .mobile-nav-item span {
     font-size: 6px;
   }
-
-  .mobile-nav-item lucide-icon {
-    width: 0.875rem !important;
-    height: 0.875rem !important;
-  }
 }
 
-/* Landscape mode on small devices - CORREGIDO */
 @media (max-width: 768px) and (orientation: landscape) {
   .mobile-nav-container {
-    bottom: 0.75rem; /* Equivalente a bottom-3 en Tailwind (12px) */
+    bottom: 0.75rem;
   }
 
   .mobile-nav-item {

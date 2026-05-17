@@ -36,15 +36,19 @@
   @apply flex items-center gap-4 px-5 py-4 rounded-2xl text-gray-400 font-medium transition-all cursor-pointer;
 }
 
-.nav-item.active {
-  background-color: var(--accent-light);
-  color: var(--accent-brown);
-  @apply font-bold;
-}
-
 .nav-item:hover {
   background-color: var(--nav-hover-bg);
   color: var(--accent-brown);
+}
+
+.nav-item.active,
+.nav-item:focus,
+.nav-item:focus-visible {
+  background-color: var(--accent-light);
+  color: var(--accent-brown);
+  @apply font-bold;
+  filter: drop-shadow(0 2px 4px rgba(142, 124, 104, 0.3));
+  outline: none;
 }
 
 /* ==========================================

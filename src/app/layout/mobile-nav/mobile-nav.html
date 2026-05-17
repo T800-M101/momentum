@@ -5,39 +5,64 @@
     <ul class="flex justify-around items-center">
 
       <!-- ENTRIES -->
-      <li class="mobile-nav-item" routerLink="/entries" routerLinkActive="active" [routerLinkActiveOptions]="{
-          exact: true
-        }">
+      <li>
+        <a
+          class="mobile-nav-item"
+          routerLink="/entries"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }">
 
-        <lucide-icon [img]="icons.NotebookTabs" class="h-4 w-4"></lucide-icon>
-        <span>Entries</span>
+          <lucide-icon [img]="icons.NotebookTabs" class="h-4 w-4"></lucide-icon>
+          <span>Entries</span>
+        </a>
       </li>
 
       <!-- JUMP -->
-      <li class="mobile-nav-item" routerLink="/jump" routerLinkActive="active">
+      <li>
+        <a
+          class="mobile-nav-item"
+          routerLink="/jump"
+          routerLinkActive="active">
 
-        <lucide-icon [img]="icons.CalendarDays" class="h-4 w-4"></lucide-icon>
-        <span>Jump</span>
+          <lucide-icon [img]="icons.CalendarDays" class="h-4 w-4"></lucide-icon>
+          <span>Jump</span>
+        </a>
       </li>
 
       <!-- SETTINGS -->
-      <li class="mobile-nav-item" routerLink="/settings" routerLinkActive="active">
+      <li>
+        <a
+          class="mobile-nav-item"
+          routerLink="/settings"
+          routerLinkActive="active">
 
-        <lucide-icon [img]="icons.Settings" class="h-4 w-4"></lucide-icon>
-        <span>Settings</span>
+          <lucide-icon [img]="icons.Settings" class="h-4 w-4"></lucide-icon>
+          <span>Settings</span>
+        </a>
       </li>
 
-      <li class="mobile-nav-item" routerLink="/new" routerLinkActive="active">
+      <!-- NEW -->
+      <li>
+        <a
+          class="mobile-nav-item"
+          routerLink="/new"
+          routerLinkActive="active">
 
-        <lucide-icon [img]="icons.SquarePen" class="h-4 w-4"></lucide-icon>
-        <span>New</span>
+          <lucide-icon [img]="icons.SquarePen" class="h-4 w-4"></lucide-icon>
+          <span>New</span>
+        </a>
       </li>
 
       <!-- LOGOUT -->
-      <li class="mobile-nav-item mobile-nav-item-logout" (click)="logout()">
+      <li>
+        <button
+          type="button"
+          class="mobile-nav-item mobile-nav-item-logout"
+          (click)="logout()">
 
-        <lucide-icon [img]="icons.LogOut" class="h-4 w-4"></lucide-icon>
-        <span>Logout</span>
+          <lucide-icon [img]="icons.LogOut" class="h-4 w-4"></lucide-icon>
+          <span>Logout</span>
+        </button>
       </li>
 
     </ul>
