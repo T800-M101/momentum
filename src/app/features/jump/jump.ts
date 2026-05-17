@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { DatePicker } from '../pages/date-picker/date-picker';
+import { DatePicker } from '../../shared/date-picker/date-picker';
 import { CustomInput } from '../../shared/custom-input/custom-input';
 import { IconsService } from '../../core/services/icons/icons-service';
 
@@ -11,8 +11,6 @@ import { IconsService } from '../../core/services/icons/icons-service';
   styleUrl: './jump.css',
 })
 export class Jump {
-
   private iconsService = inject(IconsService);
   icons = this.iconsService.icons;
-
 }

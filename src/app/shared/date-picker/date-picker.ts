@@ -1,8 +1,17 @@
-import { Component, computed, effect, ElementRef, input, output, signal, viewChild } from '@angular/core';
-import { CalendarDay } from '../../../core/interfaces/temporal.interface';
+import {
+  Component,
+  computed,
+  effect,
+  ElementRef,
+  input,
+  output,
+  signal,
+  viewChild,
+} from '@angular/core';
+import { CalendarDay } from '../../core/interfaces/temporal.interface';
 import { Temporal } from '@js-temporal/polyfill';
 import { CommonModule } from '@angular/common';
-import { DatePickerEngine } from '../../../core/date-picker/date-picker-engine';
+import { DatePickerEngine } from '../../core/date-picker-engine/date-picker-engine';
 
 @Component({
   selector: 'app-date-picker',
@@ -11,17 +20,17 @@ import { DatePickerEngine } from '../../../core/date-picker/date-picker-engine';
   styleUrl: './date-picker.css',
 })
 export class DatePicker {
- // ── Inputs ─────────────────────────────────────────────
-  modelValue      = input<string | null>(null);
-  placeholder     = input<string>('Select a date');
+  // ── Inputs ─────────────────────────────────────────────
+  modelValue = input<string | null>(null);
+  placeholder = input<string>('Select a date');
   showClearButton = input<boolean>(true);
 
   // ── Outputs ────────────────────────────────────────────
   modelValueChange = output<string | null>();
-  selectDate       = output<Temporal.PlainDate | null>();
+  selectDate = output<Temporal.PlainDate | null>();
 
   // ── View children ──────────────────────────────────────
-  inputRef   = viewChild<ElementRef<HTMLInputElement>>('inputRef');
+  inputRef = viewChild<ElementRef<HTMLInputElement>>('inputRef');
   popoverRef = viewChild<ElementRef<HTMLDivElement>>('popoverRef');
 
   // ── Private ────────────────────────────────────────────
@@ -30,17 +39,17 @@ export class DatePicker {
   private clickOutsideHandler = (e: MouseEvent) => this.handleClickOutside(e);
 
   // ── Signals ────────────────────────────────────────────
-  isOpen       = signal(false);
+  isOpen = signal(false);
   focusedIndex = signal(-1);
 
   private engineState = signal(this.engine.getState());
 
-  flatGrid       = computed(() => this.engineState().grid.flat());
-  displayValue   = computed(() => this.engineState().displayValue);
-  monthLabel     = computed(() => this.engineState().monthLabel);
+  flatGrid = computed(() => this.engineState().grid.flat());
+  displayValue = computed(() => this.engineState().displayValue);
+  monthLabel = computed(() => this.engineState().monthLabel);
   weekDayHeaders = computed(() => this.engineState().weekDayHeaders);
-  monthName      = computed(() => this.monthLabel().split(' ')[0]);
-  year           = computed(() => this.monthLabel().split(' ')[1]);
+  monthName = computed(() => this.monthLabel().split(' ')[0]);
+  year = computed(() => this.monthLabel().split(' ')[1]);
 
   // ── Constructor ────────────────────────────────────────
   constructor() {
@@ -75,7 +84,10 @@ export class DatePicker {
   private syncFocusedIndex() {
     const grid = this.flatGrid();
     const selectedIndex = grid.findIndex((d) => d.isSelected);
-    if (selectedIndex >= 0) { this.focusedIndex.set(selectedIndex); return; }
+    if (selectedIndex >= 0) {
+      this.focusedIndex.set(selectedIndex);
+      return;
+    }
     const todayIndex = grid.findIndex((d) => d.isToday);
     this.focusedIndex.set(todayIndex >= 0 ? todayIndex : 0);
   }
@@ -107,10 +119,26 @@ export class DatePicker {
   }
 
   // ── Navigation ─────────────────────────────────────────
-  async handlePrevMonth() { this.engine.prevMonth(); this.updateState(); await this.focusCurrentDay(); }
-  async handleNextMonth() { this.engine.nextMonth(); this.updateState(); await this.focusCurrentDay(); }
-  async handlePrevYear()  { this.engine.prevYear();  this.updateState(); await this.focusCurrentDay(); }
-  async handleNextYear()  { this.engine.nextYear();  this.updateState(); await this.focusCurrentDay(); }
+  async handlePrevMonth() {
+    this.engine.prevMonth();
+    this.updateState();
+    await this.focusCurrentDay();
+  }
+  async handleNextMonth() {
+    this.engine.nextMonth();
+    this.updateState();
+    await this.focusCurrentDay();
+  }
+  async handlePrevYear() {
+    this.engine.prevYear();
+    this.updateState();
+    await this.focusCurrentDay();
+  }
+  async handleNextYear() {
+    this.engine.nextYear();
+    this.updateState();
+    await this.focusCurrentDay();
+  }
 
   // ── Selection ──────────────────────────────────────────
   handleDateSelect(day: CalendarDay) {
@@ -138,10 +166,14 @@ export class DatePicker {
     this.syncFocusedIndex();
   }
 
-  handleClear() { this.handleClearSelection(); }
+  handleClear() {
+    this.handleClearSelection();
+  }
 
   // ── Input events ───────────────────────────────────────
-  handleInputFocus() { /* intentionally empty */ }
+  handleInputFocus() {
+    /* intentionally empty */
+  }
 
   async handleInputClick(event: MouseEvent) {
     event.stopPropagation();
@@ -163,10 +195,26 @@ export class DatePicker {
     let nextIndex = this.focusedIndex();
 
     switch (event.key) {
-      case 'ArrowRight': event.preventDefault(); event.stopPropagation(); nextIndex++; break;
-      case 'ArrowLeft':  event.preventDefault(); event.stopPropagation(); nextIndex--; break;
-      case 'ArrowDown':  event.preventDefault(); event.stopPropagation(); nextIndex += 7; break;
-      case 'ArrowUp':    event.preventDefault(); event.stopPropagation(); nextIndex -= 7; break;
+      case 'ArrowRight':
+        event.preventDefault();
+        event.stopPropagation();
+        nextIndex++;
+        break;
+      case 'ArrowLeft':
+        event.preventDefault();
+        event.stopPropagation();
+        nextIndex--;
+        break;
+      case 'ArrowDown':
+        event.preventDefault();
+        event.stopPropagation();
+        nextIndex += 7;
+        break;
+      case 'ArrowUp':
+        event.preventDefault();
+        event.stopPropagation();
+        nextIndex -= 7;
+        break;
 
       case 'Enter':
       case ' ': {
@@ -204,14 +252,16 @@ export class DatePicker {
     }
 
     const currentDay = grid[this.focusedIndex()];
-    const nextDay    = grid[nextIndex];
+    const nextDay = grid[nextIndex];
 
     if (nextDay.date.month > currentDay.date.month || nextDay.date.year > currentDay.date.year) {
-      this.engine.nextMonth(); this.updateState();
+      this.engine.nextMonth();
+      this.updateState();
       await new Promise((r) => setTimeout(r));
     }
     if (nextDay.date.month < currentDay.date.month || nextDay.date.year < currentDay.date.year) {
-      this.engine.prevMonth(); this.updateState();
+      this.engine.prevMonth();
+      this.updateState();
       await new Promise((r) => setTimeout(r));
     }
 
@@ -222,14 +272,17 @@ export class DatePicker {
     await this.focusCurrentDay();
   }
 
-  handleEscapeKey() { this.closeCalendar(false); }
+  handleEscapeKey() {
+    this.closeCalendar(false);
+  }
 
   // ── Click outside ──────────────────────────────────────
   private handleClickOutside(event: MouseEvent) {
     const target = event.target as HTMLElement;
-    if (target.closest('.date-picker__calendar-btn') || target.closest('.date-picker__input')) return;
+    if (target.closest('.date-picker__calendar-btn') || target.closest('.date-picker__input'))
+      return;
 
-    const inputEl   = this.inputRef()?.nativeElement;
+    const inputEl = this.inputRef()?.nativeElement;
     const popoverEl = this.popoverRef()?.nativeElement;
 
     if (inputEl && !inputEl.contains(target) && popoverEl && !popoverEl.contains(target)) {
@@ -240,13 +293,13 @@ export class DatePicker {
   // ── Template helpers ───────────────────────────────────
   dayClasses(day: CalendarDay, index: number): Record<string, boolean> {
     return {
-      'date-picker__day':                true,
-      'date-picker__day--focused':       index === this.focusedIndex(),
+      'date-picker__day': true,
+      'date-picker__day--focused': index === this.focusedIndex(),
       'date-picker__day--current-month': day.isCurrentMonth,
-      'date-picker__day--other-month':   !day.isCurrentMonth,
-      'date-picker__day--today':         day.isToday,
-      'date-picker__day--selected':      day.isSelected,
-      'date-picker__day--disabled':      day.isDisabled,
+      'date-picker__day--other-month': !day.isCurrentMonth,
+      'date-picker__day--today': day.isToday,
+      'date-picker__day--selected': day.isSelected,
+      'date-picker__day--disabled': day.isDisabled,
     };
   }
 }

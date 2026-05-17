@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { JournalCard } from '../pages/journal-card/journal-card';
+import { JournalCard } from '../../shared/journal-card/journal-card';
 import { JournalService } from '../../core/services/journal/journal-service';
 
 @Component({
