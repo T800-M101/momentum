@@ -9,9 +9,10 @@ import {
   SquarePen,
   Moon,
   Sun,
+  LogOut
 } from 'lucide-angular';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { RouterModule } from '@angular/router';
+import { AuthService } from '../../core/services/auth/auth-service';
 
 @Component({
   selector: 'app-mobile-nav',
@@ -21,6 +22,7 @@ import { RouterModule } from '@angular/router';
 })
 export class MobileNav {
   themeService = inject(ThemeService);
+  private authService = inject(AuthService);
   showSettingsMenu = signal(false);
 
   readonly icons = {
@@ -31,9 +33,14 @@ export class MobileNav {
     SquarePen,
     Moon,
     Sun,
+    LogOut
   };
 
   toggleSettingsMenu() {
     this.showSettingsMenu.update((v) => !v);
+  }
+
+  logout(): void {
+    this.authService.logout();
   }
 }

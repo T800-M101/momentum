@@ -80,11 +80,47 @@
 }
 
 
+/* ==========================================
+   LOGOUT BUTTON STYLES
+   ========================================== */
+
 .logout-btn {
   @apply flex items-center gap-4 px-5 py-3 rounded-2xl transition-all duration-300
-         cursor-pointer text-gray-400 font-semibold text-sm w-full;
-  /* Efecto de fondo sutil por defecto */
+         cursor-pointer font-semibold text-sm w-full;
+
+  color: #E07070;
   background-color: transparent;
+  position: relative;
+}
+
+.logout-btn:hover {
+  background-color: rgba(224, 112, 112, 0.15);
+  color: #E07070;
+}
+
+.logout-btn:active {
+  transform: scale(0.95);
+}
+
+.logout-btn::before {
+  content: '';
+  position: absolute;
+  left: -4px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 24px;
+  background-color: var(--border-color, rgba(0, 0, 0, 0.1));
+  border-radius: 1px;
+}
+
+/* Icon styling */
+.logout-btn lucide-icon {
+  transition: transform 0.2s ease;
+}
+
+.logout-btn:hover lucide-icon {
+  transform: scale(1.1);
 }
 
 .logout-icon-box {

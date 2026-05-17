@@ -2,7 +2,7 @@
 
 /* ==========================================
    MOBILE NAV CONTAINER
-========================================== */
+   ========================================== */
 
 .mobile-nav-container {
   @apply fixed
@@ -20,9 +20,7 @@
     var(--bg-card),
     transparent 15%
   );
-
   border-color: var(--border-color);
-
   @apply backdrop-blur-xl
   rounded-[2.5rem]
   shadow-2xl
@@ -32,27 +30,28 @@
   duration-300;
 }
 
-
 /* ==========================================
-   MOBILE NAV ITEMS
-========================================== */
+   MOBILE NAV ITEMS - Adjusted for 5 items
+   ========================================== */
 
 .mobile-nav-item {
   @apply flex
   flex-col
   items-center
-  gap-1
-  py-2
-  px-4
+  justify-center
+  gap-0.5
+  py-1.5
+  px-2
   rounded-full
   text-gray-400
   transition-all
   duration-300
   cursor-pointer;
+  min-width: 48px;
 }
 
 .mobile-nav-item span {
-  @apply text-[9px]
+  @apply text-[8px]
   font-bold
   uppercase
   tracking-wider;
@@ -66,4 +65,96 @@
 .mobile-nav-item:hover {
   background-color: var(--nav-hover-bg);
   color: var(--accent-brown);
+}
+
+.mobile-nav-item:active {
+  transform: scale(0.95);
+}
+
+/* ==========================================
+   LOGOUT BUTTON STYLES
+   ========================================== */
+
+.mobile-nav-item-logout {
+  color: #E07070;
+  position: relative;
+}
+
+.mobile-nav-item-logout:hover {
+  background-color: rgba(224, 112, 112, 0.15);
+  color: #E07070;
+}
+
+.mobile-nav-item-logout:active {
+  transform: scale(0.95);
+}
+
+.mobile-nav-item-logout::before {
+  content: '';
+  position: absolute;
+  left: -4px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 24px;
+  background-color: var(--border-color, rgba(0, 0, 0, 0.1));
+  border-radius: 1px;
+}
+
+/* ==========================================
+   RESPONSIVE ADJUSTMENTS
+   ========================================== */
+
+@media (max-width: 480px) {
+  .mobile-nav-item {
+    @apply px-1.5 py-1;
+    min-width: 44px;
+  }
+
+  .mobile-nav-item span {
+    font-size: 7px;
+  }
+
+  .mobile-nav-item-logout::before {
+    display: none;
+  }
+
+  .mobile-nav-box {
+    @apply p-1.5;
+  }
+}
+
+@media (max-width: 400px) {
+  .mobile-nav-container {
+    width: 95%;
+  }
+
+  .mobile-nav-item {
+    @apply px-1 py-0.5;
+    min-width: 40px;
+  }
+
+  .mobile-nav-item span {
+    font-size: 6px;
+  }
+
+  .mobile-nav-item lucide-icon {
+    width: 0.875rem !important;
+    height: 0.875rem !important;
+  }
+}
+
+/* Landscape mode on small devices - CORREGIDO */
+@media (max-width: 768px) and (orientation: landscape) {
+  .mobile-nav-container {
+    bottom: 0.75rem; /* Equivalente a bottom-3 en Tailwind (12px) */
+  }
+
+  .mobile-nav-item {
+    @apply py-1;
+  }
+
+  .mobile-nav-item span {
+    font-size: 7px;
+  }
 }

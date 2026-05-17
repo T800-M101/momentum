@@ -9,29 +9,35 @@
           exact: true
         }">
 
-        <lucide-icon [img]="icons.NotebookTabs" class="h-5 w-5"></lucide-icon>
+        <lucide-icon [img]="icons.NotebookTabs" class="h-4 w-4"></lucide-icon>
         <span>Entries</span>
       </li>
 
       <!-- JUMP -->
       <li class="mobile-nav-item" routerLink="/jump" routerLinkActive="active">
 
-        <lucide-icon [img]="icons.CalendarDays" class="h-5 w-5"></lucide-icon>
+        <lucide-icon [img]="icons.CalendarDays" class="h-4 w-4"></lucide-icon>
         <span>Jump</span>
       </li>
 
       <!-- SETTINGS -->
       <li class="mobile-nav-item" routerLink="/settings" routerLinkActive="active">
 
-        <lucide-icon [img]="icons.Settings" class="h-5 w-5"></lucide-icon>
+        <lucide-icon [img]="icons.Settings" class="h-4 w-4"></lucide-icon>
         <span>Settings</span>
       </li>
 
-      <!-- NEW -->
       <li class="mobile-nav-item" routerLink="/new" routerLinkActive="active">
 
-        <lucide-icon [img]="icons.SquarePen" class="h-5 w-5"></lucide-icon>
+        <lucide-icon [img]="icons.SquarePen" class="h-4 w-4"></lucide-icon>
         <span>New</span>
+      </li>
+
+      <!-- LOGOUT -->
+      <li class="mobile-nav-item mobile-nav-item-logout" (click)="logout()">
+
+        <lucide-icon [img]="icons.LogOut" class="h-4 w-4"></lucide-icon>
+        <span>Logout</span>
       </li>
 
     </ul>
