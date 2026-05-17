@@ -1,0 +1,64 @@
+<div class="login-scene">
+  <div class="book">
+
+    <div class="spine"></div>
+
+    <!-- App page visible behind the cover -->
+    <div class="app-page">
+      <span class="app-page-title">My Journal</span>
+      <div class="app-page-lines">
+        @for (line of [90, 70, 85, 60, 75]; track $index) {
+          <div class="app-page-line"></div>
+          <div class="app-page-entry" [style.width.%]="line"></div>
+        }
+        <div class="app-page-line"></div>
+      </div>
+    </div>
+
+    <!-- Cover -->
+    <div
+      class="cover"
+      [class.cover--open]="open()"
+      [class.cover--shake]="isShaking()"
+    >
+      <div class="cover-front">
+
+        <span class="journal-title">My Journal</span>
+        <div class="title-divider"></div>
+
+        <!-- Pure CSS padlock -->
+        <div class="padlock">
+          <div class="lock-shackle" [class.lock-shackle--open]="unlocking()"></div>
+          <div class="lock-body">
+            <div class="lock-keyhole"></div>
+          </div>
+        </div>
+
+        <!-- Form -->
+        <div class="login-form">
+          <input
+            type="text"
+            class="login-input"
+            placeholder="Username"
+            autocomplete="off"
+            [value]="username()"
+            (input)="username.set($any($event.target).value)"
+          />
+          <input
+            type="password"
+            class="login-input"
+            placeholder="Password"
+            [value]="password()"
+            (input)="password.set($any($event.target).value)"
+            (keydown)="onKeydown($event)"
+          />
+          <span class="login-error">{{ error() }}</span>
+          <button class="login-btn" (click)="tryLogin()">Unlock</button>
+        </div>
+
+      </div>
+      <div class="cover-back"></div>
+    </div>
+
+  </div>
+</div>

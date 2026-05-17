@@ -78,3 +78,23 @@
 .profile-email {
   @apply text-[11px] text-gray-400;
 }
+
+
+.logout-btn {
+  @apply flex items-center gap-4 px-5 py-3 rounded-2xl transition-all duration-300
+         cursor-pointer text-gray-400 font-semibold text-sm w-full;
+  /* Efecto de fondo sutil por defecto */
+  background-color: transparent;
+}
+
+.logout-icon-box {
+  @apply p-2 rounded-lg bg-gray-50 transition-colors duration-300;
+}
+
+.logout-btn:hover {
+  @apply text-red-500 bg-red-50/50;
+}
+
+.logout-btn:hover .logout-icon-box {
+  @apply bg-red-100 text-red-600;
+}

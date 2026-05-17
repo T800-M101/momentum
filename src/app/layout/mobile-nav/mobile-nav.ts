@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { ThemeService } from '../../core/services/theme-service';
+import { ThemeService } from '../../core/services/theme/theme-service';
 import { LucideAngularModule } from 'lucide-angular';
 import {
   NotebookPen,

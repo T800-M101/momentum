@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import { JournalEntry, MoodOption } from '../interfaces/journal-entry.interface';
+import { JournalEntry, MoodOption } from '../../interfaces/journal-entry.interface';
 
 
 

@@ -10,7 +10,7 @@ import {
 import { LucideAngularModule } from 'lucide-angular';
 import { Images, Ellipsis, Pencil, Trash2, ImagePlus, EllipsisVertical } from 'lucide-angular';
 import { JournalEntry } from '../../../core/interfaces/journal-entry.interface';
-import { JournalService } from '../../../core/services/journal-service';
+import { JournalService } from '../../../core/services/journal/journal-service';
 
 @Component({
   selector: 'app-journal-card',

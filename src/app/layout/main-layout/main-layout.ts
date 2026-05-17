@@ -3,7 +3,7 @@ import { Component, inject } from '@angular/core';
 import { Sidebar} from '../sidebar/sidebar';
 import { Topbar } from '../topbar/topbar';
 import { MobileNav } from "../mobile-nav/mobile-nav";
-import { JournalService } from '../../core/services/journal-service';
+import { JournalService } from '../../core/services/journal/journal-service';
 
 @Component({
   selector: 'app-main-layout',

@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { ThemeService } from '../../core/services/theme-service';
+import { ThemeService } from '../../core/services/theme/theme-service';
 import { RouterModule } from '@angular/router';
 
 import { LucideAngularModule } from 'lucide-angular';
@@ -11,16 +11,19 @@ import {
   SquarePen,
   Moon,
   Sun,
+  LogOut
 } from 'lucide-angular';
+import { AuthService } from '../../core/services/auth/auth-service';
 
 @Component({
   selector: 'app-sidebar',
-  imports: [LucideAngularModule, RouterModule ],
+  imports: [LucideAngularModule, RouterModule],
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.css',
 })
 export class Sidebar {
   themeService = inject(ThemeService);
+  private authService = inject(AuthService);
 
   readonly icons = {
     NotebookPen,
@@ -29,6 +32,11 @@ export class Sidebar {
     Settings,
     SquarePen,
     Moon,
-    Sun
+    Sun,
+    LogOut
   };
+
+  onLogout() {
+  this.authService.logout();
+}
 }

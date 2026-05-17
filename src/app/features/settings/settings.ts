@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { LucideAngularModule } from 'lucide-angular';
-import { ThemeService } from '../../core/services/theme-service';
+import { ThemeService } from '../../core/services/theme/theme-service';
 import { Moon, Sun } from 'lucide-angular';
 
 @Component({
@@ -16,5 +16,4 @@ export class Settings {
     Moon,
     Sun,
   };
-
 }
