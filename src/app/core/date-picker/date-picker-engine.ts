@@ -1,5 +1,6 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { CalendarDay, CalendarState, CalendarWeek, IDatePickerEngine } from "./interfaces/temporal.interface";
+import { CalendarDay, CalendarState, CalendarWeek, IDatePickerEngine } from "../interfaces/temporal.interface";
+
 
 const WEEK_DAYS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 

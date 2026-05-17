@@ -3,7 +3,7 @@
   <!-- LOGO -->
   <div class="sidebar-logo-section">
     <div class="logo-box">
-      <lucide-icon [img]="icons.NotebookPen" class="h-5 w-5"></lucide-icon>
+      <lucide-icon [img]="icons().NotebookPen" class="h-5 w-5"></lucide-icon>
     </div>
     <span class="sidebar-title">Journal</span>
   </div>
@@ -13,25 +13,25 @@
 
     <a class="nav-item" routerLink="/entries" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
 
-      <lucide-icon [img]="icons.NotebookTabs" class="h-5 w-5"></lucide-icon>
+      <lucide-icon [img]="icons().NotebookTabs" class="h-5 w-5"></lucide-icon>
       <span>Entries</span>
     </a>
 
     <a class="nav-item" routerLink="/jump" routerLinkActive="active">
 
-      <lucide-icon [img]="icons.CalendarDays" class="h-5 w-5"></lucide-icon>
+      <lucide-icon [img]="icons().CalendarDays" class="h-5 w-5"></lucide-icon>
       <span>Jump</span>
     </a>
 
     <a class="nav-item" routerLink="/settings" routerLinkActive="active">
 
-      <lucide-icon [img]="icons.Settings" class="h-5 w-5"></lucide-icon>
+      <lucide-icon [img]="icons().Settings" class="h-5 w-5"></lucide-icon>
       <span>Settings</span>
     </a>
 
     <a class="nav-item" routerLink="/new" routerLinkActive="active">
 
-      <lucide-icon [img]="icons.SquarePen" class="h-5 w-5"> </lucide-icon>
+      <lucide-icon [img]="icons().SquarePen" class="h-5 w-5"> </lucide-icon>
       <span>New</span>
     </a>
 
@@ -41,7 +41,7 @@
   <div class="footer-section">
     <button class="logout-btn" (click)="onLogout()">
       <div class="logout-icon-box">
-        <lucide-icon [img]="icons.LogOut" class="h-4 w-4"></lucide-icon>
+        <lucide-icon [img]="icons().LogOut" class="h-4 w-4"></lucide-icon>
       </div>
       <span>Log Out</span>
     </button>

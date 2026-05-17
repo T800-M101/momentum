@@ -1,9 +1,8 @@
 <header class="header-container">
   @if(showSearch()){
     <div class="search-wrapper group">
-      <lucide-icon [img]="icons.Search" class="search-icon"></lucide-icon>
       <div class="w-full md:w-80">
-       <app-custom-input placeholder="Search entries..." />
+       <app-custom-input placeholder="Search entries..." [icon]="icons().Search"/>
     </div>
     </div>
   }

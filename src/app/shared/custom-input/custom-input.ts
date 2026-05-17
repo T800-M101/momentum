@@ -1,6 +1,5 @@
 import { Component, input, output } from '@angular/core';
-import { LucideAngularModule } from 'lucide-angular';
-import { Search } from 'lucide-angular';
+import { LucideAngularModule, Search } from 'lucide-angular';
 
 @Component({
   selector: 'app-custom-input',
@@ -11,9 +10,8 @@ import { Search } from 'lucide-angular';
 export class CustomInput {
 
   placeholder = input<string>('Search...');
-  icon = input<any>(Search);
+  icon = input<any>();
   value = input<string>('');
-
   valueChange = output<string>();
 
   onInput(event: Event) {
