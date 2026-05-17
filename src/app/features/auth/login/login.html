@@ -1,64 +1,53 @@
-<div class="login-scene">
-  <div class="book">
+<div class="journal">
 
-    <div class="spine"></div>
+  <!-- COVER -->
+  @if(!open()) {
+  <div class="cover" [class.turning]="turning()">
 
-    <!-- App page visible behind the cover -->
-    <div class="app-page">
-      <span class="app-page-title">My Journal</span>
-      <div class="app-page-lines">
-        @for (line of [90, 70, 85, 60, 75]; track $index) {
-          <div class="app-page-line"></div>
-          <div class="app-page-entry" [style.width.%]="line"></div>
-        }
-        <div class="app-page-line"></div>
+    <div class="cover-header">
+      <span class="cover-title">My Journal</span>
+      <div class="cover-divider"></div>
+    </div>
+
+    <div class="padlock">
+      <div class="lock-shackle" [class.lock-shackle--open]="unlocking()"></div>
+      <div class="lock-body">
+        <div class="lock-keyhole"></div>
       </div>
     </div>
 
-    <!-- Cover -->
-    <div
-      class="cover"
-      [class.cover--open]="open()"
-      [class.cover--shake]="isShaking()"
-    >
-      <div class="cover-front">
+    <div class="login-box" [class.shake]="isShaking()">
 
-        <span class="journal-title">My Journal</span>
-        <div class="title-divider"></div>
+      <input type="text" placeholder="Username" [value]="username()" (input)="username.set($any($event.target).value)"
+        (keydown)="onKeydown($event)" />
 
-        <!-- Pure CSS padlock -->
-        <div class="padlock">
-          <div class="lock-shackle" [class.lock-shackle--open]="unlocking()"></div>
-          <div class="lock-body">
-            <div class="lock-keyhole"></div>
-          </div>
-        </div>
+      <input type="password" placeholder="Password" [value]="password()"
+        (input)="password.set($any($event.target).value)" (keydown)="onKeydown($event)" />
 
-        <!-- Form -->
-        <div class="login-form">
-          <input
-            type="text"
-            class="login-input"
-            placeholder="Username"
-            autocomplete="off"
-            [value]="username()"
-            (input)="username.set($any($event.target).value)"
-          />
-          <input
-            type="password"
-            class="login-input"
-            placeholder="Password"
-            [value]="password()"
-            (input)="password.set($any($event.target).value)"
-            (keydown)="onKeydown($event)"
-          />
-          <span class="login-error">{{ error() }}</span>
-          <button class="login-btn" (click)="tryLogin()">Unlock</button>
-        </div>
+      <button (click)="tryLogin()">Unlock</button>
 
-      </div>
-      <div class="cover-back"></div>
+      @if(error()) {
+      <p class="error">{{ error() }}</p>
+      }
+
     </div>
 
   </div>
+  }
+
+  <!-- INNER PAGE -->
+  <div class="app-page" [class.visible]="open()">
+
+    <span class="app-page-title">My Journal</span>
+
+    <div class="app-page-lines">
+      @for (line of [90, 70, 85, 60, 75]; track $index) {
+      <div class="app-page-line"></div>
+      <div class="app-page-entry" [style.width.%]="line"></div>
+      }
+      <div class="app-page-line"></div>
+    </div>
+
+  </div>
+
 </div>

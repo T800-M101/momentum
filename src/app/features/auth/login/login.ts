@@ -2,7 +2,6 @@ import { Component, inject, signal } from '@angular/core';
 import { AuthService } from '../../../core/services/auth/auth-service';
 import { Router } from '@angular/router';
 
-
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -11,14 +10,15 @@ import { Router } from '@angular/router';
   styleUrl: './login.css',
 })
 export class Login {
-  private auth   = inject(AuthService);
+  private auth = inject(AuthService);
   private router = inject(Router);
 
-  username  = signal('');
-  password  = signal('');
-  error     = signal('');
   unlocking = signal(false);
-  open      = signal(false);
+  turning = signal(false);
+  open = signal(false);
+  username = signal('');
+  password = signal('');
+  error = signal('');
 
   tryLogin() {
     if (!this.username() || !this.password()) {
@@ -32,8 +32,9 @@ export class Login {
       this.error.set('');
       this.unlocking.set(true);
 
-      setTimeout(() => this.open.set(true), 420);
-      setTimeout(() => this.router.navigate(['/']), 1500);
+      setTimeout(() => this.turning.set(true), 600);
+      setTimeout(() => this.open.set(true), 1000);
+      setTimeout(() => this.router.navigate(['/']), 2400);
     } else {
       this.error.set('Invalid credentials.');
       this.shake();
@@ -51,5 +52,4 @@ export class Login {
     this.shaking.set(true);
     setTimeout(() => this.shaking.set(false), 400);
   }
-
 }
