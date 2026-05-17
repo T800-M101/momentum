@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, HostListener, inject, signal } from '@angular/core';
 import { ThemeService } from '../../core/services/theme/theme-service';
 import { LucideAngularModule } from 'lucide-angular';
 import {
@@ -9,10 +9,11 @@ import {
   SquarePen,
   Moon,
   Sun,
-  LogOut
+  LogOut,
 } from 'lucide-angular';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../core/services/auth/auth-service';
+import { IconsService } from '../../core/services/icons/icons-service';
 
 @Component({
   selector: 'app-mobile-nav',
@@ -23,18 +24,22 @@ import { AuthService } from '../../core/services/auth/auth-service';
 export class MobileNav {
   themeService = inject(ThemeService);
   private authService = inject(AuthService);
+  private iconsService = inject(IconsService);
   showSettingsMenu = signal(false);
 
-  readonly icons = {
-    NotebookPen,
-    NotebookTabs,
-    CalendarDays,
-    Settings,
-    SquarePen,
-    Moon,
-    Sun,
-    LogOut
-  };
+  icons = this.iconsService.icons;
+
+  isMenuOpen = signal(false);
+
+  toggleMenu(event: Event) {
+    event.stopPropagation();
+    this.isMenuOpen.update((v) => !v);
+  }
+
+  @HostListener('document:click')
+  closeMenu() {
+    this.isMenuOpen.set(false);
+  }
 
   toggleSettingsMenu() {
     this.showSettingsMenu.update((v) => !v);

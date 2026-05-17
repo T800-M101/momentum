@@ -1,156 +1,85 @@
 @reference "tailwindcss";
 
-/* ==========================================
-   MOBILE NAV CONTAINER
-========================================== */
 .mobile-nav-container {
-  @apply fixed
-  bottom-6
-  left-1/2
-  -translate-x-1/2
-  w-[90%]
-  max-w-sm
-  z-50;
+  @apply fixed bottom-6 left-1/2 -translate-x-1/2 w-[94%] max-w-md z-50;
 }
 
 .mobile-nav-box {
-  background-color: color-mix(in srgb, var(--bg-card), transparent 15%);
-  border-color: var(--border-color);
-  @apply backdrop-blur-xl
-  rounded-[2.5rem]
-  shadow-2xl
-  border
-  p-2
-  transition-all
-  duration-300;
+  background-color: color-mix(in srgb, var(--bg-card, white), transparent 10%);
+  border: 1px solid var(--border-color);
+  @apply backdrop-blur-xl rounded-[2.5rem] shadow-2xl p-2 h-20;
 }
 
-/* ==========================================
-   MOBILE NAV ITEMS
-========================================== */
 .mobile-nav-item {
-  @apply flex
-  flex-col
-  items-center
-  justify-center
-  gap-0.5
-  py-1.5
-  px-2
-  rounded-full
-  text-gray-400
-  transition-all
-  duration-300
-  cursor-pointer;
-  min-width: 48px;
+  @apply flex flex-col items-center justify-center gap-1 py-2 px-3
+         rounded-2xl text-gray-400 transition-all duration-300 border-none bg-transparent;
+  min-width: 55px;
 }
 
 .mobile-nav-item span {
-  @apply text-[8px]
-  font-bold
-  uppercase
-  tracking-wider;
+  @apply text-[8px] font-bold uppercase tracking-wider;
 }
 
-.mobile-nav-item.active,
-.mobile-nav-item:focus,
-.mobile-nav-item:focus-visible {
+.mobile-nav-item.active {
   background-color: var(--accent-light);
   color: var(--accent-brown);
-  @apply font-bold;
-  filter: drop-shadow(0 2px 4px rgba(142, 124, 104, 0.3));
-  outline: none;
 }
 
+
+.avatar-button {
+  @apply flex items-center justify-center p-2 rounded-full transition-all duration-300
+         border-none bg-transparent outline-none cursor-pointer;
+}
+
+.avatar-button.active {
+  @apply scale-110;
+  filter: drop-shadow(0 4px 6px rgba(142, 124, 104, 0.2));
+}
+
+.mobile-avatar {
+  @apply w-8 h-8 rounded-full bg-[#D1C7BD] text-white text-xs
+         flex items-center justify-center font-bold shadow-sm;
+}
 
 /* ==========================================
-   LOGOUT BUTTON
-========================================== */
-.mobile-nav-item-logout {
-  color: #E07070;
-  position: relative;
-}
-.mobile-nav-item-logout:hover {
-  background-color: rgba(224, 112, 112, 0.15);
-  color: #E07070;
+   POPOVER & STATS (NÚMERO ARRIBA, TEXTO ABAJO)
+   ========================================== */
+.mobile-popover {
+  @apply absolute bottom-[115%] right-0 flex justify-end mb-2;
+  animation: slideIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.mobile-nav-item-logout:active {
-  transform: scale(0.95);
+.popover-content {
+  @apply bg-white border border-gray-100 rounded-[2rem] p-6 shadow-2xl w-48;
 }
 
-.mobile-nav-item-logout::before {
-  content: '';
-  position: absolute;
-  left: -4px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 1px;
-  height: 24px;
-  background-color: var(--border-color, rgba(0, 0, 0, 0.1));
-  border-radius: 1px;
+.popover-stats {
+  @apply flex justify-between gap-4 mb-4;
 }
 
-.mobile-nav-item-logout:focus,
-.mobile-nav-item-logout:focus-visible {
-  background-color: rgba(224, 112, 112, 0.15);
-  color: #E07070;
-  filter: drop-shadow(0 2px 4px rgba(224, 112, 112, 0.3));
-  outline: none;
-  transform: none;
+.stat {
+  @apply flex flex-col items-center flex-1;
 }
 
-.mobile-nav-item-logout:active {
-  transform: scale(0.95);
+.stat .v {
+  @apply text-lg font-extrabold text-gray-800 leading-none mb-1;
 }
 
-
-/* ==========================================
-   RESPONSIVE
-========================================== */
-@media (max-width: 480px) {
-  .mobile-nav-item {
-    @apply px-1.5 py-1;
-    min-width: 44px;
-  }
-
-  .mobile-nav-item span {
-    font-size: 7px;
-  }
-
-  .mobile-nav-item-logout::before {
-    display: none;
-  }
-
-  .mobile-nav-box {
-    @apply p-1.5;
-  }
+.stat .l {
+  @apply text-[7px] uppercase font-black tracking-widest text-gray-400;
 }
 
-@media (max-width: 400px) {
-  .mobile-nav-container {
-    width: 95%;
-  }
-
-  .mobile-nav-item {
-    @apply px-1 py-0.5;
-    min-width: 40px;
-  }
-
-  .mobile-nav-item span {
-    font-size: 6px;
-  }
+.popover-divider {
+  @apply h-[1px] w-full bg-gray-100 my-4;
 }
 
-@media (max-width: 768px) and (orientation: landscape) {
-  .mobile-nav-container {
-    bottom: 0.75rem;
-  }
+.popover-logout {
+  @apply flex items-center justify-center gap-2 w-full py-2
+         text-red-500 text-[10px] font-black uppercase tracking-[0.15em]
+         bg-transparent border-none active:scale-95 transition-transform;
+}
 
-  .mobile-nav-item {
-    @apply py-1;
-  }
-
-  .mobile-nav-item span {
-    font-size: 7px;
-  }
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(12px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0); }
 }

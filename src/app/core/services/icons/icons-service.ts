@@ -8,7 +8,9 @@ import {
   Moon,
   Sun,
   LogOut,
-  Search
+  Search,
+  User,
+  
 } from 'lucide-angular';
 
 @Injectable({
@@ -25,7 +27,8 @@ export class IconsService {
   Moon,
   Sun,
   LogOut,
-  Search
+  Search,
+  User
   });
 
   readonly icons = this._icons.asReadonly();

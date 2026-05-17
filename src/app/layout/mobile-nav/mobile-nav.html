@@ -1,72 +1,64 @@
 <div class="md:hidden mobile-nav-container">
 
+  @if (isMenuOpen()) {
+  <div class="mobile-popover" (click)="toggleMenu($event)">
+    <div class="popover-content" (click)="$event.stopPropagation()">
+      <div class="popover-stats">
+        <div class="stat">
+          <span class="v">124</span>
+          <span class="l">ENTRIES</span>
+        </div>
+        <div class="stat">
+          <span class="v">12</span>
+          <span class="l">STREAK</span>
+        </div>
+      </div>
+      <div class="popover-divider"></div>
+      <button class="popover-logout" (click)="logout()">
+        <lucide-icon [img]="icons().LogOut" class="h-4 w-4"></lucide-icon>
+        <span>LOG OUT</span>
+      </button>
+    </div>
+  </div>
+  }
+
   <nav class="mobile-nav-box">
+    <ul class="flex justify-around items-center h-full px-2">
 
-    <ul class="flex justify-around items-center">
-
-      <!-- ENTRIES -->
       <li>
-        <a
-          class="mobile-nav-item"
-          routerLink="/entries"
-          routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: true }">
-
-          <lucide-icon [img]="icons.NotebookTabs" class="h-4 w-4"></lucide-icon>
+        <a class="mobile-nav-item" routerLink="/entries" routerLinkActive="active">
+          <lucide-icon [img]="icons().NotebookTabs" class="h-4 w-4"></lucide-icon>
           <span>Entries</span>
         </a>
       </li>
 
-      <!-- JUMP -->
       <li>
-        <a
-          class="mobile-nav-item"
-          routerLink="/jump"
-          routerLinkActive="active">
-
-          <lucide-icon [img]="icons.CalendarDays" class="h-4 w-4"></lucide-icon>
+        <a class="mobile-nav-item" routerLink="/jump" routerLinkActive="active">
+          <lucide-icon [img]="icons().CalendarDays" class="h-4 w-4"></lucide-icon>
           <span>Jump</span>
         </a>
       </li>
 
-      <!-- SETTINGS -->
       <li>
-        <a
-          class="mobile-nav-item"
-          routerLink="/settings"
-          routerLinkActive="active">
-
-          <lucide-icon [img]="icons.Settings" class="h-4 w-4"></lucide-icon>
+        <a class="mobile-nav-item" routerLink="/settings" routerLinkActive="active">
+          <lucide-icon [img]="icons().Settings" class="h-4 w-4"></lucide-icon>
           <span>Settings</span>
         </a>
       </li>
 
-      <!-- NEW -->
       <li>
-        <a
-          class="mobile-nav-item"
-          routerLink="/new"
-          routerLinkActive="active">
-
-          <lucide-icon [img]="icons.SquarePen" class="h-4 w-4"></lucide-icon>
+        <a class="mobile-nav-item" routerLink="/new" routerLinkActive="active">
+          <lucide-icon [img]="icons().SquarePen" class="h-4 w-4"></lucide-icon>
           <span>New</span>
         </a>
       </li>
 
-      <!-- LOGOUT -->
       <li>
-        <button
-          type="button"
-          class="mobile-nav-item mobile-nav-item-logout"
-          (click)="logout()">
-
-          <lucide-icon [img]="icons.LogOut" class="h-4 w-4"></lucide-icon>
-          <span>Logout</span>
+        <button class="avatar-button" (click)="toggleMenu($event)" [class.active]="isMenuOpen()">
+          <div class="mobile-avatar">G</div>
         </button>
       </li>
 
     </ul>
-
   </nav>
-
 </div>

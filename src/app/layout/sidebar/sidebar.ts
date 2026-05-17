@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, HostListener, inject, signal } from '@angular/core';
 import { ThemeService } from '../../core/services/theme/theme-service';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../core/services/auth/auth-service';
@@ -17,6 +17,18 @@ export class Sidebar {
   private iconsService = inject(IconsService);
   icons = this.iconsService.icons
 
+  isMenuOpen = signal(false);
+  userEmail = 'memo@example.com';
+
+  toggleMenu(event: Event) {
+    event.stopPropagation(); 
+    this.isMenuOpen.update(v => !v);
+  }
+
+  @HostListener('document:click')
+  closeMenu() {
+    this.isMenuOpen.set(false);
+  }
 
   onLogout() {
   this.authService.logout();
