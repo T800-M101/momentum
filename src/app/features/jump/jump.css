@@ -1,26 +1,85 @@
 @reference "tailwindcss";
 
 .jump-wrapper {
-  @apply flex flex-col items-center justify-start gap-8 w-full;
+  @apply w-full max-w-2xl mr-auto ml-0 p-6 md:p-12 flex flex-col gap-10;
   padding-top: 6vh;
 }
 
 .jump-heading {
-  @apply text-center w-full px-4;
+  @apply text-left w-full;
 }
 
 .jump-title {
-  @apply text-2xl md:text-3xl font-semibold tracking-tight mb-2;
-  color: var(--text-main);
+  @apply m-0 p-0;
 }
 
 .jump-subtitle {
-  @apply text-xs md:text-sm font-medium tracking-wide uppercase;
-  color: var(--text-muted, #9ca3af);
-  letter-spacing: 0.08em;
+  @apply text-xs md:text-sm font-semibold tracking-[0.2em] uppercase opacity-50 block mt-3;
+  color: var(--text-muted);
 }
 
-.jump-picker-wrapper {
-  @apply w-full px-4;
-  max-width: 500px;
+.jump-controls-grid {
+  @apply grid grid-cols-1 gap-8 w-full;
+}
+
+.control-group {
+  @apply flex flex-col w-full;
+}
+
+.section-label {
+  @apply block text-[10px] font-black uppercase tracking-widest mb-3 opacity-40;
+  color: var(--text-main);
+}
+
+.input-container {
+  @apply w-full;
+  height: 56px;
+}
+
+.input-container app-date-picker {
+  --date-picker-input-width: 100%;
+  --date-picker-input-height: 56px;
+  --date-picker-input-border-radius: 20px;
+  width: 100%;
+}
+
+.search-input-wrapper {
+  @apply relative h-full w-full;
+}
+
+.search-input {
+  @apply w-full h-full pl-12 pr-4 rounded-2xl border transition-all outline-none;
+  background-color: var(--bg-card, white);
+  border-color: var(--border-color);
+  color: var(--text-main);
+  font-size: 14px;
+}
+
+.search-input:focus {
+  @apply shadow-sm;
+  border-color: var(--accent-brown);
+  background-color: var(--bg-input);
+}
+
+.search-icon {
+  @apply absolute left-4 top-1/2 -translate-y-1/2 opacity-40;
+  color: var(--text-main);
+}
+
+@media (max-width: 768px) {
+  .jump-wrapper {
+    @apply items-start px-6;
+  }
+
+  .jump-heading {
+    @apply text-left;
+  }
+
+  .input-container {
+    height: 50px;
+  }
+
+  .input-container app-date-picker {
+    --date-picker-input-height: 50px;
+  }
 }

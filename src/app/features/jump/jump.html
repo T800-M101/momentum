@@ -5,8 +5,22 @@
     <p class="jump-subtitle">Rediscover your memories by picking a day from your past</p>
   </div>
 
-  <div class="jump-picker-wrapper">
-    <app-date-picker />
+  <div class="jump-controls-grid">
+
+    <div class="control-group">
+      <label class="section-label">Select Date</label>
+      <div class="input-container">
+        <app-date-picker />
+      </div>
+    </div>
+     <h2 class="jump-title">Or</h2>
+    <div class="control-group">
+      <label class="section-label">Search by Tags or Keywords</label>
+      <div class="input-container"> <app-custom-input
+      placeholder="Example: #travel, happy..." />
+  </div>
+    </div>
+
   </div>
 
 </div>

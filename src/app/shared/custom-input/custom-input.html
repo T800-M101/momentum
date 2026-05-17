@@ -1,0 +1,10 @@
+<div class="custom-input-wrapper group">
+  <lucide-icon [img]="icon()" class="input-icon"></lucide-icon>
+  <input
+    type="text"
+    [placeholder]="placeholder()"
+    [value]="value()"
+    (input)="onInput($event)"
+    class="base-input"
+  />
+</div>

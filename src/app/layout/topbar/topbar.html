@@ -2,7 +2,9 @@
   @if(showSearch()){
     <div class="search-wrapper group">
       <lucide-icon [img]="icons.Search" class="search-icon"></lucide-icon>
-      <input type="text" placeholder="Search entries..." class="search-input">
+      <div class="w-full md:w-80">
+       <app-custom-input placeholder="Search entries..." />
+    </div>
     </div>
   }
 </header>

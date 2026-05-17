@@ -1,4 +1,16 @@
 @import "tailwindcss";
+@reference "tailwindcss";
+
+@layer base {
+  h2 {
+    @apply text-2xl md:text-3xl font-bold tracking-tight;
+    font-family: Georgia, serif;
+    color: var(--text-main);
+    line-height: 1.2;
+    margin-bottom: 2rem; 
+  }
+}
+
 :root {
   --bg-main: #FDFCFB;
   --bg-card: #ffffff;
@@ -47,3 +59,4 @@ body {
 button, [role="button"], .menu-item, .action-icon {
   cursor: pointer;
 }
+

@@ -5,8 +5,7 @@
 }
 
 .settings-title {
-  color: var(--text-main);
-  @apply text-2xl font-bold mb-8 text-left;
+  @apply text-left;
 }
 
 .settings-group {

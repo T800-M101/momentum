@@ -1,0 +1,28 @@
+@reference "tailwindcss";
+
+.custom-input-wrapper {
+  @apply relative w-full flex items-center;
+}
+
+.input-icon {
+  color: var(--text-muted);
+  @apply absolute left-5 h-4 w-4 pointer-events-none transition-colors
+         group-focus-within:text-[#8E7C68] flex items-center justify-center;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.base-input {
+  background-color: var(--bg-input);
+  color: var(--text-main);
+  @apply w-full border-none rounded-full pl-12 pr-5 text-sm
+         focus:ring-2 focus:ring-[#8E7C68]/20 outline-none transition-all;
+
+  /* Altura unificada de 2.75rem (44px) */
+  height: 2.75rem;
+}
+
+.base-input::placeholder {
+  color: var(--text-muted);
+  @apply font-medium opacity-60;
+}

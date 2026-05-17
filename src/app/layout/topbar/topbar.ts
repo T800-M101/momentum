@@ -2,10 +2,11 @@ import { Component, computed, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 import { Search } from 'lucide-angular';
+import { CustomInput } from '../../shared/custom-input/custom-input';
 
 @Component({
   selector: 'app-topbar',
-  imports: [LucideAngularModule],
+  imports: [LucideAngularModule, CustomInput],
   templateUrl: './topbar.html',
   styleUrl: './topbar.css',
 })
