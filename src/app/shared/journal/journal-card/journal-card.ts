@@ -26,6 +26,7 @@ export class JournalCard {
   showMenu = signal(false);
   moodInfo = computed(() => this.journalService.getMoodData(this.entry().mood));
   entry = input.required<JournalEntry>();
+  showMediaCount = signal(false);
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {

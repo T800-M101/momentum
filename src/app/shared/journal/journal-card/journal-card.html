@@ -11,15 +11,17 @@
     <div class="card-header">
       <h4 class="card-title">{{ entry().title }}</h4>
 
-      <div class="card-meta">
-        @if(entry().mediaCount) {
-        <div class="media-indicator">
-          <lucide-icon [img]="icons.Images" class="h-3.5 w-3.5"> </lucide-icon>
-          <span>{{ entry().mediaCount }}</span>
+      @if(showMediaCount()){
+        <div class="card-meta">
+          @if(entry().mediaCount) {
+          <div class="media-indicator">
+            <lucide-icon [img]="icons.Images" class="h-3.5 w-3.5"> </lucide-icon>
+            <span>{{ entry().mediaCount }}</span>
+          </div>
+          }
+          <span class="card-time">{{ entry().time }}</span>
         </div>
-        }
-        <span class="card-time">{{ entry().time }}</span>
-      </div>
+      }
     </div>
 
     <div class="text-fade-container">
@@ -37,10 +39,12 @@
       @if(showMenu()) {
       <div class="entry-menu" (click)="$event.stopPropagation()">
 
-        <button class="menu-item add" (click)="$event.stopPropagation()">
-          <lucide-icon [img]="icons.ImagePlus" class="h-4 w-4"></lucide-icon>
-          <span>Add photos</span>
-        </button>
+        @if(showMediaCount()){
+          <button class="menu-item add" (click)="$event.stopPropagation()">
+            <lucide-icon [img]="icons.ImagePlus" class="h-4 w-4"></lucide-icon>
+            <span>Add photos</span>
+          </button>
+        }
 
         <button class="menu-item edit" (click)="$event.stopPropagation()">
           <lucide-icon [img]="icons.Pencil" class="h-4 w-4"></lucide-icon>

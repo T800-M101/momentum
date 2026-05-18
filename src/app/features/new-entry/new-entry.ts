@@ -15,6 +15,7 @@ export class NewEntry {
   moodContainer = viewChild<ElementRef>('moodSection');
   showMoodMenu = signal(false);
   selectedMood = signal<any>(null);
+  showPhotoSection = signal(false);
   moods = signal([
     { id: 1, emoji: '😀', label: 'Happy' },
     { id: 2, emoji: '😌', label: 'Calm' },
