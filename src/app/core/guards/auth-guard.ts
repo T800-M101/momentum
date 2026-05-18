@@ -1,12 +1,27 @@
 import { inject } from '@angular/core';
-import { CanActivateFn, Router } from '@angular/router';
+import { Router, type CanActivateFn } from '@angular/router';
 import { AuthService } from '../services/auth/auth-service';
 
-export const authGuard: CanActivateFn = (route, state) => {
-  const auth   = inject(AuthService);
+export const authGuard: CanActivateFn = () => {
+  const authService = inject(AuthService);
   const router = inject(Router);
 
-  return auth.isLoggedIn()
-    ? true
-    : router.createUrlTree(['/login']);
+  if (authService.isAuthenticated()) {
+    return true;
+  }
+
+  return router.createUrlTree(['/login']);
+};
+
+// Guard for authentication pages (login, signup)
+// Redirects to the home page if already logged in
+export const publicGuard: CanActivateFn = () => {
+  const authService = inject(AuthService);
+  const router = inject(Router);
+
+  if (authService.isAuthenticated()) {
+    return router.createUrlTree(['/']);
+  }
+
+  return true;
 };

@@ -19,6 +19,17 @@
       </div>
 
       <div class="login-box" [class.shake]="isShaking()">
+
+        @if(mode() === 'signup') {
+          <input
+            type="email"
+            placeholder="Email"
+            [value]="email()"
+            (input)="email.set($any($event.target).value)"
+            (keydown)="onKeydown($event)"
+          />
+        }
+
         <input
           type="text"
           placeholder="Username"
@@ -26,6 +37,7 @@
           (input)="username.set($any($event.target).value)"
           (keydown)="onKeydown($event)"
         />
+
         <input
           type="password"
           placeholder="Password"
@@ -33,7 +45,34 @@
           (input)="password.set($any($event.target).value)"
           (keydown)="onKeydown($event)"
         />
-        <button (click)="tryLogin()">Unlock</button>
+
+        @if(mode() === 'signup') {
+          <input
+            type="password"
+            placeholder="Confirm Password"
+            [value]="confirmPassword()"
+            (input)="confirmPassword.set($any($event.target).value)"
+            (keydown)="onKeydown($event)"
+          />
+        }
+
+        <button (click)="submit()">
+          {{ mode() === 'login' ? 'Unlock' : 'Create Account' }}
+        </button>
+
+        <span
+          class="auth-link"
+          type="button"
+          (click)="toggleMode()">
+
+          @if(mode() === 'login') {
+            New here? <span>Sign up</span>
+          } @else {
+            Already have an account? <span>Sign in</span>
+          }
+
+        </span>
+
         @if(error()) {
           <p class="error">{{ error() }}</p>
         }

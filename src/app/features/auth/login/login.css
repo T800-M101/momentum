@@ -212,11 +212,9 @@
 .auth-link {
   @apply mt-2 text-center text-xs transition-all;
   color: rgba(201, 169, 110, 0.65);
-
   background: transparent;
   border: none;
   cursor: pointer;
-
   letter-spacing: 0.04em;
 }
 
