@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { AuthService } from '../../../core/services/auth/auth-service';
 import { Router } from '@angular/router';
 
@@ -28,6 +28,19 @@ export class Login {
   private router = inject(Router);
   private shaking = signal(false);
   isShaking = this.shaking.asReadonly();
+
+  constructor(){
+    effect(() => {
+      if (this.authService.closing()) {
+        this.unlocking.set(true);
+
+        setTimeout(() => {
+          this.unlocking.set(false);
+        }, 700);
+      }
+    });
+  }
+  
 
   submit() {
     if (this.mode() === 'login') {
