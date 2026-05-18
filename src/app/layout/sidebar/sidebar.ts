@@ -15,9 +15,9 @@ import { Popover } from '../../shared/popover/popover';
 export class Sidebar {
   themeService = inject(ThemeService);
   private iconsService = inject(IconsService);
+  icons = this.iconsService.icons;
 
   isMenuOpen = signal(false);
-  icons = this.iconsService.icons;
   userEmail = 'memo@example.com';
 
   @HostListener('document:click')

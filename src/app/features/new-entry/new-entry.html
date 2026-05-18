@@ -1,1 +1,69 @@
-<p>new-entry works!</p>
+<div class="entry-container">
+  <header class="entry-header">
+
+    <div>
+      <p class="entry-date"> Sunday, May 18 </p>
+      <p class="entry-time"> 10:20 AM </p>
+    </div>
+
+    <span class="save-status"> Draft </span>
+
+  </header>
+
+
+  <section class="mood-section" #moodSection>
+    <p class="section-label">How are you feeling today?</p>
+
+    <button class="mood-select" (click)="toggleMoodMenu($event)">
+      <span class="selected-mood">
+        {{ selectedMood() ? selectedMood().emoji + ' ' + selectedMood().label : 'Select a mood' }}
+      </span>
+      <lucide-icon [img]="icons().ChevronDown" class="size-4" />
+    </button>
+
+    @if(showMoodMenu()) {
+    <div class="mood-menu">
+      @for (mood of moods(); track mood.id) {
+      <button class="mood-option" (click)="selectMood(mood)">
+        <span>{{ mood.emoji }}</span>
+        <span>{{ mood.label }}</span>
+      </button>
+      }
+    </div>
+    }
+  </section>
+
+
+  <section class="title-section">
+    <input type="text" class="title-input" placeholder="Give this moment a title..." />
+  </section>
+
+
+  <section class="photo-section">
+
+    <label class="photo-dropzone">
+
+      <input type="file" multiple hidden />
+
+      <div class="photo-drop-content">
+        <div class="photo-icon"> 📷 </div>
+          <p class="photo-title"> Add photos to this memory </p>
+          <p class="photo-subtitle"> Drag & drop, paste or click to upload </p>
+      </div>
+
+    </label>
+
+  </section>
+
+
+  <section class="editor-section">
+    <textarea class="journal-editor" placeholder="What's on your mind today?"></textarea>
+  </section>
+
+
+  <footer class="entry-footer">
+    <input class="tags-input" type="text" placeholder="#gym #family #camping" />
+    <button class="save-button"> Save entry </button>
+  </footer>
+
+</div>

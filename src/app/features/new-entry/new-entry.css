@@ -1,0 +1,269 @@
+@reference "tailwindcss";
+
+.entry-container {
+  @apply
+    max-w-[1200px]
+    mx-auto
+    rounded-[32px]
+    p-12
+    overflow-hidden;
+
+  background: var(--bg-card);
+  box-shadow: 0 12px 40px var(--shadow-color);
+
+  @apply md:p-12 p-5 md:rounded-[32px] rounded-none;
+}
+
+/* ---------- Header ---------- */
+
+.entry-header {
+  @apply
+    flex
+    md:flex-row
+    flex-col
+    justify-between
+    items-start
+    gap-4
+    mb-8;
+}
+
+.entry-date {
+  @apply
+    text-[clamp(1.5rem,2vw,2rem)]
+    font-bold
+    m-0;
+
+  color: var(--text-main);
+}
+
+.entry-time {
+  @apply mt-1.5 text-sm;
+
+  color: var(--text-muted);
+}
+
+.save-status {
+  @apply
+    px-4
+    py-2.5
+    rounded-full
+    text-sm
+    whitespace-nowrap;
+
+  background: var(--accent-light);
+  color: var(--accent-brown);
+}
+
+/* ---------- Mood ---------- */
+
+.mood-section {
+  position: relative;
+  @apply mb-8;
+}
+
+.section-label {
+  @apply text-sm mb-3;
+
+  color: var(--text-muted);
+}
+
+.mood-select {
+  @apply flex items-center justify-between w-full md:w-[220px] px-5 py-4 rounded-2xl transition-all;
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-color);
+}
+
+.selected-mood {
+  @apply flex-1 text-left mr-2 font-medium;
+  @apply truncate;
+  color: var(--text-main);
+}
+
+.mood-select:hover {
+  border-color: var(--accent-brown);
+}
+
+.mood-menu {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 16px 40px var(--shadow-color);
+
+  @apply
+    absolute
+    left-0
+    top-[calc(100%+10px)]
+    z-50
+    w-[260px]
+    rounded-[28px]
+    p-2
+    max-h-[320px]
+    overflow-y-auto;
+}
+
+.mood-option {
+  @apply
+    flex
+    items-center
+    gap-3
+    w-full
+    px-4
+    py-3
+    rounded-[20px]
+    transition-all
+    duration-200
+    text-left;
+  color: var(--text-main);
+}
+
+.mood-option:hover {
+  background: var(--accent-light);
+}
+
+/* ---------- Title ---------- */
+
+.title-section {
+  @apply mb-7;
+}
+
+.title-input {
+  @apply
+    w-full
+    border-0
+    outline-none
+    bg-transparent
+    text-[clamp(1.4rem,3vw,2rem)]
+    font-semibold
+    pb-4
+    border-b;
+
+  color: var(--text-main);
+  border-color: var(--border-color);
+}
+
+.title-input::placeholder {
+  color: var(--text-muted);
+  opacity: 0.5;
+}
+
+/* ---------- Photo Upload ---------- */
+
+.photo-drop-content {
+  @apply
+    rounded-[28px]
+    border-2
+    border-dashed
+    px-6
+    py-9
+    text-center
+    transition-all
+    duration-200;
+
+  border-color: var(--border-color);
+
+  background: linear-gradient(
+    to bottom,
+    var(--bg-card),
+    var(--bg-input)
+  );
+}
+
+.photo-dropzone:hover .photo-drop-content {
+  @apply -translate-y-0.5;
+  border-color: var(--accent-brown);
+  background: var(--accent-light);
+}
+
+.photo-title {
+  @apply m-0 text-base font-semibold;
+  color: var(--text-main);
+}
+
+.photo-subtitle {
+  @apply mt-2 text-sm;
+  color: var(--text-muted);
+}
+
+/* ---------- Editor ---------- */
+
+.journal-editor {
+  @apply
+    w-full
+    min-h-[340px]
+    resize-y
+    border-0
+    outline-none
+    bg-transparent
+    text-[1.05rem]
+    leading-[1.9];
+
+  color: var(--text-main);
+  font-family: inherit;
+}
+
+.journal-editor::placeholder {
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+
+/* ---------- Footer ---------- */
+
+.entry-footer {
+  @apply
+    flex
+    md:flex-row
+    flex-col
+    items-stretch
+    gap-4
+    mt-8;
+}
+
+.tags-input {
+  @apply
+    flex-1
+    rounded-[18px]
+    px-5
+    py-4
+    border-0
+    outline-none
+    text-sm;
+
+  background: var(--bg-input);
+  color: var(--text-main);
+  border: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.tags-input:focus {
+  border-color: var(--accent-brown);
+}
+
+.save-button {
+  @apply
+    rounded-[18px]
+    border-0
+    px-6
+    py-4
+    font-semibold
+    transition-all
+    duration-200
+    hover:-translate-y-0.5
+    md:w-auto
+    w-full;
+
+  background: var(--accent-brown);
+  color: #ffffff;
+}
+
+.save-button:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 4px 12px var(--shadow-color);
+}
+
+.mood-menu::-webkit-scrollbar {
+  width: 6px;
+}
+
+.mood-menu::-webkit-scrollbar-thumb {
+  background-color: var(--border-color);
+  border-radius: 10px;
+}
