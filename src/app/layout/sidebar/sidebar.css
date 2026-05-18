@@ -17,7 +17,8 @@
 }
 
 .logo-box {
-  @apply bg-[#8E7C68] p-2 rounded-xl text-white shadow-lg;
+  background-color: var(--logo-bg);
+  @apply p-2 rounded-xl text-white shadow-lg;
 }
 
 .sidebar-title {
@@ -33,7 +34,8 @@
 }
 
 .nav-item {
-  @apply flex items-center gap-4 px-5 py-4 rounded-2xl text-gray-400 font-medium transition-all cursor-pointer;
+  @apply flex items-center gap-4 px-5 py-4 rounded-2xl font-medium transition-all cursor-pointer;
+  color: var(--nav-item-inactive);
 }
 
 .nav-item:hover {
@@ -47,7 +49,7 @@
   background-color: var(--accent-light);
   color: var(--accent-brown);
   @apply font-bold;
-  filter: drop-shadow(0 2px 4px rgba(142, 124, 104, 0.3));
+  filter: drop-shadow(0 2px 4px var(--nav-shadow));
   outline: none;
 }
 
@@ -55,55 +57,19 @@
    FOOTER SECTION
 ========================================== */
 .footer-section {
-  border-top: 1px solid var(--border-color);
-  @apply pt-6;
+  @apply relative pt-6 border-t;
+  border-color: var(--border-color);
 }
 
 /* ==========================================
-   PROFILE SECTION
+   LOGOUT BUTTON
 ========================================== */
-.profile-section {
-  @apply flex items-center gap-4 px-2;
-}
-
-.avatar {
-  @apply w-11 h-11 rounded-full bg-[#D1C7BD] flex items-center justify-center text-white font-bold shadow-inner;
-}
-
-.profile-info {
-  @apply flex flex-col;
-}
-
-.profile-name {
-  color: var(--text-main);
-  @apply text-sm font-bold;
-}
-
-.profile-email {
-  @apply text-[11px] text-gray-400;
-}
-
-
-/* ==========================================
-   LOGOUT BUTTON STYLES
-   ========================================== */
-
 .logout-btn {
   @apply flex items-center gap-4 px-5 py-3 rounded-2xl transition-all duration-300
          cursor-pointer font-semibold text-sm w-full;
-
-  color: #E07070;
+  color: var(--logout-color);
   background-color: transparent;
   position: relative;
-}
-
-.logout-btn:hover {
-  background-color: rgba(224, 112, 112, 0.15);
-  color: #E07070;
-}
-
-.logout-btn:active {
-  transform: scale(0.95);
 }
 
 .logout-btn::before {
@@ -114,11 +80,10 @@
   transform: translateY(-50%);
   width: 1px;
   height: 24px;
-  background-color: var(--border-color, rgba(0, 0, 0, 0.1));
+  background-color: var(--border-color);
   border-radius: 1px;
 }
 
-/* Icon styling */
 .logout-btn lucide-icon {
   transition: transform 0.2s ease;
 }
@@ -127,39 +92,42 @@
   transform: scale(1.1);
 }
 
-.logout-icon-box {
-  @apply p-2 rounded-lg bg-gray-50 transition-colors duration-300;
+.logout-btn:hover {
+  background-color: var(--logout-hover-bg);
+  color: var(--logout-color);
 }
 
-.logout-btn:hover {
-  @apply text-red-500 bg-red-50/50;
+.logout-btn:active {
+  transform: scale(0.95);
+}
+
+.logout-icon-box {
+  background-color: var(--logout-icon-bg);
+  @apply p-2 rounded-lg transition-colors duration-300;
 }
 
 .logout-btn:hover .logout-icon-box {
-  @apply bg-red-100 text-red-600;
-}
-
-
-.footer-section {
-  @apply relative pt-6 border-t;
-  border-color: var(--border-color);
+  background-color: var(--logout-icon-hover-bg);
+  color: var(--logout-icon-hover-color);
 }
 
 /* ==========================================
-   PROFILE CARD (Trigger)
-   ========================================== */
+   PROFILE CARD
+========================================== */
 .profile-card {
   @apply flex items-center gap-3 p-3 rounded-2xl transition-all cursor-pointer;
   border: 1px solid transparent;
 }
 
-.profile-card:hover, .profile-card.active {
+.profile-card:hover,
+.profile-card.active {
   background-color: var(--accent-light);
   border-color: var(--border-color);
 }
 
 .avatar {
-  @apply w-10 h-10 rounded-full bg-[#D1C7BD] flex items-center justify-center
+  background-color: var(--avatar-bg);
+  @apply w-10 h-10 rounded-full flex items-center justify-center
          text-white font-bold shadow-sm flex-shrink-0;
 }
 
@@ -168,10 +136,11 @@
 }
 
 .profile-name {
-  @apply text-sm font-bold truncate;
   color: var(--text-main);
+  @apply text-sm font-bold truncate;
 }
 
 .profile-email {
-  @apply text-[11px] text-gray-400 truncate;
+  color: var(--text-muted);
+  @apply text-[11px] truncate;
 }

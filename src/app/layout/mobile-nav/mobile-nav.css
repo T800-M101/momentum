@@ -5,7 +5,7 @@
 }
 
 .mobile-nav-box {
-  background-color: color-mix(in srgb, var(--bg-card, white), transparent 10%);
+  background-color: color-mix(in srgb, var(--bg-card), transparent 10%);
   border: 1px solid var(--border-color);
   @apply backdrop-blur-xl rounded-[2.5rem] shadow-2xl p-2 h-20;
 }

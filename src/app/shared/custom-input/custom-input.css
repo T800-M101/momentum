@@ -17,8 +17,6 @@
   color: var(--text-main);
   @apply w-full border-none rounded-full pl-12 pr-5 text-sm
          focus:ring-2 focus:ring-[#8E7C68]/20 outline-none transition-all;
-
-  /* Altura unificada de 2.75rem (44px) */
   height: 2.75rem;
 }
 
