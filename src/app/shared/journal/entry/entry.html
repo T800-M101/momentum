@@ -22,9 +22,17 @@
     Mañana de caminata por Chipinque
   </h1>
 
-  <section class="reader-gallery">
-    <!-- images -->
-  </section>
+<section class="reader-gallery">
+  @if (entry().images && entry().images.length > 0) {
+    <div class="gallery-scroll-container">
+      @for (image of entry().images; track $index) {
+        <div class="gallery-item">
+          <img [src]="image.url" [alt]="image.alt || 'Journal photo'" class="gallery-img">
+        </div>
+      }
+    </div>
+  }
+</section>
 
   <article
     class="reader-content"

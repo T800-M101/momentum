@@ -62,3 +62,61 @@
     transform: translateY(0) scale(1);
   }
 }
+
+/* ---------- Photo Gallery ---------- */
+/* ---------- Scrollable Gallery ---------- */
+.reader-gallery {
+  @apply mb-10 -mx-6 md:-mx-12; /* Negative margin to allow full-width scroll on mobile */
+}
+
+.gallery-scroll-container {
+  @apply flex gap-4 overflow-x-auto pb-6 px-6 md:px-12 scroll-smooth;
+
+  /* Magnetic scroll effect */
+  scroll-snap-type: x mandatory;
+
+  /* Hide scrollbar for a cleaner look */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+.gallery-scroll-container::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+.gallery-item {
+  @apply shrink-0 overflow-hidden rounded-[24px] bg-gray-100;
+
+  /* Defines the width of each photo in the scroll */
+  width: 280px;
+  @apply md:w-[450px];
+
+  aspect-ratio: 4 / 3;
+  box-shadow: 0 8px 25px var(--shadow-color);
+
+  /* Ensures each item snaps into place when scrolling */
+  scroll-snap-align: start;
+}
+
+.gallery-img {
+  @apply w-full h-full object-cover;
+}
+
+/* Optional: Mask to fade out the edges and hint that there is more content */
+.reader-gallery {
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 5%,
+    black 95%,
+    transparent
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 5%,
+    black 95%,
+    transparent
+  );
+  cursor: pointer;
+}
