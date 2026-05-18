@@ -145,46 +145,6 @@
   border-color: var(--border-color);
 }
 
-
-.profile-popover {
-  position: absolute;
-  bottom: calc(100% + 10px); 
-  left: 0.5rem;
-  right: 0.5rem;
-  background-color: var(--bg-card);
-  border: 1px solid var(--border-color);
-  @apply rounded-2xl shadow-2xl z-50 p-2 backdrop-blur-xl;
-  animation: popoverIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-@keyframes popoverIn {
-  0% { opacity: 0; transform: translateY(10px) scale(0.95); }
-  100% { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-.popover-header {
-  @apply px-3 py-2;
-}
-
-.popover-email {
-  @apply text-[10px] font-bold uppercase tracking-wider text-gray-400;
-}
-
-.popover-divider {
-  @apply h-[1px] w-full my-1;
-  background-color: var(--border-color);
-}
-
-.popover-item {
-  @apply flex items-center gap-3 w-full px-3 py-2.5 rounded-xl
-         text-sm font-medium transition-colors cursor-pointer border-none;
-  background: transparent;
-}
-
-.popover-item.logout {
-  @apply text-red-500 hover:bg-red-50;
-}
-
 /* ==========================================
    PROFILE CARD (Trigger)
    ========================================== */

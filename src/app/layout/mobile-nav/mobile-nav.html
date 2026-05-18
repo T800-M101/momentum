@@ -1,25 +1,7 @@
 <div class="md:hidden mobile-nav-container">
 
   @if (isMenuOpen()) {
-  <div class="mobile-popover" (click)="toggleMenu($event)">
-    <div class="popover-content" (click)="$event.stopPropagation()">
-      <div class="popover-stats">
-        <div class="stat">
-          <span class="v">124</span>
-          <span class="l">ENTRIES</span>
-        </div>
-        <div class="stat">
-          <span class="v">12</span>
-          <span class="l">STREAK</span>
-        </div>
-      </div>
-      <div class="popover-divider"></div>
-      <button class="popover-logout" (click)="logout()">
-        <lucide-icon [img]="icons().LogOut" class="h-4 w-4"></lucide-icon>
-        <span>LOG OUT</span>
-      </button>
-    </div>
-  </div>
+  <popover />
   }
 
   <nav class="mobile-nav-box">

@@ -1,0 +1,39 @@
+@reference "tailwindcss";
+
+.profile-popover {
+  position: absolute;
+  bottom: calc(100% + 12px);
+  right: 0;
+  width: 200px; 
+  background-color: var(--bg-card, white);
+  border: 1px solid var(--border-color);
+  @apply rounded-[2rem] shadow-2xl z-50 p-5 backdrop-blur-xl;
+  animation: popoverIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.popover-header {
+  @apply flex justify-between gap-4 mb-4;
+}
+
+.stat {
+  @apply flex flex-col items-center flex-1;
+}
+
+.stat .v {
+  @apply text-sm font-bold text-gray-800 leading-none mb-1;
+}
+
+.stat .l {
+  @apply text-[8px] uppercase tracking-widest text-gray-400 font-black;
+}
+
+.popover-divider {
+  @apply h-[1px] w-full bg-gray-100 my-3;
+}
+
+.popover-item.logout {
+  @apply flex items-center justify-center gap-3 w-full py-2
+         text-[10px] font-black uppercase tracking-[0.15em]
+         transition-colors cursor-pointer border-none bg-transparent;
+  color: #E07070;
+}

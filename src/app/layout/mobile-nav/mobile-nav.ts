@@ -1,23 +1,14 @@
 import { Component, HostListener, inject, signal } from '@angular/core';
 import { ThemeService } from '../../core/services/theme/theme-service';
 import { LucideAngularModule } from 'lucide-angular';
-import {
-  NotebookPen,
-  NotebookTabs,
-  CalendarDays,
-  Settings,
-  SquarePen,
-  Moon,
-  Sun,
-  LogOut,
-} from 'lucide-angular';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../core/services/auth/auth-service';
 import { IconsService } from '../../core/services/icons/icons-service';
+import { Popover } from '../../shared/popover/popover';
 
 @Component({
   selector: 'app-mobile-nav',
-  imports: [LucideAngularModule, RouterModule],
+  imports: [LucideAngularModule, RouterModule, Popover],
   templateUrl: './mobile-nav.html',
   styleUrl: './mobile-nav.css',
 })
