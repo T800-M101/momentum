@@ -33,7 +33,9 @@
 }
 
 .cover.falling {
-  animation: slamDown 1.5s cubic-bezier(0.76, 0, 0.24, 1) forwards;
+  z-index: 100;
+  animation: slamDown 0.7s cubic-bezier(0.17, 1.5, 0.3, 1) forwards;
+  outline: 500px solid var(--journal-cover-bg);
 }
 
 /* ── Cover header ──────────────────────────────────── */
@@ -197,12 +199,50 @@
     transform: translateY(-100%);
     opacity: 0;
   }
-  60% {
-    opacity: 0;
+  10% {
+    opacity: 1; /* Aparece rápido en el tope */
   }
   100% {
     transform: translateY(0);
     opacity: 1;
     pointer-events: auto;
   }
+}
+
+.auth-link {
+  @apply mt-2 text-center text-xs transition-all;
+  color: rgba(201, 169, 110, 0.65);
+
+  background: transparent;
+  border: none;
+  cursor: pointer;
+
+  letter-spacing: 0.04em;
+}
+
+.auth-link span {
+  color: var(--journal-gold);
+  font-weight: 600;
+  position: relative;
+}
+
+.auth-link span::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 1px;
+  background: var(--journal-gold);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.25s ease;
+}
+
+.auth-link:hover {
+  color: rgba(201, 169, 110, 0.9);
+}
+
+.auth-link:hover span::after {
+  transform: scaleX(1);
 }
