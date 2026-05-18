@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, inject, signal, viewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, inject, signal, ViewChild, viewChild } from '@angular/core';
 import { LucideAngularModule } from 'lucide-angular';
 import { IconsService } from '../../core/services/icons/icons-service';
 
@@ -9,6 +9,7 @@ import { IconsService } from '../../core/services/icons/icons-service';
   styleUrl: './new-entry.css',
 })
 export class NewEntry {
+  @ViewChild('editor') editor!: ElementRef<HTMLDivElement>;
   private iconsService = inject(IconsService);
   icons = this.iconsService.icons;
   moodContainer = viewChild<ElementRef>('moodSection');
@@ -42,4 +43,35 @@ export class NewEntry {
     this.selectedMood.set(mood);
     this.showMoodMenu.set(false);
   }
+format(command: string, value?: string) {
+  const editor = this.editor.nativeElement;
+
+  // keep focus inside editor
+  editor.focus();
+
+  switch (command) {
+    case 'bold':
+      document.execCommand('bold');
+      break;
+
+    case 'italic':
+      document.execCommand('italic');
+      break;
+
+    case 'blockquote':
+      document.execCommand('formatBlock', false, 'blockquote');
+      break;
+
+    case 'bulletList':
+      document.execCommand('insertUnorderedList');
+      break;
+
+    default:
+      document.execCommand(command, false, value);
+  }
+}
+
+getContent() {
+  return this.editor.nativeElement.innerHTML;
+}
 }

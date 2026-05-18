@@ -267,3 +267,97 @@
   background-color: var(--border-color);
   border-radius: 10px;
 }
+
+.editor-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 30px;
+}
+
+/* Toolbar */
+.editor-toolbar {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem;
+
+  border: 1px solid rgba(201, 169, 110, 0.15);
+  border-radius: 16px;
+
+  background: rgba(255,255,255,0.03);
+}
+
+.editor-toolbar button {
+  width: 38px;
+  height: 38px;
+
+  border: none;
+  border-radius: 12px;
+
+  cursor: pointer;
+
+  background: transparent;
+  color: var(--journal-gold);
+
+  transition: all .2s ease;
+}
+
+.editor-toolbar button:hover {
+  background: rgba(201,169,110,.12);
+  transform: translateY(-1px);
+}
+
+/* Editor */
+.journal-editor {
+  min-height: 240px;
+  padding: 1.25rem;
+
+  border-radius: 22px;
+
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(201,169,110,.15);
+
+  color: var(--journal-font-color);
+
+  outline: none;
+
+  font-size: 1rem;
+  line-height: 1.8;
+
+  overflow-y: auto;
+}
+
+/* Fake placeholder */
+.journal-editor:empty::before {
+  content: attr(data-placeholder);
+  color: rgba(255,255,255,0.35);
+}
+
+/* Rich text styles */
+.journal-editor b,
+.journal-editor strong {
+  font-weight: 700;
+}
+
+.journal-editor i,
+.journal-editor em {
+  font-style: italic;
+}
+
+.journal-editor blockquote {
+  margin: 1rem 0;
+  padding-left: 1rem;
+
+  border-left: 3px solid var(--journal-gold);
+
+  color: rgba(255,255,255,.8);
+  font-style: italic;
+}
+
+.journal-editor ul {
+  padding-left: 1.5rem;
+}
+
+.journal-editor li {
+  margin-bottom: .5rem;
+}
