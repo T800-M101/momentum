@@ -1,0 +1,64 @@
+@reference "tailwindcss";
+
+.entry-reader {
+  /* Limits container width for readability and centers it */
+  @apply max-w-[1200px] mx-auto p-6 md:p-12;
+  color: var(--text-main);
+  animation: openJournal .55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ---------- Header (Buttons) ---------- */
+.reader-header {
+  @apply flex justify-between items-center mb-10;
+}
+
+.back-btn, .edit-btn {
+  @apply text-sm font-medium transition-opacity hover:opacity-70;
+  color: var(--accent-brown);
+}
+
+/* ---------- Meta (Date and Mood) ---------- */
+.reader-meta {
+  @apply mb-6;
+}
+
+.reader-date {
+  @apply text-sm uppercase tracking-widest font-bold mb-2;
+  color: var(--text-muted);
+}
+
+.reader-mood {
+  @apply text-2xl;
+}
+
+/* ---------- Title ---------- */
+.reader-title {
+  @apply text-3xl md:text-5xl font-bold mb-8 leading-tight;
+  color: var(--text-main);
+}
+
+/* ---------- Article Content ---------- */
+.reader-content {
+  @apply text-lg mb-10;
+  line-height: 2;
+  color: var(--text-main);
+}
+
+/* ---------- Tags ---------- */
+.reader-tags {
+  @apply flex gap-3 text-sm font-medium pt-8 border-t;
+  border-color: var(--border-color);
+  color: var(--accent-brown);
+}
+
+/* Entry entrance animation */
+@keyframes openJournal {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

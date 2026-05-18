@@ -1,4 +1,4 @@
-<div class="journal-card-container group">
+<div class="journal-card-container group" (click)="openEntry()">
 
   <div class="date-column">
     <span class="day-number">{{ entry().day }}</span>
@@ -37,17 +37,17 @@
       @if(showMenu()) {
       <div class="entry-menu" (click)="$event.stopPropagation()">
 
-        <button class="menu-item add">
+        <button class="menu-item add" (click)="$event.stopPropagation()">
           <lucide-icon [img]="icons.ImagePlus" class="h-4 w-4"></lucide-icon>
           <span>Add photos</span>
         </button>
 
-        <button class="menu-item edit">
+        <button class="menu-item edit" (click)="$event.stopPropagation()">
           <lucide-icon [img]="icons.Pencil" class="h-4 w-4"></lucide-icon>
           <span>Edit entry</span>
         </button>
 
-        <button class="menu-item remove">
+        <button class="menu-item remove" (click)="$event.stopPropagation()">
           <lucide-icon [img]="icons.Trash2" class="h-4 w-4"></lucide-icon>
           <span>Remove</span>
         </button>

@@ -9,8 +9,9 @@ import {
 } from '@angular/core';
 import { LucideAngularModule } from 'lucide-angular';
 import { Images, Ellipsis, Pencil, Trash2, ImagePlus, EllipsisVertical } from 'lucide-angular';
-import { JournalEntry } from '../../core/interfaces/journal-entry.interface';
-import { JournalService } from '../../core/services/journal/journal-service';
+import { JournalService } from '../../../core/services/journal/journal-service';
+import { JournalEntry } from '../../../core/interfaces/journal-entry.interface';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-journal-card',
@@ -20,8 +21,11 @@ import { JournalService } from '../../core/services/journal/journal-service';
 })
 export class JournalCard {
   private journalService = inject(JournalService);
+  private router = inject(Router);
   private elementRef = inject(ElementRef);
   showMenu = signal(false);
+  moodInfo = computed(() => this.journalService.getMoodData(this.entry().mood));
+  entry = input.required<JournalEntry>();
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {
@@ -31,8 +35,6 @@ export class JournalCard {
       this.showMenu.set(false);
     }
   }
-
-  entry = input.required<JournalEntry>();
 
   readonly icons = {
     Images,
@@ -48,5 +50,7 @@ export class JournalCard {
     this.showMenu.update((v) => !v);
   }
 
-  moodInfo = computed(() => this.journalService.getMoodData(this.entry().mood));
+  openEntry() {
+    this.router.navigate(['/entry', this.entry().id]);
+  }
 }

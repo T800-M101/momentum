@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
-import { JournalCard } from '../../shared/journal-card/journal-card';
 import { JournalService } from '../../core/services/journal/journal-service';
+import { JournalCard } from '../../shared/journal/journal-card/journal-card';
 
 @Component({
   selector: 'app-entries',
