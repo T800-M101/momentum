@@ -46,7 +46,7 @@
           </button>
         }
 
-        <button class="menu-item edit" (click)="$event.stopPropagation()">
+        <button class="menu-item edit" (click)="$event.stopPropagation()" (click)="editEntry($event)">
           <lucide-icon [img]="icons().Pencil" class="h-4 w-4"></lucide-icon>
           <span>Edit entry</span>
         </button>

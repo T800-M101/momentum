@@ -1,12 +1,17 @@
 @if (entry(); as item) {
   <div class="entry-reader">
     <header class="reader-header">
-      <button class="edit-btn">Edit</button>
+      <button class="edit-btn" (click)="navigateToEdit()">Edit</button>
     </header>
 
     <section class="reader-meta">
       <div class="reader-date">
         {{ item.date | date: 'EEEE, MMMM d' }}
+        @if (item.updatedAt && item.createdAt && item.updatedAt !== item.createdAt) {
+          <span class="edited-legend" [title]="'Last dynamic update: ' + (item.updatedAt | date: 'short')">
+            (Edited)
+          </span>
+        }
       </div>
 
       <div class="reader-mood">

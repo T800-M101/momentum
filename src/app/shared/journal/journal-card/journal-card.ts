@@ -62,4 +62,30 @@ export class JournalCard {
   openEntry() {
     this.router.navigate(['/entry', this.entry().id]);
   }
+
+  editEntry(event: Event) {
+    event.stopPropagation();
+    this.showMenu.set(false);
+    this.router.navigate(['/new'], { queryParams: { id: this.entry().id } });
+  }
+
+  // removeEntry(event: Event) {
+  //   event.stopPropagation();
+  //   this.showMenu.set(false);
+
+  //   const confirmDelete = confirm('Are you sure you want to delete this entry? This action cannot be undone.');
+
+  //   if (confirmDelete) {
+  //     this.journalService.deleteEntry(this.entry().id).subscribe({
+  //       next: () => {
+  //         this.toastr.show('Entry deleted successfully', 'success');
+  //         this.journalService.refreshEntries();
+  //       },
+  //       error: (err) => {
+  //         console.error(err);
+  //         this.toastr.show('Could not delete the entry. Please try again.', 'error');
+  //       }
+  //     });
+  //   }
+  // }
 }

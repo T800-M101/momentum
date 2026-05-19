@@ -15,7 +15,7 @@ import { CommonModule } from '@angular/common';
 import { JournalService } from '../../core/services/journal/journal-service';
 import { HasPendingChanges } from '../../core/guards/pending-changes/pending-changes-guard';
 import { ExitModal } from '../../shared/exit-modal/exit-modal';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from '../../core/services/toastr/toastr-service';
 
 @Component({
@@ -30,6 +30,7 @@ export class NewEntry implements OnInit, HasPendingChanges {
   private journalService = inject(JournalService);
   private fb = inject(FormBuilder);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
   private toastr = inject(ToastrService);
 
   private modalResolve: ((value: boolean) => void) | null = null;
@@ -41,6 +42,9 @@ export class NewEntry implements OnInit, HasPendingChanges {
   moods = this.journalService.moods;
   showExitModal = signal(false);
   now = signal(new Date());
+
+  isEditMode = signal<boolean>(false);
+  entryId = signal<number | null>(null);
 
   entryForm: FormGroup = this.fb.group({
     title: ['', [Validators.required, Validators.minLength(3)]],
@@ -76,6 +80,17 @@ export class NewEntry implements OnInit, HasPendingChanges {
 
   ngOnInit(): void {
     this.entryForm.patchValue({ date: this.now() });
+
+    this.route.queryParams.subscribe((params) => {
+      const id = params['id'];
+      if (id) {
+        this.isEditMode.set(true);
+        this.entryId.set(Number(id));
+        this.loadEntryForEditing(Number(id));
+      } else {
+        this.entryForm.patchValue({ date: this.now() });
+      }
+    });
   }
 
   @HostListener('window:beforeunload', ['$event'])
@@ -106,7 +121,7 @@ export class NewEntry implements OnInit, HasPendingChanges {
     this.showMoodMenu.set(false);
   }
 
-  saveEntry() {
+saveEntry() {
     if (this.entryForm.valid) {
       const rawTags = this.entryForm.value.tags as string;
       const processedTags = rawTags
@@ -124,21 +139,61 @@ export class NewEntry implements OnInit, HasPendingChanges {
         tags: processedTags,
       };
 
-      console.log('Enviando a NestJS:', payload);
-
-      this.journalService.createEntry(payload).subscribe({
-        next: (response) => {
-          this.toastr.show('Entry saved successfully', 'success');
-          this.entryForm.reset();
-          this.router.navigate(['/entries']);
-        },
-        error: (err) => {
-          this.toastr.show('The entry could not be saved. Please try again later.', 'error');
-        }
-      });
+      // 3. Bifurcamos la petición: ¿Es una actualización (PUT) o una creación (POST)?
+      if (this.isEditMode()) {
+        this.journalService.updateEntry(this.entryId()!, payload).subscribe({
+          next: () => {
+            this.toastr.show('Entry updated successfully', 'success');
+            this.entryForm.reset();
+            this.router.navigate(['/entries']);
+          },
+          error: () => this.toastr.show('Failed to update the entry', 'error')
+        });
+      } else {
+        this.journalService.createEntry(payload).subscribe({
+          next: () => {
+            this.toastr.show('Entry saved successfully', 'success');
+            this.entryForm.reset();
+            this.router.navigate(['/entries']);
+          },
+          error: () => this.toastr.show('The entry could not be saved', 'error')
+        });
+      }
     } else {
       this.entryForm.markAllAsTouched();
     }
+  }
+
+  loadEntryForEditing(id: number) {
+    this.journalService.getEntryById(id).subscribe({
+      next: (entry) => {
+        console.log('ENTRY', entry)
+
+        const formattedTags = entry.tags
+          ? entry.tags.map((t: any) => `#${t.name || t}`).join(' ')
+          : '';
+        if (entry.mood) {
+          this.selectedMood.set(entry.mood);
+        } else {
+          const currentMood = this.moods().find(m => m.id === entry.moodId);
+          if (currentMood) this.selectedMood.set(currentMood);
+        }
+
+        this.entryForm.patchValue({
+          title: entry.title,
+          content: entry.content,
+          moodId: entry.moodId,
+          tags: formattedTags,
+          date: entry.date
+        });
+
+        this.entryForm.markAsPristine();
+      },
+      error: () => {
+        this.toastr.show('Could not load the journal entry', 'error');
+        this.router.navigate(['/entries']);
+      }
+    });
   }
 
 }

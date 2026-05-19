@@ -3,11 +3,11 @@
     <header class="entry-header">
 
       <div>
-        <p class="entry-date"> {{ now() | date: 'EEEE, MMMM d' }} </p>
-        <p class="entry-time"> {{ now() | date: 'h:mm a' }} </p>
+        <p class="entry-date"> {{ (isEditMode() ? entryForm.value.date : now()) | date: 'EEEE, MMMM d' }} </p>
+        <p class="entry-time"> {{ (isEditMode() ? entryForm.value.date : now()) | date: 'h:mm a' }} </p>
       </div>
 
-      <span class="save-status"> {{ entryForm.valid ? 'Ready' : 'Draft' }} </span>
+      <span class="save-status">{{ isEditMode() ? 'Editing' : (entryForm.valid ? 'Ready' : 'Draft') }} </span>
 
     </header>
 
@@ -36,14 +36,11 @@
 
 
     <section class="title-section">
-      <input
-        formControlName="title"
-        type="text"
-        class="title-input"
-        placeholder="Give this moment a title..." />
+      <input formControlName="title" type="text" class="title-input"
+        [placeholder]="isEditMode() ? 'Edit title...' : 'Give this moment a title...'" />
     </section>
 
-  @if(showPhotoSection()){
+    @if(showPhotoSection()){
     <section class="photo-section">
 
       <label class="photo-dropzone">
@@ -52,36 +49,26 @@
 
         <div class="photo-drop-content">
           <div class="photo-icon"> 📷 </div>
-            <p class="photo-title"> Add photos to this memory </p>
-            <p class="photo-subtitle"> Drag & drop, paste or click to upload </p>
+          <p class="photo-title"> Add photos to this memory </p>
+          <p class="photo-subtitle"> Drag & drop, paste or click to upload </p>
         </div>
 
       </label>
 
     </section>
-  }
+    }
 
 
     <section class="editor-section">
-      <textarea
-        formControlName="content"
-        class="journal-editor"
-        placeholder="What's on your mind today?">
+      <textarea formControlName="content" class="journal-editor" placeholder="What's on your mind today?">
       </textarea>
     </section>
 
 
     <footer class="entry-footer">
-      <input
-        formControlName="tags"
-        type="text"
-        class="tags-input"
-        placeholder="#gym #family #camping" />
-      <button
-        type="submit"
-        class="save-button"
-        [disabled]="entryForm.invalid">
-        Save entry
+      <input formControlName="tags" type="text" class="tags-input" placeholder="#gym #family #camping" />
+      <button type="submit" class="save-button" [disabled]="entryForm.invalid">
+        {{ isEditMode() ? 'Update entry' : 'Save entry' }}
       </button>
     </footer>
 
@@ -89,5 +76,5 @@
 </form>
 
 @if (showExitModal()) {
-  <app-exit-modal (onDecision)="handleModalDecision($event)" />
+<app-exit-modal (onDecision)="handleModalDecision($event)" />
 }

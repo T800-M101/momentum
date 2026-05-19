@@ -1,6 +1,7 @@
 import { Component, computed, inject, input, signal } from '@angular/core';
 import { JournalService } from '../../../core/services/journal/journal-service';
 import { CommonModule, DatePipe } from '@angular/common';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -11,6 +12,7 @@ import { CommonModule, DatePipe } from '@angular/common';
 })
 export class Entry {
   journalService = inject(JournalService);
+  private router = inject(Router);
   showGallery = signal(false);
   id = input.required<string>();
 
@@ -20,11 +22,18 @@ export class Entry {
 
     if (list.length === 0) {
       this.journalService.loadEntries();
-      return null; 
+      return null;
     }
 
     return list.find(e => Number(e.id) === entryId);
   });
+
+  navigateToEdit() {
+    const currentEntry = this.entry();
+    if (currentEntry && currentEntry.id) {
+      this.router.navigate(['/new'], { queryParams: { id: currentEntry.id } });
+    }
+  }
 
 
 

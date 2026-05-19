@@ -53,7 +53,7 @@
 
 .tag-item {
   @apply px-3 py-1 rounded-full transition-colors;
-  background-color: rgba(var(--accent-brown-rgb), 0.1); 
+  background-color: rgba(var(--accent-brown-rgb), 0.1);
   border: 1px solid transparent;
 
   &:hover {
@@ -131,4 +131,12 @@
     transparent
   );
   cursor: pointer;
+}
+
+.edited-legend {
+  font-size: 0.85rem;
+  color: #9ca3af;
+  font-style: italic;
+  margin-left: 0.5rem;
+  cursor: help;
 }

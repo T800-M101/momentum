@@ -46,9 +46,9 @@ export class JournalService {
   constructor() {}
 
   /**
-   * Envía una nueva entrada del diario a la API de NestJS
-   * @param payload Objeto con la estructura { title, content, moodId, date, tags }
-   * @returns Observable con la Entrada guardada e incluyendo sus relaciones de Postgres
+   * Send a new journal entry to the NestJS API
+   * @param payload Object with the structure { title, content, moodId, date, tags }
+   * @returns Observable with the saved entry and including its Postgres relationships
    */
   createEntry(payload: {
     title: string;
@@ -60,10 +60,27 @@ export class JournalService {
     return this.http.post<JournalEntry>(this.journalUrl, payload).pipe(
       tap((newEntry) => {
         console.log('Entry successfully created on the server:', newEntry);
-        // Opcional: Aquí podrías actualizar un signal global de 'entries'
-        // si tuvieras una lista activa en memoria para que se refleje sin recargar la página.
       })
     );
+  }
+
+/**
+   * Retrieve a specific journal entry by its unique identifier
+   * @param id The database primary key ID of the journal entry
+   * @returns Observable with the detailed entry object including its related mood and tags
+   */
+  getEntryById(id: number): Observable<any> {
+    return this.http.get<any>(`${this.journalUrl}/${id}`);
+  }
+
+  /**
+   * Update an existing journal entry on the NestJS API
+   * @param id The database primary key ID of the journal entry to modify
+   * @param payload Object containing the fields to update (title, content, moodId, tags)
+   * @returns Observable with the updated entry data from the database
+   */
+  updateEntry(id: number, payload: any): Observable<any> {
+    return this.http.put<any>(`${this.journalUrl}/${id}`, payload);
   }
 
 }
