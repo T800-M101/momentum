@@ -16,6 +16,7 @@ import { JournalService } from '../../core/services/journal/journal-service';
 import { HasPendingChanges } from '../../core/guards/pending-changes/pending-changes-guard';
 import { ExitModal } from '../../shared/exit-modal/exit-modal';
 import { Router } from '@angular/router';
+import { ToastrService } from '../../core/services/toastr/toastr-service';
 
 @Component({
   selector: 'app-new-entry',
@@ -29,6 +30,7 @@ export class NewEntry implements OnInit, HasPendingChanges {
   private journalService = inject(JournalService);
   private fb = inject(FormBuilder);
   private router = inject(Router);
+  private toastr = inject(ToastrService);
 
   private modalResolve: ((value: boolean) => void) | null = null;
   icons = this.iconsService.icons;
@@ -126,13 +128,12 @@ export class NewEntry implements OnInit, HasPendingChanges {
 
       this.journalService.createEntry(payload).subscribe({
         next: (response) => {
-          console.log('Entrada guardada con éxito en Postgres:', response);
+          this.toastr.show('Entry saved successfully', 'success');
           this.entryForm.reset();
           this.router.navigate(['/entries']);
         },
         error: (err) => {
-          console.error('Error al intentar guardar la entrada:', err);
-          // Aquí podrías setear un signal de error para mostrar un banner en la UI si falla Docker/Postgres
+          this.toastr.show('The entry could not be saved. Please try again later.', 'error');
         }
       });
     } else {
