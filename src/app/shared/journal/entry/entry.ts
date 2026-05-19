@@ -1,5 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { JournalEntry } from '../../../core/interfaces/journal-entry.interface';
 
 @Component({
   selector: 'app-entry',
@@ -10,11 +11,12 @@ import { ActivatedRoute } from '@angular/router';
 export class Entry {
 
   private route = inject(ActivatedRoute);
+  showGallery = signal(false);
 
-  entry = signal<any>({
+  entry = signal<JournalEntry>({
     id: 16,
     title: 'Mañana de caminata por Chipinque',
-    mood: '💪',
+    mood: 'happy',
     date: 'Saturday, Jan 16',
     content: `
       <p>El clima en Monterrey hoy estuvo espectacular.</p>

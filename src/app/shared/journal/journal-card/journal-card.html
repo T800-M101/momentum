@@ -1,8 +1,8 @@
 <div class="journal-card-container group" (click)="openEntry()">
 
   <div class="date-column">
-    <span class="day-number">{{ entry().day }}</span>
-    <span class="day-name">{{ entry().dayName }}</span>
+    <span class="day-number">{{ dateDetails().day }}</span>
+    <span class="day-name">{{ dateDetails().dayName}}</span>
 
     <div class="mood-emoji-container">{{ moodInfo()?.emoji }}</div>
   </div>
@@ -13,10 +13,10 @@
 
       @if(showMediaCount()){
         <div class="card-meta">
-          @if(entry().mediaCount) {
+          @if(mediaCount()) {
           <div class="media-indicator">
             <lucide-icon [img]="icons.Images" class="h-3.5 w-3.5"> </lucide-icon>
-            <span>{{ entry().mediaCount }}</span>
+            <span>{{mediaCount() }}</span>
           </div>
           }
           <span class="card-time">{{ entry().time }}</span>

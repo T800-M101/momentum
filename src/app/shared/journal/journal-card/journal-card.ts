@@ -28,6 +28,17 @@ export class JournalCard {
   entry = input.required<JournalEntry>();
   showMediaCount = signal(false);
 
+  dateDetails = computed(() => {
+    const dateValue = new Date(this.entry().date);
+    return {
+      day: dateValue.getDate(), // Ejemplo: 18
+      dayName: dateValue.toLocaleDateString('en-US', { weekday: 'short' }), // Ejemplo: Mon
+      time: this.entry().time || dateValue.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    };
+  });
+
+  mediaCount = computed(() => this.entry().images?.length || 0);
+
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {
     const clickedInside = this.elementRef.nativeElement.contains(event.target);

@@ -1,17 +1,20 @@
+export interface JournalImage {
+  url: string;
+  alt?: string;
+}
+
 export interface JournalEntry {
-  id: string;
-  day: number;
-  dayName: string;
+  id: number;
   title: string;
+  mood: string;
+  date: string;
   content: string;
-  time: string;
-  mood: 'happy' | 'productive' | 'sad' | 'neutral';
-  mediaCount?: number;
+  images?: JournalImage[];
+  time?: string;
 }
 
 export interface MoodOption {
   value: string;
   emoji: string;
   label: string;
-  color: string; 
 }

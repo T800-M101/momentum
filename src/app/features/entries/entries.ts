@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { JournalService } from '../../core/services/journal/journal-service';
 import { JournalCard } from '../../shared/journal/journal-card/journal-card';
 
@@ -8,7 +8,11 @@ import { JournalCard } from '../../shared/journal/journal-card/journal-card';
   templateUrl: './entries.html',
   styleUrl: './entries.css',
 })
-export class Entries {
+export class Entries implements OnInit {
   journalService = inject(JournalService);
   entries = this.journalService.entries;
+
+  ngOnInit() {
+    this.journalService.loadEntries();
+  }
 }
