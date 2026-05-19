@@ -1,16 +1,10 @@
 <div class="flex h-screen overflow-hidden transition-colors duration-300" style="background-color: var(--bg-main);">
-
   <app-sidebar></app-sidebar>
-
   <main class="flex-1 flex flex-col relative h-full">
     <app-topbar />
-
     <div class="flex-1 overflow-y-auto px-6 md:px-10 pb-32 md:pb-10 custom-scrollbar">
-
       <router-outlet />
-
     </div>
-
     <app-mobile-nav />
   </main>
 </div>

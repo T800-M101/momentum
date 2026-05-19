@@ -3,12 +3,12 @@ import { JournalService } from '../../core/services/journal/journal-service';
 import { JournalCard } from '../../shared/journal/journal-card/journal-card';
 
 @Component({
-  selector: 'app-entries',
+  selector: 'app-entry-list',
   imports: [JournalCard],
-  templateUrl: './entries.html',
-  styleUrl: './entries.css',
+  templateUrl: './entry-list.html',
+  styleUrl: './entry-list.css',
 })
-export class Entries implements OnInit {
+export class EntryList implements OnInit {
   journalService = inject(JournalService);
   entries = this.journalService.entries;
 

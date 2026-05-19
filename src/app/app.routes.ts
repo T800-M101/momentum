@@ -21,7 +21,7 @@ export const routes: Routes = [
 
       {
         path: 'entries',
-        loadComponent: () => import('./features/entries/entries').then((c) => c.Entries),
+        loadComponent: () => import('./features/entry-list/entry-list').then((c) => c.EntryList),
       },
       {
         path: 'entry/:id',
