@@ -1,5 +1,5 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { JournalEntry, MoodOption } from '../../interfaces/journal-entry.interface';
+import { JournalEntry } from '../../interfaces/journal-entry.interface';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 
@@ -27,25 +27,11 @@ export class JournalService {
     }
   }
 
-  readonly MOOD_OPTIONS: MoodOption[] = [
-    { value: 'happy', emoji: '✨', label: 'Feliz' },
-    { value: 'productive', emoji: '💪', label: 'Productivo' },
-    { value: 'neutral', emoji: '😶', label: 'Neutral' },
-    { value: 'sad', emoji: '☁️', label: 'Triste'},
-    { value: 'embarrassed', emoji: '😳', label: 'Apenado' },
-    { value: 'angry', emoji: '🔥', label: 'Enojado' },
-    { value: 'hungry', emoji: '🍱', label: 'Hambriento'},
-    { value: 'tired', emoji: '💤', label: 'Cansado' }
-  ];
-
-
   constructor() {}
 
   // addEntry(entry: JournalEntry) {
   //   this.entries.update(prev => [entry, ...prev]);
   // }
 
-  getMoodData(value: string): MoodOption | undefined {
-    return this.MOOD_OPTIONS.find(m => m.value === value);
-  }
+
 }

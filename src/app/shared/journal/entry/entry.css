@@ -46,9 +46,21 @@
 
 /* ---------- Tags ---------- */
 .reader-tags {
-  @apply flex gap-3 text-sm font-medium pt-8 border-t;
+  @apply flex flex-wrap gap-2 text-sm font-medium pt-8 border-t;
   border-color: var(--border-color);
   color: var(--accent-brown);
+}
+
+.tag-item {
+  @apply px-3 py-1 rounded-full transition-colors;
+  background-color: rgba(var(--accent-brown-rgb), 0.1); 
+  border: 1px solid transparent;
+
+  &:hover {
+    @apply cursor-pointer;
+    border-color: var(--accent-brown);
+    background-color: transparent;
+  }
 }
 
 /* Entry entrance animation */

@@ -10,7 +10,12 @@ import {
   LogOut,
   Search,
   User,
-  ChevronDown
+  ChevronDown,
+  Images,
+  EllipsisVertical,
+  ImagePlus,
+  Pencil,
+  Trash2
 
 } from 'lucide-angular';
 
@@ -30,7 +35,12 @@ export class IconsService {
   LogOut,
   Search,
   User,
-  ChevronDown
+  ChevronDown,
+  Images,
+  EllipsisVertical,
+  ImagePlus,
+  Pencil,
+  Trash2
   });
 
   readonly icons = this._icons.asReadonly();

@@ -3,18 +3,21 @@ export interface JournalImage {
   alt?: string;
 }
 
+export interface Tag {
+  id: number;
+  name: string;
+}
+
 export interface JournalEntry {
   id: number;
   title: string;
   mood: string;
-  date: string;
+  emoji: string;
+  date: Date;
   content: string;
-  images?: JournalImage[];
-  time?: string;
+  tags?: Tag[]
+  images: JournalImage[];
+  createdAt: Date;
+  updatedAt?: Date;
 }
 
-export interface MoodOption {
-  value: string;
-  emoji: string;
-  label: string;
-}

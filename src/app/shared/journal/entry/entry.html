@@ -1,48 +1,45 @@
-<div class="entry-reader">
+@if (entry(); as item) {
+  <div class="entry-reader">
+    <header class="reader-header">
+      <button class="edit-btn">Edit</button>
+    </header>
 
-  <header class="reader-header">
+    <section class="reader-meta">
+      <div class="reader-date">
+        {{ item.date | date: 'EEEE, MMMM d' }}
+      </div>
 
-    <button class="edit-btn">
-      Edit
-    </button>
+      <div class="reader-mood">
+        {{ item.emoji }} <span>Feeling</span> {{ item.mood | titlecase }}
+      </div>
+    </section>
 
-  </header>
+    <h1 class="reader-title">
+      {{ item.title }}
+    </h1>
 
-  <section class="reader-meta">
-    <div class="reader-date">
-      Saturday, January 16
-    </div>
-
-    <div class="reader-mood">
-      💪 Feeling Strong
-    </div>
-  </section>
-
-  <h1 class="reader-title">
-    Mañana de caminata por Chipinque
-  </h1>
-
-  @if(showGallery() && entry()){
-    <section class="reader-gallery">
-      @if (entry()?.images && entry()?.images!.length > 0) {
+    @if (showGallery() && item.images && item.images.length > 0) {
+      <section class="reader-gallery">
         <div class="gallery-scroll-container">
-          @for (image of entry().images; track $index) {
+          @for (image of item.images; track $index) {
             <div class="gallery-item">
               <img [src]="image.url" [alt]="image.alt || 'Journal photo'" class="gallery-img">
             </div>
           }
         </div>
+      </section>
+    }
+
+    <article class="reader-content" [innerHTML]="item.content"></article>
+
+    <footer class="reader-tags">
+      @for(tag of item.tags; track tag.id){
+        <span class="tag-item">#{{tag.name}}</span>
       }
-    </section>
-  }
-
-  <article
-    class="reader-content"
-    [innerHTML]="entry().content">
-  </article>
-
-  <footer class="reader-tags">
-    #gym #mountains #weekend
-  </footer>
-
-</div>
+    </footer>
+  </div>
+} @else {
+  <div class="loading-container">
+    <p>Loading journal entry...</p>
+  </div>
+}

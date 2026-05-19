@@ -8,10 +8,9 @@ import {
   signal,
 } from '@angular/core';
 import { LucideAngularModule } from 'lucide-angular';
-import { Images, Ellipsis, Pencil, Trash2, ImagePlus, EllipsisVertical } from 'lucide-angular';
-import { JournalService } from '../../../core/services/journal/journal-service';
 import { JournalEntry } from '../../../core/interfaces/journal-entry.interface';
 import { Router } from '@angular/router';
+import { IconsService } from '../../../core/services/icons/icons-service';
 
 @Component({
   selector: 'app-journal-card',
@@ -20,23 +19,30 @@ import { Router } from '@angular/router';
   styleUrl: './journal-card.css',
 })
 export class JournalCard {
-  private journalService = inject(JournalService);
+
   private router = inject(Router);
   private elementRef = inject(ElementRef);
-  showMenu = signal(false);
-  moodInfo = computed(() => this.journalService.getMoodData(this.entry().mood));
-  entry = input.required<JournalEntry>();
-  showMediaCount = signal(false);
 
+  private iconsService = inject(IconsService);
+  icons = this.iconsService.icons;
+
+  showMenu = signal(false);
+  entry = input.required<JournalEntry>();
   dateDetails = computed(() => {
     const dateValue = new Date(this.entry().date);
+
     return {
-      day: dateValue.getDate(), // Ejemplo: 18
-      dayName: dateValue.toLocaleDateString('en-US', { weekday: 'short' }), // Ejemplo: Mon
-      time: this.entry().time || dateValue.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      day: dateValue.getDate(),
+      dayName: dateValue.toLocaleDateString('en-US', { weekday: 'short' }),
+      time: dateValue.toLocaleTimeString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true,
+      }),
     };
   });
 
+  showMediaCount = signal(false);
   mediaCount = computed(() => this.entry().images?.length || 0);
 
   @HostListener('document:click', ['$event'])
@@ -47,15 +53,6 @@ export class JournalCard {
       this.showMenu.set(false);
     }
   }
-
-  readonly icons = {
-    Images,
-    Ellipsis,
-    Pencil,
-    Trash2,
-    ImagePlus,
-    EllipsisVertical,
-  };
 
   toggleMenu(event: MouseEvent) {
     event.stopPropagation();
