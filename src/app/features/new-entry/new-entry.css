@@ -54,6 +54,11 @@
   color: var(--accent-brown);
 }
 
+form.ng-valid .save-status {
+  background: #e8f5e9;
+  color: #2e7d32;     
+}
+
 /* ---------- Mood ---------- */
 
 .mood-section {
@@ -252,6 +257,13 @@
 
   background: var(--accent-brown);
   color: #ffffff;
+}
+
+.save-button:disabled {
+  cursor: not-allowed;
+  background-color: #9ca3af;
+  opacity: 0.6;
+  pointer-events: none;
 }
 
 .save-button:hover {

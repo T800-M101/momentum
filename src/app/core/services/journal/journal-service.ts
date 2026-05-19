@@ -1,5 +1,5 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { JournalEntry } from '../../interfaces/journal-entry.interface';
+import { JournalEntry, Mood } from '../../interfaces/journal-entry.interface';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 
@@ -11,19 +11,35 @@ import { firstValueFrom } from 'rxjs';
 export class JournalService {
 
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:3000/journal';
+  private apiUrl = 'http://localhost:3000/';
+  private journalUrl = `${this.apiUrl}journal`;
+  private moodUrl = `${this.apiUrl}mood`;
 
   private entriesSignal = signal<JournalEntry[]>([]);
   readonly entries = this.entriesSignal.asReadonly();
 
+  private moodSignal = signal<Mood[]>([]);
+  readonly moods = this.moodSignal.asReadonly();
+
   async loadEntries() {
     try {
       const data = await firstValueFrom(
-        this.http.get<JournalEntry[]>(this.apiUrl)
+        this.http.get<JournalEntry[]>(this.journalUrl)
       );
       this.entriesSignal.set(data);
     } catch (error) {
-      console.error('Failed to load entries from Monterrey DB:', error);
+      console.error('Failed to load entries from Journal DB:', error);
+    }
+  }
+
+    async loadMoods() {
+    try {
+      const data = await firstValueFrom(
+        this.http.get<Mood[]>(this.moodUrl)
+      );
+      this.moodSignal.set(data);
+    } catch (error) {
+      console.error('Failed to load moods from Journal DB:', error);
     }
   }
 

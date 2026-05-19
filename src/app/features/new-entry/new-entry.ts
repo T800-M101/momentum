@@ -1,31 +1,88 @@
-import { Component, ElementRef, HostListener, inject, signal, ViewChild, viewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  inject,
+  OnInit,
+  signal,
+  ViewChild,
+  viewChild,
+} from '@angular/core';
 import { LucideAngularModule } from 'lucide-angular';
 import { IconsService } from '../../core/services/icons/icons-service';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { JournalService } from '../../core/services/journal/journal-service';
+import { HasPendingChanges } from '../../core/guards/pending-changes/pending-changes-guard';
+import { ExitModal } from '../../shared/exit-modal/exit-modal';
 
 @Component({
   selector: 'app-new-entry',
-  imports: [LucideAngularModule],
+  imports: [LucideAngularModule, ReactiveFormsModule, CommonModule, ExitModal],
   templateUrl: './new-entry.html',
   styleUrl: './new-entry.css',
 })
-export class NewEntry {
+export class NewEntry implements OnInit, HasPendingChanges {
   @ViewChild('editor') editor!: ElementRef<HTMLDivElement>;
   private iconsService = inject(IconsService);
+  private journalService = inject(JournalService);
+
+  constructor(){
+    this.journalService.loadMoods();
+  }
+
+  canDeactivate(): Promise<boolean> | boolean {
+    if (!this.entryForm.dirty) {
+      return true;
+    }
+    this.showExitModal.set(true);
+
+    return new Promise<boolean>((resolve) => {
+      this.modalResolve = resolve;
+    });
+  }
+
+  handleModalDecision(allowNavigation: boolean) {
+    this.showExitModal.set(false);
+
+    if (this.modalResolve) {
+      this.modalResolve(allowNavigation); 
+      this.modalResolve = null;
+    }
+  }
+
+  @HostListener('window:beforeunload', ['$event'])
+  unloadNotification($event: any): void {
+    if (this.entryForm.dirty) {
+      $event.returnValue = true;
+    }
+  }
+
   icons = this.iconsService.icons;
   moodContainer = viewChild<ElementRef>('moodSection');
   showMoodMenu = signal(false);
   selectedMood = signal<any>(null);
   showPhotoSection = signal(false);
-  moods = signal([
-    { id: 1, emoji: '😀', label: 'Happy' },
-    { id: 2, emoji: '😌', label: 'Calm' },
-    { id: 3, emoji: '😴', label: 'Tired' },
-    { id: 4, emoji: '😔', label: 'Sad' },
-    { id: 5, emoji: '🤩', label: 'Excited' },
-    { id: 6, emoji: '🥲', label: 'Emotional' },
-  ]);
+  moods = this.journalService.moods;
+  showExitModal = signal(false);
+  private modalResolve: ((value: boolean) => void) | null = null;
 
- @HostListener('document:click', ['$event'])
+  private fb = inject(FormBuilder);
+  now = signal(new Date());
+
+  entryForm: FormGroup = this.fb.group({
+    title: ['', [Validators.required, Validators.minLength(3)]],
+    content: ['', Validators.required],
+    moodId: [null, Validators.required],
+    tags: [''],
+    date: [new Date(), Validators.required]
+  });
+
+  ngOnInit(): void {
+    this.entryForm.patchValue({ date: this.now() });
+  }
+
+  @HostListener('document:click', ['$event'])
   handleOutsideClick(event: MouseEvent) {
     const container = this.moodContainer()?.nativeElement;
     const path = event.composedPath();
@@ -40,39 +97,41 @@ export class NewEntry {
     this.showMoodMenu.update((v) => !v);
   }
 
-  selectMood(mood: any) {
+ selectMood(mood: any) {
     this.selectedMood.set(mood);
+    this.entryForm.patchValue({ moodId: mood.id });
     this.showMoodMenu.set(false);
   }
-format(command: string, value?: string) {
-  const editor = this.editor.nativeElement;
 
-  // keep focus inside editor
-  editor.focus();
+  saveEntry() {
+  if (this.entryForm.valid) {
+    const rawTags = this.entryForm.value.tags as string;
+    const processedTags = rawTags
+      ? rawTags
+          .split(' ')
+          .map(tag => tag.replace(/#/g, '').trim())
+          .filter(tag => tag.length > 0)
+      : [];
 
-  switch (command) {
-    case 'bold':
-      document.execCommand('bold');
-      break;
+    const payload = {
+      title: this.entryForm.value.title,
+      content: this.entryForm.value.content,
+      moodId: Number(this.entryForm.value.moodId),
+      date: this.entryForm.value.date,
+      tags: processedTags
+    };
 
-    case 'italic':
-      document.execCommand('italic');
-      break;
+    console.log('Enviando a NestJS:', payload);
 
-    case 'blockquote':
-      document.execCommand('formatBlock', false, 'blockquote');
-      break;
+    // Aquí mandas el payload a tu servicio HTTP:
+    // this.journalService.createEntry(payload).subscribe(...);
 
-    case 'bulletList':
-      document.execCommand('insertUnorderedList');
-      break;
-
-    default:
-      document.execCommand(command, false, value);
+  } else {
+    this.entryForm.markAllAsTouched();
   }
 }
 
-getContent() {
-  return this.editor.nativeElement.innerHTML;
-}
+  getContent() {
+    return this.editor.nativeElement.innerHTML;
+  }
 }

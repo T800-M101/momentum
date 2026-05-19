@@ -1,5 +1,7 @@
 import { Routes } from '@angular/router';
-import { authGuard } from './core/guards/auth-guard';
+import { authGuard } from './core/guards/auth/auth-guard';
+import { pendingChangesGuard } from './core/guards/pending-changes/pending-changes-guard';
+
 
 export const routes: Routes = [
   {
@@ -36,6 +38,7 @@ export const routes: Routes = [
       {
         path: 'new',
         loadComponent: () => import('./features/new-entry/new-entry').then((c) => c.NewEntry),
+        canDeactivate: [pendingChangesGuard]
       },
 
       {

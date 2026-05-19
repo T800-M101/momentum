@@ -8,10 +8,16 @@ export interface Tag {
   name: string;
 }
 
+export interface Mood {
+  id: number;
+  label: string;
+  emoji: string;
+}
+
 export interface JournalEntry {
   id: number;
   title: string;
-  mood: string;
+  mood: Mood;
   emoji: string;
   date: Date;
   content: string;

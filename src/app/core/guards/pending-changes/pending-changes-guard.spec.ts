@@ -1,11 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 import { CanActivateFn } from '@angular/router';
+import { pendingChangesGuard } from './pending-changes-guard';
 
-import { authGuard } from './auth-guard';
 
-describe('authGuard', () => {
-  const executeGuard: CanActivateFn = (...guardParameters) => 
-      TestBed.runInInjectionContext(() => authGuard(...guardParameters));
+
+describe('pendingChangesGuard', () => {
+  const executeGuard: CanActivateFn = (...guardParameters) =>
+      TestBed.runInInjectionContext(() => pendingChangesGuard(...guardParameters));
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
