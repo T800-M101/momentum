@@ -1,7 +1,7 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { JournalEntry, Mood } from '../../interfaces/journal-entry.interface';
 import { HttpClient } from '@angular/common/http';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, Observable, tap } from 'rxjs';
 
 
 
@@ -45,9 +45,25 @@ export class JournalService {
 
   constructor() {}
 
-  // addEntry(entry: JournalEntry) {
-  //   this.entries.update(prev => [entry, ...prev]);
-  // }
-
+  /**
+   * Envía una nueva entrada del diario a la API de NestJS
+   * @param payload Objeto con la estructura { title, content, moodId, date, tags }
+   * @returns Observable con la Entrada guardada e incluyendo sus relaciones de Postgres
+   */
+  createEntry(payload: {
+    title: string;
+    content: string;
+    moodId: number;
+    date: Date | string;
+    tags: string[];
+  }): Observable<JournalEntry> {
+    return this.http.post<JournalEntry>(this.journalUrl, payload).pipe(
+      tap((newEntry) => {
+        console.log('Entry successfully created on the server:', newEntry);
+        // Opcional: Aquí podrías actualizar un signal global de 'entries'
+        // si tuvieras una lista activa en memoria para que se refleje sin recargar la página.
+      })
+    );
+  }
 
 }
