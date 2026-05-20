@@ -129,17 +129,23 @@ export class Login {
       return;
     }
 
-    const success = await this.authService.signup({
-      username: username!,
-      password: password!,
-      email: email!,
-    });
+    try {
+      const result = await this.authService.signup({
+        username: username!,
+        password: password!,
+        email: email!,
+      });
 
-    if (success) {
-      this.executeSuccessAnimation();
-    } else {
-      this.error.set('Username or Email already exists.');
-      this.shake();
+      if (result.success) {
+        this.executeSuccessAnimation();
+      } else {
+        this.error.set('Username or Email already exists.');
+        this.shake();
+      }
+
+    } catch (err) {
+        this.error.set('Could not connect to the authentication server.');
+        this.shake();
     }
   }
 

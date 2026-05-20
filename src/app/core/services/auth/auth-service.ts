@@ -34,10 +34,17 @@ export class AuthService {
   currentUser = this._currentUser.asReadonly();
 
   constructor() {
-    // Rehydrate basic user structure profile details on application boot
-    const savedUser = localStorage.getItem('journal_user_profile');
-    if (savedUser) {
-      this._currentUser.set(JSON.parse(savedUser));
+    const savedUser = localStorage.getItem('user');
+
+    if (savedUser && savedUser !== 'undefined' && savedUser !== 'null') {
+      try {
+        this._currentUser.set(JSON.parse(savedUser));
+      } catch (e) {
+        console.error('Error parseando el usuario del localStorage', e);
+        localStorage.removeItem('user');
+      }
+    } else {
+      this._currentUser.set(null);
     }
   }
 
@@ -62,17 +69,23 @@ export class AuthService {
   /**
    * Registers a brand new account inside your PostgreSQL instance.
    */
-  async signup(userData: Omit<User, 'id'> & { password: string }): Promise<boolean> {
+  async signup(
+    userData: Omit<User, 'id'> & { password: string },
+  ): Promise<{ success: boolean; message?: string }> {
     try {
       const response = await firstValueFrom(
         this.http.post<AuthResponse>(`${this.API_URL}/signup`, userData),
       );
 
       this.handleAuthSuccess(response);
-      return true;
-    } catch (error) {
+      return { success: true };
+    } catch (error: any) {
       console.error('Registration signup transaction failed:', error);
-      return false;
+      const serverMessage = error.error?.message || 'An unexpected error occurred.';
+      return {
+        success: false,
+        message: Array.isArray(serverMessage) ? serverMessage[0] : serverMessage,
+      };
     }
   }
 
@@ -107,14 +120,10 @@ export class AuthService {
   // --- Helper Routines ---
 
   private handleAuthSuccess(response: AuthResponse) {
-    // 1. Secure authorization tokens inside persistent LocalStorage references
-    localStorage.setItem('access_token', response.accessToken);
-    localStorage.setItem('refresh_token', response.refreshToken);
+    localStorage.setItem('access_token', (response as any).access_token);
+    localStorage.setItem('refresh_token', (response as any).refresh_token);
+    localStorage.setItem('user', JSON.stringify(response.user));
 
-    // 2. Cache user profile meta information safely to avoid unneeded API payload overhead
-    localStorage.setItem('journal_user_profile', JSON.stringify(response.user));
-
-    // 3. Update the global application state via signals
     this._currentUser.set(response.user);
   }
 }
