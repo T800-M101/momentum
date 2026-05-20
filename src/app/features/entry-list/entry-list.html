@@ -1,8 +1,37 @@
-<div class="mb-12">
-  <h3 class="month-label"> Jan 2023 </h3>
-  <div class="grid gap-5">
-    @for ( entry of journalService.entries(); track entry.id ) {
-      <app-journal-card [entry]="entry"> </app-journal-card>
-    }
+<div class="journal-timeline">
+
+  @for (group of groupedEntries(); track group.monthYear) {
+  <div class="mb-12">
+
+    <h3 class="month-label">{{ group.monthYear }}</h3>
+
+    <div class="grid gap-5">
+      @for (entry of group.entries; track entry.id) {
+      <app-journal-card [entry]="entry"></app-journal-card>
+      }
+    </div>
+
   </div>
+  } @empty {
+  <div class="empty-state">
+    <div class="empty-icon">📖</div>
+
+    <p class="empty-title">No entries found for your journal.</p>
+
+    <div class="empty-action-text">
+      <span>Your thoughts deserve to be remembered. Click on the</span>
+
+      <span class="inline-badge">
+        <lucide-icon [img]="icons().SquarePen" class="h-4 w-4" />
+        <span class="font-semibold">New</span>
+      </span>
+
+      <span> button in the sidebar to write your first memory.</span>
+    </div>
+  </div>
+  }
+
 </div>
+
+
+

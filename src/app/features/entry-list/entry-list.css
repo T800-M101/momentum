@@ -1,0 +1,43 @@
+@reference "tailwindcss";
+
+/* .journal-timeline {
+  @apply max-w-2xl mx-auto w-full pt-6;
+} */
+
+.journal-timeline:has(.empty-state) {
+  @apply flex flex-col items-center justify-center min-h-[calc(100vh-400px)];
+}
+
+.empty-state {
+  @apply flex flex-col items-center justify-center text-center p-8 rounded-2xl w-full;
+  background: var(--bg-card);
+  border: 2px dashed var(--border-color);
+  box-shadow: 0 10px 25px -5px var(--shadow-color);
+}
+
+.empty-icon {
+  @apply text-5xl mb-5;
+  animation: float 3s ease-in-out infinite;
+}
+
+.empty-title {
+  @apply text-xl font-bold mb-2;
+  color: var(--text-main);
+}
+
+.empty-action-text {
+  @apply text-lg leading-relaxed text-center inline;
+  color: var(--text-muted);
+}
+
+.inline-badge {
+  @apply inline-flex items-center gap-1 px-2 py-0.5 border rounded-md mx-1 align-middle text-sm;
+  background: var(--bg-main);
+  border-color: var(--border-color);
+  color: var(--text-main);
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
