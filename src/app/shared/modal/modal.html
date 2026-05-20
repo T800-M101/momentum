@@ -1,0 +1,23 @@
+<div class="modal-overlay">
+  <div class="modal-card animate-fade-in" [ngClass]="mode()">
+
+    <div class="modal-header">
+      <span class="modal-icon">{{ mode() === 'danger' ? '🗑️' : '⚠️' }}</span>
+      <h3 class="modal-title">{{ title() }}</h3>
+    </div>
+
+    <p class="modal-body">
+      {{ body() }}
+    </p>
+
+    <div class="modal-actions">
+      <button type="button" class="btn-keep" (click)="makeDecision(false)">
+        {{ btnCancelText() }}
+      </button>
+      <button type="button" class="btn-discard" (click)="makeDecision(true)">
+        {{ btnConfirmText() }}
+      </button>
+    </div>
+
+  </div>
+</div>

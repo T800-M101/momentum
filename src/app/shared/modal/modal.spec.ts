@@ -1,18 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ExitModal } from './exit-modal';
+import { Modal } from './modal';
 
-describe('ExitModal', () => {
-  let component: ExitModal;
-  let fixture: ComponentFixture<ExitModal>;
+describe('Modal', () => {
+  let component: Modal;
+  let fixture: ComponentFixture<Modal>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ExitModal]
-    })
-    .compileComponents();
+      imports: [Modal],
+    }).compileComponents();
 
-    fixture = TestBed.createComponent(ExitModal);
+    fixture = TestBed.createComponent(Modal);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

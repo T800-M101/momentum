@@ -14,13 +14,13 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
 import { CommonModule } from '@angular/common';
 import { JournalService } from '../../core/services/journal/journal-service';
 import { HasPendingChanges } from '../../core/guards/pending-changes/pending-changes-guard';
-import { ExitModal } from '../../shared/exit-modal/exit-modal';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from '../../core/services/toastr/toastr-service';
+import { Modal } from '../../shared/modal/modal';
 
 @Component({
   selector: 'app-new-entry',
-  imports: [LucideAngularModule, ReactiveFormsModule, CommonModule, ExitModal],
+  imports: [LucideAngularModule, ReactiveFormsModule, CommonModule, Modal],
   templateUrl: './new-entry.html',
   styleUrl: './new-entry.css',
 })
@@ -121,7 +121,7 @@ export class NewEntry implements OnInit, HasPendingChanges {
     this.showMoodMenu.set(false);
   }
 
-saveEntry() {
+  saveEntry() {
     if (this.entryForm.valid) {
       const rawTags = this.entryForm.value.tags as string;
       const processedTags = rawTags
@@ -147,7 +147,7 @@ saveEntry() {
             this.entryForm.reset();
             this.router.navigate(['/entries']);
           },
-          error: () => this.toastr.show('Failed to update the entry', 'error')
+          error: () => this.toastr.show('Failed to update the entry', 'error'),
         });
       } else {
         this.journalService.createEntry(payload).subscribe({
@@ -156,7 +156,7 @@ saveEntry() {
             this.entryForm.reset();
             this.router.navigate(['/entries']);
           },
-          error: () => this.toastr.show('The entry could not be saved', 'error')
+          error: () => this.toastr.show('The entry could not be saved', 'error'),
         });
       }
     } else {
@@ -167,7 +167,7 @@ saveEntry() {
   loadEntryForEditing(id: number) {
     this.journalService.getEntryById(id).subscribe({
       next: (entry) => {
-        console.log('ENTRY', entry)
+        console.log('ENTRY', entry);
 
         const formattedTags = entry.tags
           ? entry.tags.map((t: any) => `#${t.name || t}`).join(' ')
@@ -175,7 +175,7 @@ saveEntry() {
         if (entry.mood) {
           this.selectedMood.set(entry.mood);
         } else {
-          const currentMood = this.moods().find(m => m.id === entry.moodId);
+          const currentMood = this.moods().find((m) => m.id === entry.moodId);
           if (currentMood) this.selectedMood.set(currentMood);
         }
 
@@ -184,7 +184,7 @@ saveEntry() {
           content: entry.content,
           moodId: entry.moodId,
           tags: formattedTags,
-          date: entry.date
+          date: entry.date,
         });
 
         this.entryForm.markAsPristine();
@@ -192,8 +192,7 @@ saveEntry() {
       error: () => {
         this.toastr.show('Could not load the journal entry', 'error');
         this.router.navigate(['/entries']);
-      }
+      },
     });
   }
-
 }

@@ -46,12 +46,12 @@
           </button>
         }
 
-        <button class="menu-item edit" (click)="$event.stopPropagation()" (click)="editEntry($event)">
+        <button class="menu-item edit" (click)="$event.stopPropagation(); editEntry($event)">
           <lucide-icon [img]="icons().Pencil" class="h-4 w-4"></lucide-icon>
           <span>Edit entry</span>
         </button>
 
-        <button class="menu-item remove" (click)="$event.stopPropagation()">
+        <button class="menu-item remove" (click)="$event.stopPropagation(); removeEntry($event)">
           <lucide-icon [img]="icons().Trash2" class="h-4 w-4"></lucide-icon>
           <span>Remove</span>
         </button>
@@ -62,3 +62,13 @@
     </div>
   </div>
 </div>
+
+@if (showDeleteModal()) {
+  <app-modal
+    title="Delete Entry"
+    body="Are you sure you want to delete this entry? This action is permanent and cannot be undone."
+    btnCancelText="Cancel"
+    btnConfirmText="Delete permanently"
+    mode="danger"
+    (onDecision)="handleDeleteDecision($event)" />
+}

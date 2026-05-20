@@ -9,19 +9,28 @@ import { firstValueFrom, Observable, tap } from 'rxjs';
   providedIn: 'root'
 })
 export class JournalService {
-
   private http = inject(HttpClient);
+
+  // Centrally configured endpoints
   private apiUrl = 'http://localhost:3000/';
   private journalUrl = `${this.apiUrl}journal`;
   private moodUrl = `${this.apiUrl}mood`;
 
+  // 1. Internal State Management with Reactive Signals
   private entriesSignal = signal<JournalEntry[]>([]);
-  readonly entries = this.entriesSignal.asReadonly();
-
   private moodSignal = signal<Mood[]>([]);
+
+  // 2. Display of Read-Only Status for Standalone Components
+  readonly entries = this.entriesSignal.asReadonly();
   readonly moods = this.moodSignal.asReadonly();
 
-  async loadEntries() {
+  constructor() {}
+
+  /**
+   * Fetch all journal entries from Postgres via NestJS and update the global Signal.
+   * Resolves the same requirement as refreshEntries but with a unified async pattern.
+   */
+  async loadEntries(): Promise<void> {
     try {
       const data = await firstValueFrom(
         this.http.get<JournalEntry[]>(this.journalUrl)
@@ -32,7 +41,10 @@ export class JournalService {
     }
   }
 
-    async loadMoods() {
+  /**
+   * Fetch all available moods from the DB to populate selection forms.
+   */
+  async loadMoods(): Promise<void> {
     try {
       const data = await firstValueFrom(
         this.http.get<Mood[]>(this.moodUrl)
@@ -43,12 +55,10 @@ export class JournalService {
     }
   }
 
-  constructor() {}
-
   /**
-   * Send a new journal entry to the NestJS API
+   * Send a new journal entry to the NestJS API and prepend it to the local Signal state.
    * @param payload Object with the structure { title, content, moodId, date, tags }
-   * @returns Observable with the saved entry and including its Postgres relationships
+   * @returns Observable with the saved entry including its Postgres relationships
    */
   createEntry(payload: {
     title: string;
@@ -60,11 +70,13 @@ export class JournalService {
     return this.http.post<JournalEntry>(this.journalUrl, payload).pipe(
       tap((newEntry) => {
         console.log('Entry successfully created on the server:', newEntry);
+        // Reactividad optimista: se inserta la nueva nota arriba del listado de inmediato
+        this.entriesSignal.update((entries) => [newEntry, ...entries]);
       })
     );
   }
 
-/**
+  /**
    * Retrieve a specific journal entry by its unique identifier
    * @param id The database primary key ID of the journal entry
    * @returns Observable with the detailed entry object including its related mood and tags
@@ -74,13 +86,41 @@ export class JournalService {
   }
 
   /**
-   * Update an existing journal entry on the NestJS API
+   * Update an existing journal entry on the NestJS API and replace it in the state.
    * @param id The database primary key ID of the journal entry to modify
    * @param payload Object containing the fields to update (title, content, moodId, tags)
    * @returns Observable with the updated entry data from the database
    */
   updateEntry(id: number, payload: any): Observable<any> {
-    return this.http.put<any>(`${this.journalUrl}/${id}`, payload);
+    return this.http.put<any>(`${this.journalUrl}/${id}`, payload).pipe(
+      tap((updatedEntry) => {
+        // Buscamos y reemplazamos el registro viejo con la data fresca en el Signal
+        this.entriesSignal.update((entries) =>
+          entries.map((e) => (e.id === id ? updatedEntry : e))
+        );
+      })
+    );
   }
 
+  /**
+   * Remove a specific journal entry from the NestJS API and clear it out from local state.
+   * @param id The database primary key ID of the journal entry to delete
+   * @returns Observable confirming the deletion status from Postgres
+   */
+  deleteEntry(id: number): Observable<any> {
+    return this.http.delete<any>(`${this.journalUrl}/${id}`).pipe(
+      tap(() => {
+        // Remueve la entrada borrada del Signal reactivo al instante para actualizar la UI
+        this.entriesSignal.update((entries) => entries.filter((e) => e.id !== id));
+      })
+    );
+  }
+
+  /**
+   * Backward-compatible alias for loadEntries to safely fulfill previous invocation mappings.
+   */
+  refreshEntries(): void {
+    this.loadEntries();
+  }
 }
+
