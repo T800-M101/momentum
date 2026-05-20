@@ -3,10 +3,8 @@ import { JournalEntry, Mood } from '../../interfaces/journal-entry.interface';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom, Observable, tap } from 'rxjs';
 
-
-
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class JournalService {
   private http = inject(HttpClient);
@@ -27,17 +25,32 @@ export class JournalService {
   constructor() {}
 
   /**
-   * Fetch all journal entries from Postgres via NestJS and update the global Signal.
-   * Resolves the same requirement as refreshEntries but with a unified async pattern.
+   * Fetch journal entries from Postgres via NestJS and update the global entries Signal.
+   * Supports dynamic filtering by a specific calendar date and/or search keywords.
+   * * @param filters Optional object containing active query constraints
+   * @param filters.date Optional ISO date string (YYYY-MM-DD) to fetch a single day
+   * @param filters.search Optional text query or tag (e.g., '#travel') to filter records
    */
-  async loadEntries(): Promise<void> {
+  async loadEntries(filters?: { date: string | null; search: string | null }): Promise<void> {
     try {
-      const data = await firstValueFrom(
-        this.http.get<JournalEntry[]>(this.journalUrl)
-      );
+      const params = new URLSearchParams();
+
+      // We force it to only be added if it has real text and is not an empty string
+      if (filters?.date && filters.date.trim() !== '') {
+        params.append('date', filters.date);
+      }
+
+      if (filters?.search && filters.search.trim() !== '') {
+        params.append('search', filters.search.trim());
+      }
+
+      const queryString = params.toString();
+      const url = queryString ? `${this.journalUrl}?${queryString}` : this.journalUrl;
+
+      const data = await firstValueFrom(this.http.get<JournalEntry[]>(url));
       this.entriesSignal.set(data);
     } catch (error) {
-      console.error('Failed to load entries from Journal DB:', error);
+      console.error('Failed to load entries:', error);
     }
   }
 
@@ -46,9 +59,7 @@ export class JournalService {
    */
   async loadMoods(): Promise<void> {
     try {
-      const data = await firstValueFrom(
-        this.http.get<Mood[]>(this.moodUrl)
-      );
+      const data = await firstValueFrom(this.http.get<Mood[]>(this.moodUrl));
       this.moodSignal.set(data);
     } catch (error) {
       console.error('Failed to load moods from Journal DB:', error);
@@ -72,7 +83,7 @@ export class JournalService {
         console.log('Entry successfully created on the server:', newEntry);
         // Reactividad optimista: se inserta la nueva nota arriba del listado de inmediato
         this.entriesSignal.update((entries) => [newEntry, ...entries]);
-      })
+      }),
     );
   }
 
@@ -96,9 +107,9 @@ export class JournalService {
       tap((updatedEntry) => {
         // Buscamos y reemplazamos el registro viejo con la data fresca en el Signal
         this.entriesSignal.update((entries) =>
-          entries.map((e) => (e.id === id ? updatedEntry : e))
+          entries.map((e) => (e.id === id ? updatedEntry : e)),
         );
-      })
+      }),
     );
   }
 
@@ -112,7 +123,7 @@ export class JournalService {
       tap(() => {
         // Remueve la entrada borrada del Signal reactivo al instante para actualizar la UI
         this.entriesSignal.update((entries) => entries.filter((e) => e.id !== id));
-      })
+      }),
     );
   }
 
@@ -123,4 +134,3 @@ export class JournalService {
     this.loadEntries();
   }
 }
-

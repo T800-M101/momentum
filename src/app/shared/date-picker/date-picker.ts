@@ -3,6 +3,7 @@ import {
   computed,
   effect,
   ElementRef,
+  inject,
   input,
   output,
   signal,
@@ -12,6 +13,8 @@ import { CalendarDay } from '../../core/interfaces/temporal.interface';
 import { Temporal } from '@js-temporal/polyfill';
 import { CommonModule } from '@angular/common';
 import { DatePickerEngine } from '../../core/date-picker-engine/date-picker-engine';
+import { Router } from '@angular/router';
+import { ToastrService } from '../../core/services/toastr/toastr-service';
 
 @Component({
   selector: 'app-date-picker',
@@ -20,6 +23,10 @@ import { DatePickerEngine } from '../../core/date-picker-engine/date-picker-engi
   styleUrl: './date-picker.css',
 })
 export class DatePicker {
+
+  private router = inject(Router);
+  private toastr = inject(ToastrService);
+
   // ── Inputs ─────────────────────────────────────────────
   modelValue = input<string | null>(null);
   placeholder = input<string>('Select a date');
@@ -143,11 +150,31 @@ export class DatePicker {
   // ── Selection ──────────────────────────────────────────
   handleDateSelect(day: CalendarDay) {
     if (day.isDisabled) return;
+
+    // Verify that it is not a future date
+    const hoy = Temporal.Now.plainDateISO();
+
+    /* Temporal.PlainDate.compare returns:
+     1 if the first date is later than the second
+     0 if they are equal
+    -1 if the first is earlier
+    */
+    if (Temporal.PlainDate.compare(day.date, hoy) > 0) {
+      this.toastr.show('Cannot select a future date for journal queries.', 'error');
+      return;
+    }
+
     this.engine.selectDate(day.date);
     this.updateState();
+
+    // Standard format ISO: YYYY-MM-DD
+    const formattedDate = day.date.toString();
+
     this.modelValueChange.emit(this.engine.getState().displayValue);
     this.selectDate.emit(day.date);
     this.closeCalendar(true);
+
+    this.navigateToEntriesWithDate(formattedDate);
   }
 
   handleGoToToday() {
@@ -301,5 +328,12 @@ export class DatePicker {
       'date-picker__day--selected': day.isSelected,
       'date-picker__day--disabled': day.isDisabled,
     };
+  }
+
+  private navigateToEntriesWithDate(dateString: string) {
+    this.router.navigate(['/entries'], {
+      queryParams: { date: dateString },
+      queryParamsHandling: 'merge'
+    });
   }
 }

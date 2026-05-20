@@ -13,22 +13,37 @@
 
   </div>
   } @empty {
-  <div class="empty-state">
-    <div class="empty-icon">📖</div>
+ <div class="empty-state">
 
-    <p class="empty-title">No entries found for your journal.</p>
+      @if (isFilteredView()) {
+        <div class="empty-icon">🔍</div>
 
-    <div class="empty-action-text">
-      <span>Your thoughts deserve to be remembered. Click on the</span>
+        @if (currentFilterSearch()) {
+          <p class="empty-title">No results found</p>
+          <div class="empty-action-text">
+            <span>We couldn't find any memories matching <strong class="text-primary">"{{ currentFilterSearch() }}"</strong>. Try checking your spelling or look for another keyword.</span>
+          </div>
+        } @else {
+          <p class="empty-title">No entries for this specific day</p>
+          <div class="empty-action-text">
+            <span>You didn't write any memories on <strong>{{ currentFilterDate() }}</strong>. Try jumping to another date or go to entries to see your feed.</span>
+          </div>
+        }
 
-      <span class="inline-badge">
-        <lucide-icon [img]="icons.SquarePen" class="h-4 w-4" />
-        <span class="font-semibold">New</span>
-      </span>
+      } @else {
+        <div class="empty-icon">📖</div>
+        <p class="empty-title">No entries found for your journal.</p>
+        <div class="empty-action-text">
+          <span>Your thoughts deserve to be remembered. Click on the</span>
+          <span class="inline-badge">
+            <lucide-icon [img]="icons.SquarePen" class="h-4 w-4" />
+            <span class="font-semibold">New</span>
+          </span>
+          <span> button in the sidebar to write your first memory.</span>
+        </div>
+      }
 
-      <span> button in the sidebar to write your first memory.</span>
     </div>
-  </div>
   }
 
 </div>
