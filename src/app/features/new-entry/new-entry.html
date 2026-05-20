@@ -19,7 +19,7 @@
         <span class="selected-mood">
           {{ selectedMood() ? selectedMood().emoji + ' ' + selectedMood().label : 'Select your mood' }}
         </span>
-        <lucide-icon [img]="icons().ChevronDown" class="size-4" />
+        <lucide-icon [img]="icons.ChevronDown" class="size-4" />
       </button>
 
       @if(showMoodMenu()) {

@@ -15,7 +15,7 @@
         <div class="card-meta">
           @if(mediaCount()) {
           <div class="media-indicator">
-            <lucide-icon [img]="icons().Images" class="h-3.5 w-3.5"> </lucide-icon>
+            <lucide-icon [img]="icons.Images" class="h-3.5 w-3.5"> </lucide-icon>
             <span>{{mediaCount() }}</span>
           </div>
           }
@@ -33,7 +33,7 @@
     <div class="options-wrapper">
 
       <button class="options-button" (click)="toggleMenu($event)">
-        <lucide-icon [img]="icons().EllipsisVertical" class="h-5 w-4"></lucide-icon>
+        <lucide-icon [img]="icons.EllipsisVertical" class="h-5 w-4"></lucide-icon>
       </button>
 
       @if(showMenu()) {
@@ -41,18 +41,18 @@
 
         @if(showMediaCount()){
           <button class="menu-item add" (click)="$event.stopPropagation()">
-            <lucide-icon [img]="icons().ImagePlus" class="h-4 w-4"></lucide-icon>
+            <lucide-icon [img]="icons.ImagePlus" class="h-4 w-4"></lucide-icon>
             <span>Add photos</span>
           </button>
         }
 
         <button class="menu-item edit" (click)="$event.stopPropagation(); editEntry($event)">
-          <lucide-icon [img]="icons().Pencil" class="h-4 w-4"></lucide-icon>
+          <lucide-icon [img]="icons.Pencil" class="h-4 w-4"></lucide-icon>
           <span>Edit entry</span>
         </button>
 
         <button class="menu-item remove" (click)="$event.stopPropagation(); removeEntry($event)">
-          <lucide-icon [img]="icons().Trash2" class="h-4 w-4"></lucide-icon>
+          <lucide-icon [img]="icons.Trash2" class="h-4 w-4"></lucide-icon>
           <span>Remove</span>
         </button>
 

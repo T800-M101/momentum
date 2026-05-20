@@ -24,7 +24,7 @@ import {
 })
 export class IconsService {
 
-  private _icons = signal({
+  readonly icons = {
   NotebookPen,
   NotebookTabs,
   CalendarDays,
@@ -41,8 +41,6 @@ export class IconsService {
   ImagePlus,
   Pencil,
   Trash2
-  });
-
-  readonly icons = this._icons.asReadonly();
+  } as const;
 
 }

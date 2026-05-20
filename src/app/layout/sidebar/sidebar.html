@@ -3,7 +3,7 @@
   <!-- LOGO -->
   <div class="sidebar-logo-section">
     <div class="logo-box">
-      <lucide-icon [img]="icons().NotebookPen" class="h-5 w-5"></lucide-icon>
+      <lucide-icon [img]="icons.NotebookPen" class="h-5 w-5"></lucide-icon>
     </div>
     <span class="sidebar-title">Journal</span>
   </div>
@@ -13,25 +13,25 @@
 
     <a class="nav-item" routerLink="/entries" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
 
-      <lucide-icon [img]="icons().NotebookTabs" class="h-5 w-5"></lucide-icon>
+      <lucide-icon [img]="icons.NotebookTabs" class="h-5 w-5"></lucide-icon>
       <span>Entries</span>
     </a>
 
     <a class="nav-item" routerLink="/jump" routerLinkActive="active">
 
-      <lucide-icon [img]="icons().CalendarDays" class="h-5 w-5"></lucide-icon>
+      <lucide-icon [img]="icons.CalendarDays" class="h-5 w-5"></lucide-icon>
       <span>Jump</span>
     </a>
 
     <a class="nav-item" routerLink="/settings" routerLinkActive="active">
 
-      <lucide-icon [img]="icons().Settings" class="h-5 w-5"></lucide-icon>
+      <lucide-icon [img]="icons.Settings" class="h-5 w-5"></lucide-icon>
       <span>Settings</span>
     </a>
 
     <a class="nav-item" routerLink="/new" routerLinkActive="active">
 
-      <lucide-icon [img]="icons().SquarePen" class="h-5 w-5"> </lucide-icon>
+      <lucide-icon [img]="icons.SquarePen" class="h-5 w-5"> </lucide-icon>
       <span>New</span>
     </a>
 
@@ -50,7 +50,7 @@
         <span class="profile-name">Guillermo Moran</span>
         <span class="profile-email">memo@example.com</span>
       </div>
-      <lucide-icon [img]="icons().Settings" class="h-4 w-4 text-gray-400 transition-transform"
+      <lucide-icon [img]="icons.Settings" class="h-4 w-4 text-gray-400 transition-transform"
         [class.rotate-180]="isMenuOpen()">
       </lucide-icon>
     </div>
