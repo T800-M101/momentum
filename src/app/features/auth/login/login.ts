@@ -1,35 +1,44 @@
 import { Component, effect, inject, signal } from '@angular/core';
 import { AuthService } from '../../../core/services/auth/auth-service';
 import { Router } from '@angular/router';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 type AuthMode = 'login' | 'signup';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [],
+  imports: [ReactiveFormsModule],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
 export class Login {
   authService = inject(AuthService);
+  private router = inject(Router);
+  private fb = inject(FormBuilder);
 
+  // --- Animation and UI Signals ---
   unlocking = signal(false);
   turning = signal(false);
   open = signal(false);
   username = signal('');
   password = signal('');
   error = signal('');
-
   mode = signal<AuthMode>('login');
   email = signal('');
   confirmPassword = signal('');
 
-  private router = inject(Router);
   private shaking = signal(false);
   isShaking = this.shaking.asReadonly();
 
-  constructor(){
+  authForm = this.fb.nonNullable.group({
+    username: ['', [Validators.required]],
+    password: ['', [Validators.required]],
+    email: ['', [Validators.required, Validators.email]],
+    confirmPassword: ['', [Validators.required]],
+  });
+
+  constructor() {
     effect(() => {
       if (this.authService.closing()) {
         this.unlocking.set(true);
@@ -40,12 +49,24 @@ export class Login {
       }
     });
   }
-  
 
   submit() {
     if (this.mode() === 'login') {
+      const usernameValid = this.authForm.controls.username.valid;
+      const passwordValid = this.authForm.controls.password.valid;
+
+      if (!usernameValid || !passwordValid) {
+        this.error.set('Please fill in both Username/Email and Password.');
+        this.shake();
+        return;
+      }
       this.tryLogin();
     } else {
+      if (this.authForm.invalid) {
+        this.handleFormErrors();
+        this.shake();
+        return;
+      }
       this.trySignup();
     }
   }
@@ -56,76 +77,98 @@ export class Login {
     this.error.set('');
     this.shaking.set(false);
 
-    if (this.mode() === 'login') {
-      this.email.set('');
-      this.confirmPassword.set('');
-    }
-  }
+    // 🚀 Dynamically update validation rules instead of adding/removing controls
+    const emailCtrl = this.authForm.controls.email;
+    const confirmCtrl = this.authForm.controls.confirmPassword;
 
-  private tryLogin() {
-    if (!this.username() || !this.password()) {
-      this.error.set('Please fill in both fields.');
-      this.shake();
-      return;
-    }
-
-    const ok = this.authService.login(this.username(), this.password());
-
-    if (ok) {
-      this.error.set('');
-      this.unlocking.set(true);
-
-      setTimeout(() => this.turning.set(true), 500);
-      setTimeout(() => this.open.set(true), 800);
-      setTimeout(() => this.router.navigate(['/']), 2200);
+    if (this.mode() === 'signup') {
+      emailCtrl.setValidators([Validators.required, Validators.email]);
+      confirmCtrl.setValidators([Validators.required]);
     } else {
-      this.error.set('Invalid credentials.');
-      this.shake();
+      // Clear validations and values so login succeeds without fields present
+      emailCtrl.clearValidators();
+      confirmCtrl.clearValidators();
+      emailCtrl.setValue('');
+      confirmCtrl.setValue('');
+    }
+
+    // Force Angular to recalculate validation status across the form
+    emailCtrl.updateValueAndValidity();
+    confirmCtrl.updateValueAndValidity();
+  }
+
+  private async tryLogin() {
+    const { username, password } = this.authForm.getRawValue();
+
+    try {
+      const ok = await this.authService.login(username!, password!);
+
+      if (ok) {
+        this.executeSuccessAnimation();
+      } else {
+        this.error.set('Invalid credentials or connection issue.');
+        this.shake();
+      }
+    } catch (err) {
+      console.error('🚨 ERROR CRÍTICO EN EL COMPONENTE:', err);
     }
   }
 
-  private trySignup() {
-    if (!this.username() || !this.password() || !this.email()) {
-      this.error.set('Please fill in all fields.');
-      this.shake();
-      return;
-    }
+  private async trySignup() {
+    const { username, password, email, confirmPassword } = this.authForm.getRawValue();
 
-    if (this.password() !== this.confirmPassword()) {
+    if (password !== confirmPassword) {
       this.error.set('Passwords do not match.');
       this.shake();
       return;
     }
 
-    if (this.password().length < 6) {
+    if (password && password.length < 6) {
       this.error.set('Password must be at least 6 characters.');
       this.shake();
       return;
     }
 
-    if (!this.email().includes('@') || !this.email().includes('.')) {
-      this.error.set('Please enter a valid email address.');
-      this.shake();
-      return;
-    }
-
-    const success = this.authService.signup({
-      username: this.username(),
-      password: this.password(),
-      email: this.email(),
+    const success = await this.authService.signup({
+      username: username!,
+      password: password!,
+      email: email!,
     });
 
     if (success) {
-      this.error.set('');
-      this.unlocking.set(true);
-
-      setTimeout(() => this.turning.set(true), 500);
-      setTimeout(() => this.open.set(true), 800);
-      setTimeout(() => this.router.navigate(['/']), 2200);
+      this.executeSuccessAnimation();
     } else {
-      this.error.set('Username already exists.');
+      this.error.set('Username or Email already exists.');
       this.shake();
     }
+  }
+
+  private handleFormErrors() {
+    const controls = this.authForm.controls;
+
+    if (controls.username.errors?.['required'] || controls.password.errors?.['required']) {
+      this.error.set('Please fill in both Username and Password.');
+      return;
+    }
+
+    // Secondary signup-specific check if fields are present in current abstract control mapping
+    if (this.mode() === 'signup') {
+      const emailCtrl = this.authForm.get('email');
+      if (emailCtrl?.errors?.['required']) {
+        this.error.set('Please fill in all fields.');
+      } else if (emailCtrl?.errors?.['email']) {
+        this.error.set('Please enter a valid email address.');
+      }
+    }
+  }
+
+  private executeSuccessAnimation() {
+    this.error.set('');
+    this.unlocking.set(true);
+
+    setTimeout(() => this.turning.set(true), 500);
+    setTimeout(() => this.open.set(true), 800);
+    setTimeout(() => this.router.navigate(['/']), 2200);
   }
 
   onKeydown(event: KeyboardEvent) {
