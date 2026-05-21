@@ -97,27 +97,31 @@ export class AuthService {
    * It is invoked automatically when the user presses F5.
    */
   async refreshSession(): Promise<boolean> {
-    try {
-      // We send the empty request; the browser attaches the cookie on its own.
-      const response = await firstValueFrom(
-        this.http.post<{ access_token: string }>(
-          `${this.API_URL}/refresh`,
-          {},
-          { withCredentials: true }
-        )
-      );
+  if (this._accessToken()) return true;
 
-      if (response && response.access_token) {
-        this._accessToken.set(response.access_token);
-        return true;
+  try {
+    const response = await firstValueFrom(
+      this.http.post<{ access_token: string }>(
+        `${this.API_URL}/refresh`,
+        {},
+        { withCredentials: true }
+      )
+    );
+
+    if (response && response.access_token) {
+      this._accessToken.set(response.access_token);
+      const savedUser = localStorage.getItem('journal_user_profile');
+      if (savedUser) {
+        this._currentUser.set(JSON.parse(savedUser));
       }
-      return false;
-    } catch {
-      // If the Refresh Token has already expired on the server, we silently clean everything up.
-      this.clearSessionData();
-      return false;
+      return true;
     }
+    return false;
+  } catch {
+    this.clearSessionData();
+    return false; 
   }
+}
 
   /**
    * Destroy the local credentials and notify the backend.

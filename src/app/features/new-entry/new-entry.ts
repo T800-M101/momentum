@@ -85,8 +85,8 @@ export class NewEntry implements OnInit, HasPendingChanges {
       const id = params['id'];
       if (id) {
         this.isEditMode.set(true);
-        this.entryId.set(Number(id));
-        this.loadEntryForEditing(Number(id));
+        this.entryId.set(id);
+        this.loadEntryForEditing(id);
       } else {
         this.entryForm.patchValue({ date: this.now() });
       }
@@ -167,8 +167,6 @@ export class NewEntry implements OnInit, HasPendingChanges {
   loadEntryForEditing(id: number) {
     this.journalService.getEntryById(id).subscribe({
       next: (entry) => {
-        console.log('ENTRY', entry);
-
         const formattedTags = entry.tags
           ? entry.tags.map((t: any) => `#${t.name || t}`).join(' ')
           : '';

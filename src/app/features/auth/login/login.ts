@@ -77,7 +77,7 @@ export class Login {
     this.error.set('');
     this.shaking.set(false);
 
-    // 🚀 Dynamically update validation rules instead of adding/removing controls
+    // Dynamically update validation rules instead of adding/removing controls
     const emailCtrl = this.authForm.controls.email;
     const confirmCtrl = this.authForm.controls.confirmPassword;
 
