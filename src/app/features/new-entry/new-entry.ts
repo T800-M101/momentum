@@ -105,7 +105,11 @@ export class NewEntry implements OnInit, HasPendingChanges {
     const container = this.moodContainer()?.nativeElement;
     const path = event.composedPath();
 
-    if (this.showMoodMenu() && container && !path.includes(container)) {
+    if (container && path.includes(container)) {
+      return;
+    }
+
+    if (this.showMoodMenu()) {
       this.showMoodMenu.set(false);
     }
   }
