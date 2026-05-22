@@ -1,4 +1,4 @@
-import { Component, HostListener, inject, signal } from '@angular/core';
+import { Component, computed, HostListener, inject, signal } from '@angular/core';
 import { ThemeService } from '../../core/services/theme/theme-service';
 import { LucideAngularModule } from 'lucide-angular';
 import { RouterModule } from '@angular/router';
@@ -21,6 +21,13 @@ export class MobileNav {
   icons = this.iconsService.icons;
 
   isMenuOpen = signal(false);
+
+  currentUser = this.authService.currentUser;
+
+  userInitial = computed(() => {
+    const name = this.currentUser()?.username;
+    return name ? name.charAt(0).toUpperCase() : '?';
+  });
 
   toggleMenu(event: Event) {
     event.stopPropagation();

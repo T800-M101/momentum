@@ -40,15 +40,13 @@
   <!-- FOOTER -->
   <div class="footer-section">
 
-    @if (isMenuOpen()) {
-    <popover />
-    }
+    @if (isMenuOpen()) { <popover /> }
 
     <div class="profile-card" [class.active]="isMenuOpen()" (click)="toggleMenu($event)">
-      <div class="avatar">G</div>
+      <div class="avatar">{{ userInitial() }}</div>
       <div class="profile-info">
-        <span class="profile-name">Guillermo Moran</span>
-        <span class="profile-email">memo@example.com</span>
+        <span class="profile-name">{{ currentUser()?.username }}</span>
+        <span class="profile-email">{{ currentUser()?.email }}</span>
       </div>
       <lucide-icon [img]="icons.Settings" class="h-4 w-4 text-gray-400 transition-transform"
         [class.rotate-180]="isMenuOpen()">

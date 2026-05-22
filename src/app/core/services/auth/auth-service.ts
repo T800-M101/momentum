@@ -39,10 +39,21 @@ export class AuthService {
       try {
         this._currentUser.set(JSON.parse(savedUser));
       } catch (e) {
-        console.error('Error parseando el usuario del localStorage', e);
+        console.error('Error parsing the localStorage user', e);
         localStorage.removeItem('journal_user_profile');
       }
     }
+
+    window.addEventListener('storage', (event) => {
+      if (event.key === null || event.key === 'journal_user_profile') {
+
+        if (!event.newValue) {
+          console.warn('Security Alert! Profile deletion detected in localStorage.');
+          this.clearSessionData();
+          this.router.navigate(['/login']);
+        }
+      }
+    });
   }
 
   /**
