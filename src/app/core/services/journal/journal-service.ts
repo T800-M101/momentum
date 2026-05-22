@@ -2,6 +2,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { JournalEntry, Mood } from '../../interfaces/journal-entry.interface';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom, Observable, tap } from 'rxjs';
+import { environment } from '../../../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root',
@@ -10,9 +11,9 @@ export class JournalService {
   private http = inject(HttpClient);
 
   // Centrally configured endpoints
-  private apiUrl = 'http://localhost:3000/';
-  private journalUrl = `${this.apiUrl}journal`;
-  private moodUrl = `${this.apiUrl}mood`;
+  private apiUrl = environment.apiUrl;
+  private journalUrl = `${this.apiUrl}/journal`;
+  private moodUrl = `${this.apiUrl}/mood`;
 
   // 1. Internal State Management with Reactive Signals
   private entriesSignal = signal<JournalEntry[]>([]);
