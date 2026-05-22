@@ -33,28 +33,29 @@ export class AuthService {
   constructor() {
     effect(() => {
       const user = this.currentUser();
-
       if (user) {
         this.journalService.loadStats();
       }
     });
 
-    // The public profile (username/email) can persist in localStorage to avoid losing its visual state.
     const savedUser = localStorage.getItem('journal_user_profile');
-
     if (savedUser && savedUser !== 'undefined' && savedUser !== 'null') {
       try {
         this._currentUser.set(JSON.parse(savedUser));
       } catch (e) {
-        console.error('Error parsing the localStorage user', e);
+        console.error('Error parsing user', e);
         localStorage.removeItem('journal_user_profile');
       }
+    }
+
+    const savedToken = localStorage.getItem('journal_token');
+    if (savedToken) {
+      this._accessToken.set(savedToken);
     }
 
     window.addEventListener('storage', (event) => {
       if (event.key === null || event.key === 'journal_user_profile') {
         if (!event.newValue) {
-          console.warn('Security Alert! Profile deletion detected in localStorage.');
           this.clearSessionData();
           this.router.navigate(['/login']);
         }
@@ -129,11 +130,15 @@ export class AuthService {
 
       if (response && response.access_token) {
         this._accessToken.set(response.access_token);
+        const savedUser = localStorage.getItem('journal_user_profile');
+        if (savedUser) {
+          this._currentUser.set(JSON.parse(savedUser));
+        }
         return true;
       }
       return false;
-    } catch (error) {
-      this._accessToken.set(null);
+    } catch {
+      this.clearSessionData();
       return false;
     }
   }
@@ -160,11 +165,10 @@ export class AuthService {
   // --- Internal Helping Routines ---
 
   private handleAuthSuccess(response: AuthResponse) {
-    // 1. We store the Access Token only in volatile memory
-    this._accessToken.set(response.access_token);
-
-    // 2. We store public metadata in localStorage to remember who logged in
+    localStorage.setItem('journal_token', response.access_token);
     localStorage.setItem('journal_user_profile', JSON.stringify(response.user));
+
+    this._accessToken.set(response.access_token);
     this._currentUser.set(response.user);
   }
 
