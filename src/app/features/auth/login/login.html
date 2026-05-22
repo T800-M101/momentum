@@ -15,18 +15,37 @@
       </div>
     </div>
 
-    <div class="login-box" [class.shake]="isShaking()" [formGroup]="authForm">
+    <div class="login-box" [class.shake]="isShaking()" [formGroup]="authForm" autocomplete="off">
 
       @if(mode() === 'signup') {
-      <input type="email" placeholder="Email" formControlName="email" (keydown)="onKeydown($event)" />
+      <input
+        type="email"
+        placeholder="Email"
+        formControlName="email"
+        autocomplete="off"
+        (keydown)="onKeydown($event)" />
       }
 
-      <input type="text" placeholder="Username / email" formControlName="username" (keydown)="onKeydown($event)" />
+      <input
+        type="text"
+        placeholder="Username / email"
+        formControlName="username"
+        autocomplete="off"
+        (keydown)="onKeydown($event)" />
 
-      <input type="password" placeholder="Password" formControlName="password" (keydown)="onKeydown($event)" />
+      <input
+        type="password"
+        placeholder="Password"
+        formControlName="password"
+        autocomplete="new-password"
+        (keydown)="onKeydown($event)" />
 
       @if(mode() === 'signup') {
-      <input type="password" placeholder="Confirm Password" formControlName="confirmPassword"
+      <input
+        type="password"
+        placeholder="Confirm Password"
+        formControlName="confirmPassword"
+        autocomplete="new-password"
         (keydown)="onKeydown($event)" />
       }
 
