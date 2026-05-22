@@ -129,15 +129,11 @@ export class AuthService {
 
       if (response && response.access_token) {
         this._accessToken.set(response.access_token);
-        const savedUser = localStorage.getItem('journal_user_profile');
-        if (savedUser) {
-          this._currentUser.set(JSON.parse(savedUser));
-        }
         return true;
       }
       return false;
-    } catch {
-      this.clearSessionData();
+    } catch (error) {
+      this._accessToken.set(null);
       return false;
     }
   }

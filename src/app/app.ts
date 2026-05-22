@@ -1,12 +1,23 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, effect, inject, signal } from '@angular/core';
+import { Router, RouterOutlet } from '@angular/router';
+import { AuthService } from './core/services/auth/auth-service';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet ],
+  imports: [RouterOutlet],
   templateUrl: './app.html',
-  styleUrl: './app.scss'
+  styleUrl: './app.scss',
 })
 export class App {
-  protected readonly title = signal('my-memos');
+  protected readonly title = signal('momentum');
+  constructor() {
+    const authService = inject(AuthService);
+    const router = inject(Router);
+
+    effect(() => {
+      if (!authService.isAuthenticated()) {
+        router.navigate(['/login']);
+      }
+    });
+  }
 }
