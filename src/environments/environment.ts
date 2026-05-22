@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://api.tudiario.com',
-  enableDebugLogs: false 
+  apiUrl: 'https://momentumapi-btcm.onrender.com',
+  enableDebugLogs: false
 };
