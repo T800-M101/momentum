@@ -11,9 +11,9 @@ export class JournalService {
   private http = inject(HttpClient);
 
   // Centrally configured endpoints
-  private apiUrl = environment.apiUrl;
-  private journalUrl = `${this.apiUrl}/journal`;
-  private moodUrl = `${this.apiUrl}/mood`;
+  private readonly API_URL = environment.apiUrl;
+  private journalUrl = `${this.API_URL}/journal`;
+  private moodUrl = `${this.API_URL}/mood`;
 
   // 1. Internal State Management with Reactive Signals
   private entriesSignal = signal<JournalEntry[]>([]);

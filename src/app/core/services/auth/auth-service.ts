@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { User } from '../../interfaces/user.interface';
 import { AuthResponse } from '../../interfaces/auth-response.interface';
+import { environment } from '../../../../environments/environment.development';
 
 
 
@@ -15,7 +16,7 @@ export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
 
-  private readonly API_URL = 'http://localhost:3000/auth';
+  private readonly API_URL = environment.apiUrl;
 
   // --- State Management con Signals ---
   private _closing = signal(false);
@@ -51,7 +52,7 @@ export class AuthService {
     try {
       const response = await firstValueFrom(
         this.http.post<AuthResponse>(
-          `${this.API_URL}/login`,
+          `${this.API_URL}/auth/login`,
           { identifier, password },
           { withCredentials: true } // CRITICAL: Allows receiving and storing the HttpOnly Cookie
         ),
@@ -74,7 +75,7 @@ export class AuthService {
     try {
       const response = await firstValueFrom(
         this.http.post<AuthResponse>(
-          `${this.API_URL}/signup`,
+          `${this.API_URL}/auth/signup`,
           userData,
           { withCredentials: true } // CRITICAL: Allows receiving the HttpOnly Cookie
         ),
@@ -102,7 +103,7 @@ export class AuthService {
   try {
     const response = await firstValueFrom(
       this.http.post<{ access_token: string }>(
-        `${this.API_URL}/refresh`,
+        `${this.API_URL}/auth/refresh`,
         {},
         { withCredentials: true }
       )
@@ -119,7 +120,7 @@ export class AuthService {
     return false;
   } catch {
     this.clearSessionData();
-    return false; 
+    return false;
   }
 }
 
@@ -130,7 +131,7 @@ export class AuthService {
     this._closing.set(true);
 
     // We notify NestJS using normal headers (the interceptor will inject the Access Token)
-    this.http.post(`${this.API_URL}/logout`, {}, { withCredentials: true }).subscribe({
+    this.http.post(`${this.API_URL}/auth/logout`, {}, { withCredentials: true }).subscribe({
       next: () => console.log('Session cleared on remote database.'),
       error: (err) => console.error('Failed to invalidate Refresh token remotely', err),
     });
