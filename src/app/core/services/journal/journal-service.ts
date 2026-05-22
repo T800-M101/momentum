@@ -3,6 +3,7 @@ import { JournalEntry, Mood } from '../../interfaces/journal-entry.interface';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom, Observable, tap } from 'rxjs';
 import { environment } from '../../../../environments/environment.development';
+import { UserStats } from '../../interfaces/user-stats.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -14,6 +15,7 @@ export class JournalService {
   private readonly API_URL = environment.apiUrl;
   private journalUrl = `${this.API_URL}/journal`;
   private moodUrl = `${this.API_URL}/mood`;
+  private statsUrl = `${this.API_URL}/journal/stats`;
 
   // 1. Internal State Management with Reactive Signals
   private entriesSignal = signal<JournalEntry[]>([]);
@@ -22,6 +24,9 @@ export class JournalService {
   // 2. Display of Read-Only Status for Standalone Components
   readonly entries = this.entriesSignal.asReadonly();
   readonly moods = this.moodSignal.asReadonly();
+
+  private statsSignal = signal<UserStats>({ totalEntries: 0, currentStreak: 0 });
+  readonly stats = this.statsSignal.asReadonly();
 
   constructor() {}
 
@@ -83,6 +88,7 @@ export class JournalService {
       tap((newEntry) => {
         console.log('Entry successfully created on the server:', newEntry);
         this.entriesSignal.update((entries) => [newEntry, ...entries]);
+        this.loadStats();
       }),
     );
   }
@@ -108,6 +114,7 @@ export class JournalService {
         this.entriesSignal.update((entries) =>
           entries.map((e) => (e.id === id ? updatedEntry : e)),
         );
+        this.loadStats();
       }),
     );
   }
@@ -121,6 +128,7 @@ export class JournalService {
     return this.http.delete<any>(`${this.journalUrl}/${id}`).pipe(
       tap(() => {
         this.entriesSignal.update((entries) => entries.filter((e) => e.id !== id));
+        this.loadStats();
       }),
     );
   }
@@ -130,5 +138,20 @@ export class JournalService {
    */
   refreshEntries(): void {
     this.loadEntries();
+  }
+
+  /**
+   * Consume the NestJS analytics endpoint and update user statistics
+   */
+  async loadStats(): Promise<void> {
+    try {
+      const data = await firstValueFrom(
+        this.http.get<UserStats>(this.statsUrl, { withCredentials: true })
+      );
+      console.log('DATA', data)
+      this.statsSignal.set(data);
+    } catch (error) {
+      console.error('Failed to load user metrics from server:', error);
+    }
   }
 }

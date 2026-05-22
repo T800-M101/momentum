@@ -1,11 +1,11 @@
 <div class="profile-popover" (click)="$event.stopPropagation()">
   <div class="popover-header flex gap-4">
     <div class="flex flex-col">
-      <span class="text-xs font-bold text-gray-800">124</span>
+      <span class="text-xs font-bold text-gray-800">{{ stats().totalEntries }}</span>
       <span class="text-[9px] uppercase tracking-tighter text-gray-400">Entries</span>
     </div>
     <div class="flex flex-col border-l pl-4 border-gray-100">
-      <span class="text-xs font-bold text-gray-800">12 Days</span>
+      <span class="text-xs font-bold text-gray-800">{{ stats().currentStreak }} Days</span>
       <span class="text-[9px] uppercase tracking-tighter text-gray-400">Streak</span>
     </div>
   </div>

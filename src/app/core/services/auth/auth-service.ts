@@ -1,13 +1,11 @@
-import { inject, Injectable, signal, computed } from '@angular/core';
+import { inject, Injectable, signal, computed, effect } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { User } from '../../interfaces/user.interface';
 import { AuthResponse } from '../../interfaces/auth-response.interface';
 import { environment } from '../../../../environments/environment.development';
-
-
-
+import { JournalService } from '../journal/journal-service';
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +13,7 @@ import { environment } from '../../../../environments/environment.development';
 export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
+  private journalService = inject(JournalService);
 
   private readonly API_URL = environment.apiUrl;
 
@@ -32,6 +31,14 @@ export class AuthService {
   isAuthenticated = computed(() => this._currentUser() !== null && this._accessToken() !== null);
 
   constructor() {
+    effect(() => {
+      const user = this.currentUser();
+
+      if (user) {
+        this.journalService.loadStats();
+      }
+    });
+
     // The public profile (username/email) can persist in localStorage to avoid losing its visual state.
     const savedUser = localStorage.getItem('journal_user_profile');
 
@@ -46,7 +53,6 @@ export class AuthService {
 
     window.addEventListener('storage', (event) => {
       if (event.key === null || event.key === 'journal_user_profile') {
-
         if (!event.newValue) {
           console.warn('Security Alert! Profile deletion detected in localStorage.');
           this.clearSessionData();
@@ -65,11 +71,12 @@ export class AuthService {
         this.http.post<AuthResponse>(
           `${this.API_URL}/auth/login`,
           { identifier, password },
-          { withCredentials: true } // CRITICAL: Allows receiving and storing the HttpOnly Cookie
+          { withCredentials: true }, // CRITICAL: Allows receiving and storing the HttpOnly Cookie
         ),
       );
 
       this.handleAuthSuccess(response);
+      this.journalService.loadStats();
       return true;
     } catch (error) {
       console.error('Authentication login transaction failed:', error);
@@ -88,7 +95,7 @@ export class AuthService {
         this.http.post<AuthResponse>(
           `${this.API_URL}/auth/signup`,
           userData,
-          { withCredentials: true } // CRITICAL: Allows receiving the HttpOnly Cookie
+          { withCredentials: true }, // CRITICAL: Allows receiving the HttpOnly Cookie
         ),
       );
 
@@ -109,31 +116,31 @@ export class AuthService {
    * It is invoked automatically when the user presses F5.
    */
   async refreshSession(): Promise<boolean> {
-  if (this._accessToken()) return true;
+    if (this._accessToken()) return true;
 
-  try {
-    const response = await firstValueFrom(
-      this.http.post<{ access_token: string }>(
-        `${this.API_URL}/auth/refresh`,
-        {},
-        { withCredentials: true }
-      )
-    );
+    try {
+      const response = await firstValueFrom(
+        this.http.post<{ access_token: string }>(
+          `${this.API_URL}/auth/refresh`,
+          {},
+          { withCredentials: true },
+        ),
+      );
 
-    if (response && response.access_token) {
-      this._accessToken.set(response.access_token);
-      const savedUser = localStorage.getItem('journal_user_profile');
-      if (savedUser) {
-        this._currentUser.set(JSON.parse(savedUser));
+      if (response && response.access_token) {
+        this._accessToken.set(response.access_token);
+        const savedUser = localStorage.getItem('journal_user_profile');
+        if (savedUser) {
+          this._currentUser.set(JSON.parse(savedUser));
+        }
+        return true;
       }
-      return true;
+      return false;
+    } catch {
+      this.clearSessionData();
+      return false;
     }
-    return false;
-  } catch {
-    this.clearSessionData();
-    return false;
   }
-}
 
   /**
    * Destroy the local credentials and notify the backend.
