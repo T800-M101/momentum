@@ -81,7 +81,6 @@ export class JournalService {
     return this.http.post<JournalEntry>(this.journalUrl, payload).pipe(
       tap((newEntry) => {
         console.log('Entry successfully created on the server:', newEntry);
-        // Reactividad optimista: se inserta la nueva nota arriba del listado de inmediato
         this.entriesSignal.update((entries) => [newEntry, ...entries]);
       }),
     );
@@ -120,7 +119,6 @@ export class JournalService {
   deleteEntry(id: string): Observable<any> {
     return this.http.delete<any>(`${this.journalUrl}/${id}`).pipe(
       tap(() => {
-        // Remueve la entrada borrada del Signal reactivo al instante para actualizar la UI
         this.entriesSignal.update((entries) => entries.filter((e) => e.id !== id));
       }),
     );
