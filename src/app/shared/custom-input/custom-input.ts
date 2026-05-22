@@ -13,10 +13,15 @@ export class CustomInput {
   icon = input<any>();
   value = input<string>('');
   valueChange = output<string>();
+  enterPressed = output<string>();
 
   onInput(event: Event) {
     const val = (event.target as HTMLInputElement).value;
     this.valueChange.emit(val);
+  }
+
+  onSearchTriggered() {
+    this.enterPressed.emit(this.value());
   }
 
 }

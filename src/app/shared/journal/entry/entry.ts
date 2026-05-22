@@ -17,7 +17,7 @@ export class Entry {
   id = input.required<string>();
 
   entry = computed(() => {
-    const entryId = Number(this.id());
+    const entryId = this.id();
     const list = this.journalService.entries();
 
     if (list.length === 0) {
@@ -25,7 +25,7 @@ export class Entry {
       return null;
     }
 
-    return list.find(e => Number(e.id) === entryId);
+    return list.find(e => e.id === entryId);
   });
 
   navigateToEdit() {
@@ -34,7 +34,5 @@ export class Entry {
       this.router.navigate(['/new'], { queryParams: { id: currentEntry.id } });
     }
   }
-
-
-
+  
 }

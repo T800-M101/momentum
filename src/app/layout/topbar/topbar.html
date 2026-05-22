@@ -1,9 +1,14 @@
 <header class="header-container">
-  @if(showSearch()){
-    <div class="search-wrapper group">
-      <div class="w-full md:w-80">
-       <app-custom-input placeholder="Search entries..." [icon]="icons.Search"/>
-    </div>
-    </div>
-  }
+@if(showSearch()){
+  <div class="search-wrapper group">
+    <div class="w-full md:w-80">
+     <app-custom-input
+      placeholder="Just Type #travel, happy, etc... "
+      [icon]="icons.Search"
+      (valueChange)="handleInstantFilter($event)"
+      />
+  </div>
+  </div>
+}
+
 </header>

@@ -92,7 +92,7 @@ export class JournalService {
    * @param id The database primary key ID of the journal entry
    * @returns Observable with the detailed entry object including its related mood and tags
    */
-  getEntryById(id: number): Observable<any> {
+  getEntryById(id: string): Observable<any> {
     return this.http.get<any>(`${this.journalUrl}/${id}`);
   }
 
@@ -102,10 +102,9 @@ export class JournalService {
    * @param payload Object containing the fields to update (title, content, moodId, tags)
    * @returns Observable with the updated entry data from the database
    */
-  updateEntry(id: number, payload: any): Observable<any> {
+  updateEntry(id: string, payload: any): Observable<any> {
     return this.http.put<any>(`${this.journalUrl}/${id}`, payload).pipe(
       tap((updatedEntry) => {
-        // Buscamos y reemplazamos el registro viejo con la data fresca en el Signal
         this.entriesSignal.update((entries) =>
           entries.map((e) => (e.id === id ? updatedEntry : e)),
         );
@@ -118,7 +117,7 @@ export class JournalService {
    * @param id The database primary key ID of the journal entry to delete
    * @returns Observable confirming the deletion status from Postgres
    */
-  deleteEntry(id: number): Observable<any> {
+  deleteEntry(id: string): Observable<any> {
     return this.http.delete<any>(`${this.journalUrl}/${id}`).pipe(
       tap(() => {
         // Remueve la entrada borrada del Signal reactivo al instante para actualizar la UI

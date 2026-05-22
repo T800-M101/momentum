@@ -15,7 +15,7 @@ export interface Mood {
 }
 
 export interface JournalEntry {
-  id: number;
+  id: string;
   title: string;
   mood: Mood;
   emoji: string;

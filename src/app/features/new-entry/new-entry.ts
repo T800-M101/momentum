@@ -44,7 +44,7 @@ export class NewEntry implements OnInit, HasPendingChanges {
   now = signal(new Date());
 
   isEditMode = signal<boolean>(false);
-  entryId = signal<number | null>(null);
+  entryId = signal<string | null>(null);
 
   entryForm: FormGroup = this.fb.group({
     title: ['', [Validators.required, Validators.minLength(3)]],
@@ -164,7 +164,7 @@ export class NewEntry implements OnInit, HasPendingChanges {
     }
   }
 
-  loadEntryForEditing(id: number) {
+  loadEntryForEditing(id: string) {
     this.journalService.getEntryById(id).subscribe({
       next: (entry) => {
         const formattedTags = entry.tags
