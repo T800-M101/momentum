@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { User } from '../../interfaces/user.interface';
 import { AuthResponse } from '../../interfaces/auth-response.interface';
-import { environment } from '../../../../environments/environment.development';
+import { environment } from '../../../../environments/environment';
 import { JournalService } from '../journal/journal-service';
 
 @Injectable({
@@ -182,8 +182,6 @@ export class AuthService {
   }
 
   async resetPassword(email: string): Promise<any> {
-  return firstValueFrom(
-    this.http.post(`${this.API_URL}/auth/forgot-password`, { email })
-  );
-}
+    return firstValueFrom(this.http.post(`${this.API_URL}/auth/forgot-password`, { email }));
+  }
 }

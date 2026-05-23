@@ -2,7 +2,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { JournalEntry, Mood } from '../../interfaces/journal-entry.interface';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom, Observable, tap } from 'rxjs';
-import { environment } from '../../../../environments/environment.development';
+import { environment } from '../../../../environments/environment';
 import { UserStats } from '../../interfaces/user-stats.interface';
 
 @Injectable({
@@ -146,7 +146,7 @@ export class JournalService {
   async loadStats(): Promise<void> {
     try {
       const data = await firstValueFrom(
-        this.http.get<UserStats>(this.statsUrl, { withCredentials: true })
+        this.http.get<UserStats>(this.statsUrl, { withCredentials: true }),
       );
       this.statsSignal.set(data);
     } catch (error) {

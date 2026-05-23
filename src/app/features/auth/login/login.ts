@@ -58,75 +58,89 @@ export class Login {
     });
   }
 
-  async submit() {
-    if (this.authForm.invalid) {
-      this.authForm.markAllAsTouched();
+ async submit() {
+  if (this.mode() === 'forgot') {
+    const emailCtrl = this.authForm.controls.email;
+
+    if (emailCtrl.invalid) {
+      emailCtrl.markAsTouched();
       this.shaking.set(true);
       return;
     }
 
-    if (this.mode() === 'forgot') {
-      const email = this.authForm.controls.email.value!;
-
-      try {
-        await this.authService.resetPassword(email);
-        this.toastr.show('We have sent a link to your email to reset your password', 'success');
-      } catch (err) {
-        this.toastr.show('Something went wrong. Please try again later.', 'error');
-      }
-      return;
+    try {
+      await this.authService.resetPassword(emailCtrl.value);
+      this.toastr.show('We have sent a link to your email to reset your password', 'success');
+    } catch (err) {
+      this.toastr.show('Something went wrong. Please try again later.', 'error');
     }
-
-    if (this.mode() === 'login') {
-      const usernameValid = this.authForm.controls.username.valid;
-      const passwordValid = this.authForm.controls.password.valid;
-
-      if (!usernameValid || !passwordValid) {
-        this.error.set('Please fill in both Username/Email and Password.');
-        this.shake();
-        return;
-      }
-      this.tryLogin();
-    } else {
-      if (this.authForm.invalid) {
-        this.handleFormErrors();
-        this.shake();
-        return;
-      }
-      this.trySignup();
-    }
+    return;
   }
 
-  toggleMode(targetMode: 'login' | 'signup' | 'forgot' = 'login') {
-    if (targetMode === 'forgot') {
-      this.mode.set('forgot');
-    } else {
-      this.mode.set(this.mode() === 'login' ? 'signup' : 'login');
-    }
+  if (this.authForm.invalid) {
+    this.authForm.markAllAsTouched();
+    this.shaking.set(true);
+    return;
+  }
 
-    this.error.set('');
-    this.shaking.set(false);
+  if (this.mode() === 'login') {
+    this.tryLogin();
+  } else {
+    this.trySignup();
+  }
+}
 
-    const emailCtrl = this.authForm.controls.email;
-    const confirmCtrl = this.authForm.controls.confirmPassword;
+ toggleMode(targetMode: 'login' | 'signup' | 'forgot' = 'login') {
+  if (targetMode === 'forgot') {
+    this.mode.set('forgot');
+  } else {
+    this.mode.set(this.mode() === 'login' ? 'signup' : 'login');
+  }
 
-    if (this.mode() === 'signup') {
-      emailCtrl.setValidators([Validators.required, Validators.email]);
-      confirmCtrl.setValidators([Validators.required]);
-    } else if (this.mode() === 'forgot') {
-      emailCtrl.setValidators([Validators.required, Validators.email]);
-      confirmCtrl.clearValidators();
-      confirmCtrl.setValue('');
-    } else {
-      emailCtrl.clearValidators();
-      confirmCtrl.clearValidators();
-      emailCtrl.setValue('');
-      confirmCtrl.setValue('');
-    }
+  this.error.set('');
+  this.shaking.set(false);
 
+  const emailCtrl = this.authForm.controls.email;
+  const userCtrl = this.authForm.controls.username;
+  const passCtrl = this.authForm.controls.password;
+  const confirmCtrl = this.authForm.controls.confirmPassword;
+
+  if (this.mode() === 'signup') {
+    emailCtrl.setValidators([Validators.required, Validators.email]);
+    userCtrl.setValidators([Validators.required]);
+    passCtrl.setValidators([Validators.required]);
+    confirmCtrl.setValidators([Validators.required]);
+  }
+  else if (this.mode() === 'forgot') {
+    emailCtrl.setValidators([Validators.required, Validators.email]);
+
+    this.authForm.controls.username.clearValidators();
+    this.authForm.controls.password.clearValidators();
+    this.authForm.controls.confirmPassword.clearValidators();
+
+    this.authForm.patchValue({
+      username: '',
+      password: '',
+      confirmPassword: ''
+    });
+
+    this.authForm.controls.username.updateValueAndValidity();
+    this.authForm.controls.password.updateValueAndValidity();
+    this.authForm.controls.confirmPassword.updateValueAndValidity();
     emailCtrl.updateValueAndValidity();
-    confirmCtrl.updateValueAndValidity();
   }
+  else {
+    emailCtrl.clearValidators();
+    userCtrl.setValidators([Validators.required]);
+    passCtrl.setValidators([Validators.required]);
+    confirmCtrl.clearValidators();
+  }
+
+  emailCtrl.updateValueAndValidity();
+  userCtrl.updateValueAndValidity();
+  passCtrl.updateValueAndValidity();
+  confirmCtrl.updateValueAndValidity();
+}
 
   private async tryLogin() {
     const { username, password } = this.authForm.getRawValue();

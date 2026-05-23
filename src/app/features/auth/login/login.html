@@ -42,19 +42,16 @@
         }
       }
 
-      <!-- CASO: FORGOT PASSWORD -->
       @if(mode() === 'forgot') {
         <input type="email" placeholder="Enter your email" formControlName="email" autocomplete="off" (keydown)="onKeydown($event)" />
       }
 
-      <!-- BOTÓN PRINCIPAL -->
       <button (click)="submit()">
         @if(mode() === 'login') { Unlock }
         @else if(mode() === 'signup') { Create Account }
         @else { Send Reset Link }
       </button>
 
-      <!-- ENLACES DE NAVEGACIÓN -->
       <span class="auth-link" type="button" (click)="toggleMode()">
         @if(mode() === 'login') {
           New here? <span>Sign up</span>
@@ -65,7 +62,6 @@
         }
       </span>
 
-      <!-- ENLACE FORGOT (Solo visible en Login) -->
       @if(mode() === 'login') {
         <span class="forgot-link" (click)="mode.set('forgot')">Forgot your password?</span>
       }
