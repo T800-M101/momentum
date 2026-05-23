@@ -69,9 +69,11 @@ export class Login {
     }
 
     try {
-      await this.authService.resetPassword(emailCtrl.value);
+      const response = await this.authService.resetPassword(emailCtrl.value);
+      console.log('Respuesta del servicio:', response);
       this.toastr.show('We have sent a link to your email to reset your password', 'success');
     } catch (err) {
+      console.error('ERROR EN FRONTEND:', err);
       this.toastr.show('Something went wrong. Please try again later.', 'error');
     }
     return;
