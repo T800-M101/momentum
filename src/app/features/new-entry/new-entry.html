@@ -15,7 +15,7 @@
     <section class="mood-section" #moodSection>
       <p class="section-label">How are you feeling today?</p>
 
-      <button class="mood-select" (click)="toggleMoodMenu($event)">
+      <button type="button" class="mood-select" (click)="toggleMoodMenu($event)">
         <span class="selected-mood">
           {{ selectedMood() ? selectedMood().emoji + ' ' + selectedMood().label : 'Select your mood' }}
         </span>
@@ -25,7 +25,7 @@
       @if(showMoodMenu()) {
       <div class="mood-menu">
         @for (mood of moods(); track mood.id) {
-        <button class="mood-option" (click)="selectMood(mood)">
+        <button type="button" class="mood-option" (click)="selectMood(mood)">
           <span>{{ mood.emoji }}</span>
           <span>{{ mood.label }}</span>
         </button>

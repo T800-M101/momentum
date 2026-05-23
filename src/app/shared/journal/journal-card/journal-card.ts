@@ -1,8 +1,6 @@
 import {
   Component,
   computed,
-  ElementRef,
-  HostListener,
   inject,
   input,
   signal,
@@ -14,16 +12,16 @@ import { IconsService } from '../../../core/services/icons/icons-service';
 import { JournalService } from '../../../core/services/journal/journal-service';
 import { Modal } from '../../modal/modal';
 import { ToastrService } from '../../../core/services/toastr/toastr-service';
+import { ClickOutsideDirective } from '../../directives/click-outside.directive';
 
 @Component({
   selector: 'app-journal-card',
-  imports: [LucideAngularModule, Modal],
+  imports: [LucideAngularModule, Modal, ClickOutsideDirective],
   templateUrl: './journal-card.html',
   styleUrl: './journal-card.css',
 })
 export class JournalCard {
   private router = inject(Router);
-  private elementRef = inject(ElementRef);
   private journalService = inject(JournalService);
   private toastr = inject(ToastrService);
 
@@ -50,15 +48,6 @@ export class JournalCard {
   showMediaCount = signal(false);
   mediaCount = computed(() => this.entry().images?.length || 0);
 
-  @HostListener('document:click', ['$event'])
-  onDocumentClick(event: MouseEvent) {
-    const clickedInside = this.elementRef.nativeElement.contains(event.target);
-
-    if (!clickedInside && this.showMenu()) {
-      this.showMenu.set(false);
-    }
-  }
-
   toggleMenu(event: MouseEvent) {
     event.stopPropagation();
     this.showMenu.update((v) => !v);
@@ -68,7 +57,7 @@ export class JournalCard {
     this.router.navigate(['/entry', this.entry().id]);
   }
 
-  editEntry(event: Event) {
+  editEntry(event: MouseEvent) {
     event.stopPropagation();
     this.showMenu.set(false);
     this.router.navigate(['/new'], { queryParams: { id: this.entry().id } });
