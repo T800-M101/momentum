@@ -28,20 +28,9 @@ export class AuthService {
   private _accessToken = signal<string | null>(null);
   accessToken = this._accessToken.asReadonly();
 
-  isAuthenticated = computed(
-    () => this._currentUser() !== null && this._accessToken() !== null
-  );
+  isAuthenticated = computed(() => this._currentUser() !== null && this._accessToken() !== null);
 
   constructor() {
-    // Cuando hay usuario autenticado, cargar estadísticas
-    effect(() => {
-      const user = this.currentUser();
-      if (user) {
-        this.journalService.loadStats();
-      }
-    });
-
-
     const savedUser = localStorage.getItem('journal_user_profile');
     if (savedUser && savedUser !== 'undefined' && savedUser !== 'null') {
       try {
@@ -51,7 +40,6 @@ export class AuthService {
         localStorage.removeItem('journal_user_profile');
       }
     }
-
 
     window.addEventListener('storage', (event) => {
       if (event.key === null || event.key === 'journal_user_profile') {
@@ -72,7 +60,7 @@ export class AuthService {
         this.http.post<AuthResponse>(
           `${this.API_URL}/auth/login`,
           { identifier, password },
-          { withCredentials: true }
+          { withCredentials: true },
         ),
       );
 
@@ -92,11 +80,9 @@ export class AuthService {
   ): Promise<{ success: boolean; message?: string }> {
     try {
       const response = await firstValueFrom(
-        this.http.post<AuthResponse>(
-          `${this.API_URL}/auth/signup`,
-          userData,
-          { withCredentials: true },
-        ),
+        this.http.post<AuthResponse>(`${this.API_URL}/auth/signup`, userData, {
+          withCredentials: true,
+        }),
       );
 
       this.handleAuthSuccess(response);
@@ -116,8 +102,10 @@ export class AuthService {
    * It is automatically invoked on every F5 via provideAppInitializer.
    */
   async refreshSession(): Promise<boolean> {
-    // If there is already a token in RAM, there is no need to refresh.
-    if (this._accessToken()) return true;
+    if (this._accessToken()) {
+      this.journalService.loadStats();
+      return true;
+    }
 
     try {
       const response = await firstValueFrom(
@@ -131,18 +119,18 @@ export class AuthService {
       if (response?.access_token) {
         this._accessToken.set(response.access_token);
 
-        // Restore profile if it exists (it was already saved in handleAuthSuccess)
         const savedUser = localStorage.getItem('journal_user_profile');
         if (savedUser) {
           this._currentUser.set(JSON.parse(savedUser));
         }
 
+        this.journalService.loadStats();
         return true;
       }
 
       return false;
-    } catch {
-      // RT expired or invalid — clear session
+    } catch (error) {
+      console.error('❌ Refresh failed:', error);
       this.clearSessionData();
       return false;
     }
@@ -154,12 +142,10 @@ export class AuthService {
   logout() {
     this._closing.set(true);
 
-    this.http
-      .post(`${this.API_URL}/auth/logout`, {}, { withCredentials: true })
-      .subscribe({
-        next: () => console.log('Remote session invalidated.'),
-        error: (err) => console.error('Remote logout failed:', err),
-      });
+    this.http.post(`${this.API_URL}/auth/logout`, {}, { withCredentials: true }).subscribe({
+      next: () => console.log('Remote session invalidated.'),
+      error: (err) => console.error('Remote logout failed:', err),
+    });
 
     setTimeout(() => {
       this.clearSessionData();

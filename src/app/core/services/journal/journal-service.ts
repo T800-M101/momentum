@@ -148,7 +148,6 @@ export class JournalService {
       const data = await firstValueFrom(
         this.http.get<UserStats>(this.statsUrl, { withCredentials: true })
       );
-      console.log('DATA', data)
       this.statsSignal.set(data);
     } catch (error) {
       console.error('Failed to load user metrics from server:', error);
