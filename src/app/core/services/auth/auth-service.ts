@@ -102,7 +102,13 @@ export class AuthService {
    * It is automatically invoked on every F5 via provideAppInitializer.
    */
   async refreshSession(): Promise<boolean> {
-    if (this._accessToken()) {
+    if (this._accessToken()) return true;
+
+    const savedToken = localStorage.getItem('journal_token');
+    if (savedToken) {
+      this._accessToken.set(savedToken);
+      const savedUser = localStorage.getItem('journal_user_profile');
+      if (savedUser) this._currentUser.set(JSON.parse(savedUser));
       this.journalService.loadStats();
       return true;
     }
@@ -118,12 +124,8 @@ export class AuthService {
 
       if (response?.access_token) {
         this._accessToken.set(response.access_token);
-
         const savedUser = localStorage.getItem('journal_user_profile');
-        if (savedUser) {
-          this._currentUser.set(JSON.parse(savedUser));
-        }
-
+        if (savedUser) this._currentUser.set(JSON.parse(savedUser));
         this.journalService.loadStats();
         return true;
       }
@@ -158,11 +160,9 @@ export class AuthService {
 
   private handleAuthSuccess(response: AuthResponse) {
     localStorage.setItem('journal_user_profile', JSON.stringify(response.user));
-
+    localStorage.setItem('journal_token', response.access_token);
     this._accessToken.set(response.access_token);
     this._currentUser.set(response.user);
-
-    this.journalService.loadStats();
   }
 
   private clearSessionData() {
