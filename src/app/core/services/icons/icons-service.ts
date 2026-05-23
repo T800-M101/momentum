@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable } from '@angular/core';
 import {
   NotebookPen,
   NotebookTabs,
@@ -15,7 +15,9 @@ import {
   EllipsisVertical,
   ImagePlus,
   Pencil,
-  Trash2
+  Trash2,
+  EyeOff,
+  Eye
 
 } from 'lucide-angular';
 
@@ -40,7 +42,9 @@ export class IconsService {
   EllipsisVertical,
   ImagePlus,
   Pencil,
-  Trash2
+  Trash2,
+  EyeOff,
+  Eye
   } as const;
 
 }

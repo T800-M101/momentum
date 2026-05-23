@@ -33,20 +33,45 @@
         autocomplete="off"
         (keydown)="onKeydown($event)" />
 
-      <input
-        type="password"
-        placeholder="Password"
-        formControlName="password"
-        autocomplete="new-password"
-        (keydown)="onKeydown($event)" />
+      <div class="password-wrapper">
+        <input
+          [type]="showPassword() ? 'text' : 'password'"
+          placeholder="Password"
+          formControlName="password"
+          autocomplete="new-password"
+          (keydown)="onKeydown($event)" />
+
+        <button
+          type="button"
+          class="eye-btn"
+          (click)="togglePasswordVisibility()">
+          <lucide-icon [
+            img]="showPassword() ? icons.EyeOff : icons.Eye"
+            class="h-4 w-4"
+            [style.color]="'var(--journal-gold)'">
+          </lucide-icon>
+        </button>
+      </div>
 
       @if(mode() === 'signup') {
-      <input
-        type="password"
-        placeholder="Confirm Password"
-        formControlName="confirmPassword"
-        autocomplete="new-password"
-        (keydown)="onKeydown($event)" />
+      <div class="password-wrapper">
+        <input
+          [type]="showConfirmPassword() ? 'text' : 'password'"
+          placeholder="Confirm Password"
+          formControlName="confirmPassword"
+          autocomplete="new-password"
+          (keydown)="onKeydown($event)" />
+
+        <button
+          type="button"
+          class="eye-btn"
+          (click)="toggleConfirmPasswordVisibility()">
+          <lucide-icon
+            [img]="showConfirmPassword() ? icons.EyeOff : icons.Eye"
+            class="h-4 w-4" [style.color]="'var(--journal-gold)'">
+          </lucide-icon>
+        </button>
+      </div>
       }
 
       <button (click)="submit()">
@@ -54,13 +79,11 @@
       </button>
 
       <span class="auth-link" type="button" (click)="toggleMode()">
-
         @if(mode() === 'login') {
         New here? <span>Sign up</span>
         } @else {
         Already have an account? <span>Sign in</span>
         }
-
       </span>
 
       @if(error()) {
@@ -70,11 +93,10 @@
 
   </div>
   }
+
   <!-- INNER PAGE -->
   <div class="app-page" [class.visible]="open()" [class.falling]="authService.closing()">
-
     <span class="app-page-title">My Journal</span>
-
     <div class="app-page-lines">
       @for (line of [90, 70, 85, 60, 75]; track $index) {
       <div class="app-page-line"></div>
@@ -82,7 +104,6 @@
       }
       <div class="app-page-line"></div>
     </div>
-
   </div>
 
 </div>

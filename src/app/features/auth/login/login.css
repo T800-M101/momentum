@@ -120,6 +120,33 @@
 .login-box button:hover  { @apply brightness-110 scale-[1.02]; }
 .login-box button:active { @apply scale-95; }
 
+.password-wrapper {
+  @apply relative w-full;
+}
+
+.password-wrapper input {
+  @apply w-full pr-12;
+}
+
+.eye-btn {
+  @apply absolute right-3 top-0 bottom-0 flex items-center justify-center
+         transition-colors duration-200;
+  background: transparent !important;
+  border: none !important;
+  margin: 0 !important;
+  padding: 0 8px !important;
+  height: 100%;
+  cursor: pointer;
+}
+
+.eye-btn:hover {
+  filter: brightness(1.2);
+}
+
+.password-wrapper .eye-btn {
+  margin-top: 0 !important;
+}
+
 .auth-link {
   @apply mt-2 text-center text-xs tracking-wider cursor-pointer transition-all;
   color: rgba(201, 169, 110, 0.65);

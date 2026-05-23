@@ -2,13 +2,15 @@ import { Component, effect, inject, signal } from '@angular/core';
 import { AuthService } from '../../../core/services/auth/auth-service';
 import { Router } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { LucideAngularModule } from 'lucide-angular';
+import { IconsService } from '../../../core/services/icons/icons-service';
 
 type AuthMode = 'login' | 'signup';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, LucideAngularModule],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
@@ -16,7 +18,8 @@ export class Login {
   authService = inject(AuthService);
   private router = inject(Router);
   private fb = inject(FormBuilder);
-
+  private iconsService = inject(IconsService);
+  icons = this.iconsService.icons;
   // --- Animation and UI Signals ---
   unlocking = signal(false);
   turning = signal(false);
@@ -30,6 +33,9 @@ export class Login {
 
   private shaking = signal(false);
   isShaking = this.shaking.asReadonly();
+
+  showPassword = signal(false);
+  showConfirmPassword = signal(false);
 
   authForm = this.fb.nonNullable.group({
     username: ['', [Validators.required]],
@@ -142,10 +148,9 @@ export class Login {
         this.error.set('Username or Email already exists.');
         this.shake();
       }
-
     } catch (err) {
-        this.error.set('Could not connect to the authentication server.');
-        this.shake();
+      this.error.set('Could not connect to the authentication server.');
+      this.shake();
     }
   }
 
@@ -186,5 +191,13 @@ export class Login {
   private shake() {
     this.shaking.set(true);
     setTimeout(() => this.shaking.set(false), 400);
+  }
+
+  togglePasswordVisibility() {
+    this.showPassword.update((v) => !v);
+  }
+
+  toggleConfirmPasswordVisibility() {
+    this.showConfirmPassword.update((v) => !v);
   }
 }
