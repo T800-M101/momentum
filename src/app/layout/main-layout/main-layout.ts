@@ -5,12 +5,13 @@ import { Topbar } from '../topbar/topbar';
 import { MobileNav } from "../mobile-nav/mobile-nav";
 import { JournalService } from '../../core/services/journal/journal-service';
 import { Toastr } from '../../shared/toastr/toastr';
+import { LoadingOverlay } from '../../shared/loading-overlay/loading-overlay';
 
 
 @Component({
   selector: 'app-main-layout',
   standalone: true,
-  imports: [ RouterOutlet, Sidebar, Topbar, MobileNav, Toastr],
+  imports: [ RouterOutlet, Sidebar, Topbar, MobileNav, Toastr, LoadingOverlay],
   templateUrl: './main-layout.html',
   styleUrl: './main-layout.css',
 })
