@@ -180,4 +180,10 @@ export class AuthService {
     this._currentUser.set(null);
     localStorage.removeItem('journal_user_profile');
   }
+
+  async resetPassword(email: string): Promise<any> {
+  return firstValueFrom(
+    this.http.post(`${this.API_URL}/auth/forgot-password`, { email })
+  );
+}
 }

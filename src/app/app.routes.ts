@@ -2,7 +2,6 @@ import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth/auth-guard';
 import { pendingChangesGuard } from './core/guards/pending-changes/pending-changes-guard';
 
-
 export const routes: Routes = [
   {
     path: 'login',
@@ -38,12 +37,17 @@ export const routes: Routes = [
       {
         path: 'new',
         loadComponent: () => import('./features/new-entry/new-entry').then((c) => c.NewEntry),
-        canDeactivate: [pendingChangesGuard]
+        canDeactivate: [pendingChangesGuard],
       },
 
       {
         path: 'settings',
         loadComponent: () => import('./features/settings/settings').then((c) => c.Settings),
+      },
+      {
+        path: 'forgot-password',
+        loadComponent: () =>
+          import('./features/auth/forgot-password/forgot-password').then((m) => m.ForgotPassword),
       },
     ],
   },

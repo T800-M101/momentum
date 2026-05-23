@@ -147,6 +147,38 @@
   margin-top: 0 !important;
 }
 
+/* FORGOT PASSWORD */
+.forgot-link {
+  @apply text-xs transition-colors duration-200 cursor-pointer;
+
+  color: var(--journal-gold-placeholder);
+  margin-top: -0.35rem;
+  text-align: center;
+}
+
+.forgot-link:hover {
+  color: var(--journal-gold);
+}
+
+.forgot-container {
+  @apply flex flex-col gap-3 w-full;
+}
+
+.forgot-container input {
+  @apply px-4 py-3 rounded-xl border outline-none text-sm w-full;
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--journal-gold-muted);
+  color: var(--journal-text);
+}
+
+.forgot-container button {
+  @apply w-full mt-2 p-3 rounded-xl font-bold uppercase tracking-widest text-[12px] cursor-pointer;
+  background: var(--journal-gold);
+  color: var(--journal-cover-bg);
+}
+
+
+/* AUTH */
 .auth-link {
   @apply mt-2 text-center text-xs tracking-wider cursor-pointer transition-all;
   color: rgba(201, 169, 110, 0.65);

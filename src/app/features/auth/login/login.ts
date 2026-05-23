@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
 import { IconsService } from '../../../core/services/icons/icons-service';
+import { ToastrService } from '../../../core/services/toastr/toastr-service';
 
 type AuthMode = 'login' | 'signup';
 
@@ -19,6 +20,7 @@ export class Login {
   private router = inject(Router);
   private fb = inject(FormBuilder);
   private iconsService = inject(IconsService);
+  private toastr = inject(ToastrService);
   icons = this.iconsService.icons;
   // --- Animation and UI Signals ---
   unlocking = signal(false);
@@ -27,7 +29,7 @@ export class Login {
   username = signal('');
   password = signal('');
   error = signal('');
-  mode = signal<AuthMode>('login');
+  mode = signal<'login' | 'signup' | 'forgot'>('login');
   email = signal('');
   confirmPassword = signal('');
 
@@ -56,7 +58,25 @@ export class Login {
     });
   }
 
-  submit() {
+  async submit() {
+    if (this.authForm.invalid) {
+      this.authForm.markAllAsTouched();
+      this.shaking.set(true);
+      return;
+    }
+
+    if (this.mode() === 'forgot') {
+      const email = this.authForm.controls.email.value!;
+
+      try {
+        await this.authService.resetPassword(email);
+        this.toastr.show('We have sent a link to your email to reset your password', 'success');
+      } catch (err) {
+        this.toastr.show('Something went wrong. Please try again later.', 'error');
+      }
+      return;
+    }
+
     if (this.mode() === 'login') {
       const usernameValid = this.authForm.controls.username.valid;
       const passwordValid = this.authForm.controls.password.valid;
@@ -77,28 +97,33 @@ export class Login {
     }
   }
 
-  // Toggle between login and signup
-  toggleMode() {
-    this.mode.set(this.mode() === 'login' ? 'signup' : 'login');
+  toggleMode(targetMode: 'login' | 'signup' | 'forgot' = 'login') {
+    if (targetMode === 'forgot') {
+      this.mode.set('forgot');
+    } else {
+      this.mode.set(this.mode() === 'login' ? 'signup' : 'login');
+    }
+
     this.error.set('');
     this.shaking.set(false);
 
-    // Dynamically update validation rules instead of adding/removing controls
     const emailCtrl = this.authForm.controls.email;
     const confirmCtrl = this.authForm.controls.confirmPassword;
 
     if (this.mode() === 'signup') {
       emailCtrl.setValidators([Validators.required, Validators.email]);
       confirmCtrl.setValidators([Validators.required]);
+    } else if (this.mode() === 'forgot') {
+      emailCtrl.setValidators([Validators.required, Validators.email]);
+      confirmCtrl.clearValidators();
+      confirmCtrl.setValue('');
     } else {
-      // Clear validations and values so login succeeds without fields present
       emailCtrl.clearValidators();
       confirmCtrl.clearValidators();
       emailCtrl.setValue('');
       confirmCtrl.setValue('');
     }
 
-    // Force Angular to recalculate validation status across the form
     emailCtrl.updateValueAndValidity();
     confirmCtrl.updateValueAndValidity();
   }
@@ -162,7 +187,6 @@ export class Login {
       return;
     }
 
-    // Secondary signup-specific check if fields are present in current abstract control mapping
     if (this.mode() === 'signup') {
       const emailCtrl = this.authForm.get('email');
       if (emailCtrl?.errors?.['required']) {
@@ -199,5 +223,13 @@ export class Login {
 
   toggleConfirmPasswordVisibility() {
     this.showConfirmPassword.update((v) => !v);
+  }
+
+  forgotPassword() {
+    this.mode.set('forgot');
+  }
+
+  goBackToLogin() {
+    this.mode.set('login');
   }
 }
