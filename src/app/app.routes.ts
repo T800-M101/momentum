@@ -43,12 +43,7 @@ export const routes: Routes = [
       {
         path: 'settings',
         loadComponent: () => import('./features/settings/settings').then((c) => c.Settings),
-      },
-      {
-        path: 'forgot-password',
-        loadComponent: () =>
-          import('./features/auth/forgot-password/forgot-password').then((m) => m.ForgotPassword),
-      },
+      }
     ],
   },
 
