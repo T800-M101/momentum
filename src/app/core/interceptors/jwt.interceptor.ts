@@ -4,15 +4,14 @@ import { AuthService } from '../services/auth/auth-service';
 
 export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
-  const token = authService.accessToken(); 
+  const token = authService.accessToken();
 
-  if (token) {
-    req = req.clone({
-      setHeaders: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-  }
+  const authReq = req.clone({
+    withCredentials: true,          // ← sends RT cookie on every request
+    setHeaders: token
+      ? { Authorization: `Bearer ${token}` }
+      : {},
+  });
 
-  return next(req);
+  return next(authReq);
 };
