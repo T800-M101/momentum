@@ -56,23 +56,42 @@ export class AuthService {
   /**
    * Send credentials to the API and store the received tokens.
    */
-  async login(identifier: string, password: string): Promise<boolean> {
-    try {
-      const response = await firstValueFrom(
-        this.http.post<AuthResponse>(
-          `${this.API_URL}/auth/login`,
-          { identifier, password }
-        ),
-      );
+  // async login(identifier: string, password: string): Promise<boolean> {
+  //   try {
+  //     const response = await firstValueFrom(
+  //       this.http.post<AuthResponse>(
+  //         `${this.API_URL}/auth/login`,
+  //         { identifier, password }
+  //       ),
+  //     );
 
-      this.handleAuthSuccess(response);
-      this.journalService.loadStats();
-      return true;
-    } catch (error) {
-      console.error('Login failed:', error);
-      return false;
-    }
+  //     this.handleAuthSuccess(response);
+  //     this.journalService.loadStats();
+  //     return true;
+  //   } catch (error) {
+  //     console.error('Login failed:', error);
+  //     return false;
+  //   }
+  // }
+  async login(identifier: string, password: string): Promise<any> {
+  console.log("URL de destino:", `${this.API_URL}/auth/login`); // ¿Aparece esto?
+
+  // Vamos a usar un fetch nativo de JS en lugar de Angular HttpClient
+  // para descartar problemas de interceptores
+  try {
+    const response = await fetch(`${this.API_URL}/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ identifier, password })
+    });
+
+    const data = await response.json();
+    console.log("Respuesta desde el servidor:", data); // ¡Esto debe aparecer!
+    return data;
+  } catch (err) {
+    console.error("Error crítico en fetch:", err);
   }
+}
 
   /**
    * Register a new user and log in automatically.
@@ -123,7 +142,7 @@ export class AuthService {
   } catch (error) {
     console.error('Refresh token failed, user must login:', error);
     this.clearSessionData();
-    return true; 
+    return true;
   }
 }
 
