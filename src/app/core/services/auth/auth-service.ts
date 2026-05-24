@@ -136,8 +136,8 @@ export class AuthService {
 
     setTimeout(() => {
       this._closing.set(false);
-      this.router.navigate(['/login']);
     }, 800);
+    this.router.navigate(['/login']);
   }
 
   private handleAuthSuccess(response: AuthResponse) {
