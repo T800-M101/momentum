@@ -19,6 +19,5 @@ export class Popover {
 
   onLogout() {
     this.authService.logout();
-    this.journalService.loadStats();
   }
 }

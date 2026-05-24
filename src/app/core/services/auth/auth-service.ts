@@ -112,14 +112,32 @@ export class AuthService {
    */
   logout() {
     this._closing.set(true);
-    this.http.post(`${this.API_URL}/auth/logout`, {}).subscribe({
-      next: () => console.log('Backend notificado'),
-      error: (err) => console.warn('Logout error', err),
-    });
 
+    // Capture token before clearing
+    const token = this._accessToken();
+
+    // Send logout with the token still valid
+    this.http
+      .post(
+        `${this.API_URL}/auth/logout`,
+        {},
+        {
+          withCredentials: true,
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        },
+      )
+      .subscribe({
+        next: () => console.log('Remote session invalidated.'),
+        error: (err) => console.error('Remote logout failed:', err),
+      });
+
+    // Clear locally immediately after firing the request
     this.clearSessionData();
-    this._closing.set(false);
-    this.router.navigate(['/login']);
+
+    setTimeout(() => {
+      this._closing.set(false);
+      this.router.navigate(['/login']);
+    }, 800);
   }
 
   private handleAuthSuccess(response: AuthResponse) {

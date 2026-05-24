@@ -1,7 +1,9 @@
 <div class="journal">
 
-  @if(!open()) {
-  <div class="cover" [class.turning]="turning()" [class.falling]="authService.closing()">
+  <div class="cover"
+       [class.turning]="turning()"
+       [class.falling]="authService.closing()"
+       [class.cover--hidden]="open()">
 
     <div class="cover-header">
       <span class="cover-title">My Journal</span>
@@ -15,95 +17,130 @@
       </div>
     </div>
 
-    <div class="login-box" [class.shake]="isShaking()" [formGroup]="authForm" autocomplete="off">
+    <div class="login-box"
+         [class.shake]="isShaking()"
+         [formGroup]="authForm"
+         autocomplete="off">
 
+      <!-- Email — signup only -->
       @if(mode() === 'signup') {
-      <input
-        type="email"
-        placeholder="Email"
-        formControlName="email"
-        autocomplete="off"
-        (keydown)="onKeydown($event)" />
+          <input
+            type="email"
+            placeholder="Email"
+            formControlName="email"
+            autocomplete="off"
+            (keydown)="onKeydown($event)"
+          />
+          @if(authForm.controls.email.invalid && authForm.controls.email.touched) {
+            <span class="field-error">Enter a valid email.</span>
+          }
+
       }
 
-      <input
-        type="text"
-        placeholder="Username / email"
-        formControlName="username"
-        autocomplete="off"
-        (keydown)="onKeydown($event)" />
-
-      <div class="password-wrapper">
+      <!-- Username -->
         <input
-          [type]="showPassword() ? 'text' : 'password'" placeholder="Password"
-          formControlName="password"
-          autocomplete="new-password"
-          (keydown)="onKeydown($event)" />
+          type="text"
+          placeholder="Username / email"
+          formControlName="username"
+          autocomplete="off"
+          (keydown)="onKeydown($event)"
+        />
+        @if(authForm.controls.username.invalid && authForm.controls.username.touched) {
+          <span class="field-error">Username is required.</span>
+        }
 
-        <button
-          type="button"
-          class="eye-btn"
-          (click)="togglePasswordVisibility()">
-          <lucide-icon
-            [img]="showPassword() ? icons.EyeOff : icons.Eye" class="h-4 w-4"
-            [style.color]="'var(--journal-gold)'">
-          </lucide-icon>
-        </button>
-      </div>
 
-      @if(mode() === 'signup') {
+      <!-- Password -->
+      <div class="field-wrapper">
         <div class="password-wrapper">
           <input
-            [type]="showConfirmPassword() ? 'text' : 'password'"
-            placeholder="Confirm Password"
-            formControlName="confirmPassword"
+            [type]="showPassword() ? 'text' : 'password'"
+            placeholder="Password"
+            formControlName="password"
             autocomplete="new-password"
-            (keydown)="onKeydown($event)" />
-
+            (keydown)="onKeydown($event)"
+          />
           <button
-            type="button" class="eye-btn"
-            (click)="toggleConfirmPasswordVisibility()">
+            type="button"
+            class="eye-btn"
+            (click)="togglePasswordVisibility()"
+            [style.color]="'var(--journal-gold)'">
             <lucide-icon
-              [img]="showConfirmPassword() ? icons.EyeOff : icons.Eye" class="h-4 w-4"
-              [style.color]="'var(--journal-gold)'">
+              [img]="showPassword() ? icons.EyeOff : icons.Eye"
+              class="h-4 w-4">
             </lucide-icon>
           </button>
         </div>
+        @if(authForm.controls.password.invalid && authForm.controls.password.touched) {
+          <span class="field-error">Password is required.</span>
+        }
+      </div>
+
+      <!-- Confirm Password — signup only -->
+      @if(mode() === 'signup') {
+        <div class="field-wrapper">
+          <div class="password-wrapper">
+            <input
+              [type]="showConfirmPassword() ? 'text' : 'password'"
+              placeholder="Confirm Password"
+              formControlName="confirmPassword"
+              autocomplete="new-password"
+              (keydown)="onKeydown($event)"
+            />
+            <button type="button" class="eye-btn" (click)="toggleConfirmPasswordVisibility()">
+              <lucide-icon
+                [img]="showConfirmPassword() ? icons.EyeOff : icons.Eye"
+                class="h-4 w-4"
+                [style.color]="'var(--journal-gold)'">
+              </lucide-icon>
+            </button>
+          </div>
+          @if(authForm.controls.confirmPassword.invalid && authForm.controls.confirmPassword.touched) {
+            <span class="field-error">Please confirm your password.</span>
+          }
+        </div>
       }
 
-      <button (click)="submit()">
-        @if(mode() === 'login') {
-          Unlock
-        } @else {
-           Create Account
-        }
+      <!-- Submit -->
+      <button type="button" (click)="submit()">
+        {{ mode() === 'login' ? 'Unlock' : 'Create Account' }}
       </button>
 
-      <span class="auth-link" type="button" (click)="toggleMode()">
+      <!-- Mode toggle -->
+      <span class="auth-link" (click)="toggleMode(mode() === 'login' ? 'signup' : 'login')">
         @if(mode() === 'login') {
           New here? <span>Sign up</span>
         } @else {
           Already have an account? <span>Sign in</span>
         }
       </span>
-      <span class="forgot-link">Forgot your password?</span>
-      
+
+      <!-- Forgot password — login only -->
+
+        <span class="forgot-link" (click)="forgotPassword()"> Forgot your password? </span>
+
+
+      <!-- Server error -->
       @if(error()) {
-      <p class="error">{{ error() }}</p>
+        <p class="error">{{ error() }}</p>
       }
+
     </div>
 
   </div>
-  }
 
-  <div class="app-page" [class.visible]="open()" [class.falling]="authService.closing()">
+  <!-- Inner page -->
+  <div class="app-page"
+       [class.visible]="open()"
+       [class.falling]="authService.closing()">
     <span class="app-page-title">My Journal</span>
     <div class="app-page-lines">
       @for (line of [90, 70, 85, 60, 75]; track $index) {
-      <div class="app-page-line"></div>
-      <div class="app-page-entry" [style.width.%]="line"></div>
+        <div class="app-page-line"></div>
+        <div class="app-page-entry" [style.width.%]="line"></div>
       }
       <div class="app-page-line"></div>
     </div>
   </div>
+
 </div>

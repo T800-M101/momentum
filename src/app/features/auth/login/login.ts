@@ -23,133 +23,102 @@ export class Login {
   private toastr = inject(ToastrService);
   icons = this.iconsService.icons;
 
-  // --- Animation and UI Signals ---
+  // ── Animation signals ──────────────────────────────
   unlocking = signal(false);
-  turning = signal(false);
-  open = signal(false);
-  username = signal('');
-  password = signal('');
-  error = signal('');
-  mode = signal<'login' | 'signup' | 'forgot'>('login');
-  email = signal('');
-  confirmPassword = signal('');
+  turning   = signal(false);
+  open      = signal(false);
+  error     = signal('');
+  mode      = signal<AuthMode>('login');
 
   private shaking = signal(false);
   isShaking = this.shaking.asReadonly();
 
-  showPassword = signal(false);
+  showPassword        = signal(false);
   showConfirmPassword = signal(false);
 
+  // ── Form ───────────────────────────────────────────
   authForm = this.fb.nonNullable.group({
-    username: ['', [Validators.required]],
-    password: ['', [Validators.required]],
-    email: ['', [Validators.required, Validators.email]],
-    confirmPassword: ['', [Validators.required]],
+    username:        ['', [Validators.required]],
+    password:        ['', [Validators.required]],
+    email:           [''],
+    confirmPassword: [''],
   });
 
   constructor() {
     effect(() => {
       if (this.authService.closing()) {
         this.unlocking.set(true);
-
-        setTimeout(() => {
-          this.unlocking.set(false);
-        }, 700);
+        setTimeout(() => this.unlocking.set(false), 700);
       }
     });
   }
 
- async submit() {
-  if (this.mode() === 'forgot') {
-    const emailCtrl = this.authForm.controls.email;
+  // ── Submit ─────────────────────────────────────────
+  async submit() {
+    this.error.set('');
 
-    if (emailCtrl.invalid) {
-      emailCtrl.markAsTouched();
-      this.shaking.set(true);
-      return;
+    if (this.mode() === 'login') {
+      const { username, password } = this.authForm.controls;
+      username.markAsTouched();
+      password.markAsTouched();
+
+      if (username.invalid || password.invalid) {
+        this.handleFormErrors();
+        this.shake();
+        return;
+      }
+
+      await this.tryLogin();
+
+    } else {
+      this.authForm.markAllAsTouched();
+
+      if (this.authForm.invalid) {
+        this.handleFormErrors();
+        this.shake();
+        return;
+      }
+
+      await this.trySignup();
+    }
+  }
+
+  // ── Mode toggle ────────────────────────────────────
+  toggleMode(targetMode: AuthMode) {
+    this.mode.set(targetMode);
+    this.error.set('');
+    this.shaking.set(false);
+    this.authForm.reset();
+
+    const { email, username, password, confirmPassword } = this.authForm.controls;
+
+    if (targetMode === 'signup') {
+      email.setValidators([Validators.required, Validators.email]);
+      confirmPassword.setValidators([Validators.required]);
+    } else {
+      email.clearValidators();
+      confirmPassword.clearValidators();
     }
 
-    try {
-      const response = await this.authService.resetPassword(emailCtrl.value);
-      console.log('Respuesta del servicio:', response);
-      this.toastr.show('We have sent a link to your email to reset your password', 'success');
-    } catch (err) {
-      console.error('ERROR EN FRONTEND:', err);
-      this.toastr.show('Something went wrong. Please try again later.', 'error');
-    }
-    return;
+    username.setValidators([Validators.required]);
+    password.setValidators([Validators.required]);
+
+    email.updateValueAndValidity();
+    username.updateValueAndValidity();
+    password.updateValueAndValidity();
+    confirmPassword.updateValueAndValidity();
   }
 
-  if (this.authForm.invalid) {
-    this.authForm.markAllAsTouched();
-    this.shaking.set(true);
-    return;
+  goBackToLogin() {
+    this.toggleMode('login');
   }
 
-  if (this.mode() === 'login') {
-    this.tryLogin();
-  } else {
-    this.trySignup();
-  }
-}
-
- toggleMode(targetMode: 'login' | 'signup' | 'forgot' = 'login') {
-  if (targetMode === 'forgot') {
-    this.mode.set('forgot');
-  } else {
-    this.mode.set(this.mode() === 'login' ? 'signup' : 'login');
-  }
-
-  this.error.set('');
-  this.shaking.set(false);
-
-  const emailCtrl = this.authForm.controls.email;
-  const userCtrl = this.authForm.controls.username;
-  const passCtrl = this.authForm.controls.password;
-  const confirmCtrl = this.authForm.controls.confirmPassword;
-
-  if (this.mode() === 'signup') {
-    emailCtrl.setValidators([Validators.required, Validators.email]);
-    userCtrl.setValidators([Validators.required]);
-    passCtrl.setValidators([Validators.required]);
-    confirmCtrl.setValidators([Validators.required]);
-  }
-  else if (this.mode() === 'forgot') {
-    emailCtrl.setValidators([Validators.required, Validators.email]);
-
-    this.authForm.controls.username.clearValidators();
-    this.authForm.controls.password.clearValidators();
-    this.authForm.controls.confirmPassword.clearValidators();
-
-    this.authForm.patchValue({
-      username: '',
-      password: '',
-      confirmPassword: ''
-    });
-
-    this.authForm.controls.username.updateValueAndValidity();
-    this.authForm.controls.password.updateValueAndValidity();
-    this.authForm.controls.confirmPassword.updateValueAndValidity();
-    emailCtrl.updateValueAndValidity();
-  }
-  else {
-    emailCtrl.clearValidators();
-    userCtrl.setValidators([Validators.required]);
-    passCtrl.setValidators([Validators.required]);
-    confirmCtrl.clearValidators();
-  }
-
-  emailCtrl.updateValueAndValidity();
-  userCtrl.updateValueAndValidity();
-  passCtrl.updateValueAndValidity();
-  confirmCtrl.updateValueAndValidity();
-}
-
+  // ── Login ──────────────────────────────────────────
   private async tryLogin() {
     const { username, password } = this.authForm.getRawValue();
 
     try {
-      const ok = await this.authService.login(username!, password!);
+      const ok = await this.authService.login(username, password);
 
       if (ok) {
         this.executeSuccessAnimation();
@@ -158,10 +127,13 @@ export class Login {
         this.shake();
       }
     } catch (err) {
-      console.error('🚨 ERROR CRÍTICO EN EL COMPONENTE:', err);
+      console.error('Login error:', err);
+      this.error.set('Could not connect to the server.');
+      this.shake();
     }
   }
 
+  // ── Signup ─────────────────────────────────────────
   private async trySignup() {
     const { username, password, email, confirmPassword } = this.authForm.getRawValue();
 
@@ -171,7 +143,7 @@ export class Login {
       return;
     }
 
-    if (password && password.length < 6) {
+    if (password.length < 6) {
       this.error.set('Password must be at least 6 characters.');
       this.shake();
       return;
@@ -179,41 +151,60 @@ export class Login {
 
     try {
       const result = await this.authService.signup({
-        username: username!,
-        password: password!,
-        email: email!,
+        username,
+        password,
+        email,
       });
 
       if (result.success) {
         this.executeSuccessAnimation();
       } else {
-        this.error.set('Username or Email already exists.');
+        this.error.set(result.message ?? 'Username or Email already exists.');
         this.shake();
       }
     } catch (err) {
+      console.error('Signup error:', err);
       this.error.set('Could not connect to the authentication server.');
       this.shake();
     }
   }
 
+  // ── Form error messages ────────────────────────────
   private handleFormErrors() {
-    const controls = this.authForm.controls;
+    const { username, password, email, confirmPassword } = this.authForm.controls;
 
-    if (controls.username.errors?.['required'] || controls.password.errors?.['required']) {
-      this.error.set('Please fill in both Username and Password.');
+    if (username.errors?.['required'] && password.errors?.['required']) {
+      this.error.set('Please fill in all required fields.');
+      return;
+    }
+
+    if (username.errors?.['required']) {
+      this.error.set('Username is required.');
+      return;
+    }
+
+    if (password.errors?.['required']) {
+      this.error.set('Password is required.');
       return;
     }
 
     if (this.mode() === 'signup') {
-      const emailCtrl = this.authForm.get('email');
-      if (emailCtrl?.errors?.['required']) {
-        this.error.set('Please fill in all fields.');
-      } else if (emailCtrl?.errors?.['email']) {
+      if (email.errors?.['required']) {
+        this.error.set('Email is required.');
+        return;
+      }
+      if (email.errors?.['email']) {
         this.error.set('Please enter a valid email address.');
+        return;
+      }
+      if (confirmPassword.errors?.['required']) {
+        this.error.set('Please confirm your password.');
+        return;
       }
     }
   }
 
+  // ── Animation ──────────────────────────────────────
   private executeSuccessAnimation() {
     this.error.set('');
     this.unlocking.set(true);
@@ -223,10 +214,9 @@ export class Login {
     setTimeout(() => this.router.navigate(['/']), 2200);
   }
 
+  // ── Helpers ────────────────────────────────────────
   onKeydown(event: KeyboardEvent) {
-    if (event.key === 'Enter') {
-      this.submit();
-    }
+    if (event.key === 'Enter') this.submit();
   }
 
   private shake() {
@@ -235,18 +225,14 @@ export class Login {
   }
 
   togglePasswordVisibility() {
-    this.showPassword.update((v) => !v);
+    this.showPassword.update(v => !v);
   }
 
   toggleConfirmPasswordVisibility() {
-    this.showConfirmPassword.update((v) => !v);
+    this.showConfirmPassword.update(v => !v);
   }
 
-  forgotPassword() {
-    this.mode.set('forgot');
-  }
-
-  goBackToLogin() {
-    this.mode.set('login');
+  forgotPassword():void {
+    
   }
 }
