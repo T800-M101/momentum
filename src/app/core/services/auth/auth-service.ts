@@ -103,29 +103,29 @@ export class AuthService {
    * Attempt to retrieve a new Access Token using the stored Refresh Token.
    */
   async refreshSession(): Promise<boolean> {
-    const refreshToken = localStorage.getItem('journal_refresh_token');
-    if (!refreshToken) return false;
+  const refreshToken = localStorage.getItem('journal_refresh_token');
+  if (!refreshToken) return true;
 
-    try {
-      const response = await firstValueFrom(
-        this.http.post<{ access_token: string, refresh_token: string }>(
-          `${this.API_URL}/auth/refresh`,
-          { refreshToken }
-        ),
-      );
+  try {
+    const response = await firstValueFrom(
+      this.http.post<{ access_token: string, refresh_token: string }>(
+        `${this.API_URL}/auth/refresh`,
+        { refreshToken }
+      ),
+    );
 
-      if (response && response.access_token) {
-        this._accessToken.set(response.access_token);
-        localStorage.setItem('journal_token', response.access_token);
-        localStorage.setItem('journal_refresh_token', response.refresh_token);
-        return true;
-      }
-      return false;
-    } catch {
-      this.clearSessionData();
-      return false;
+    if (response && response.access_token) {
+      this._accessToken.set(response.access_token);
+      localStorage.setItem('journal_token', response.access_token);
+      localStorage.setItem('journal_refresh_token', response.refresh_token);
     }
+    return true;
+  } catch (error) {
+    console.error('Refresh token failed, user must login:', error);
+    this.clearSessionData();
+    return true; 
   }
+}
 
   /**
    * Notify the backend to invalidate the session and clear local data.
