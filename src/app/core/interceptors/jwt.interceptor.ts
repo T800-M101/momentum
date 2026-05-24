@@ -7,7 +7,6 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
   const token = authService.accessToken();
 
   const authReq = req.clone({
-    withCredentials: true,          // ← sends RT cookie on every request
     setHeaders: token
       ? { Authorization: `Bearer ${token}` }
       : {},

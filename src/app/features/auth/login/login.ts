@@ -20,6 +20,7 @@ export class Login {
   private fb = inject(FormBuilder);
   private iconsService = inject(IconsService);
   icons = this.iconsService.icons;
+
   // --- Animation and UI Signals ---
   unlocking = signal(false);
   turning = signal(false);

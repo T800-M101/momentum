@@ -18,36 +18,19 @@
     <div class="login-box" [class.shake]="isShaking()" [formGroup]="authForm" autocomplete="off">
 
       @if(mode() === 'signup') {
-      <input
-        type="email"
-        placeholder="Email"
-        formControlName="email"
-        autocomplete="off"
+      <input type="email" placeholder="Email" formControlName="email" autocomplete="off"
         (keydown)="onKeydown($event)" />
       }
 
-      <input
-        type="text"
-        placeholder="Username / email"
-        formControlName="username"
-        autocomplete="off"
+      <input type="text" placeholder="Username / email" formControlName="username" autocomplete="off"
         (keydown)="onKeydown($event)" />
 
       <div class="password-wrapper">
-        <input
-          [type]="showPassword() ? 'text' : 'password'"
-          placeholder="Password"
-          formControlName="password"
-          autocomplete="new-password"
-          (keydown)="onKeydown($event)" />
+        <input [type]="showPassword() ? 'text' : 'password'" placeholder="Password" formControlName="password"
+          autocomplete="new-password" (keydown)="onKeydown($event)" />
 
-        <button
-          type="button"
-          class="eye-btn"
-          (click)="togglePasswordVisibility()">
-          <lucide-icon [
-            img]="showPassword() ? icons.EyeOff : icons.Eye"
-            class="h-4 w-4"
+        <button type="button" class="eye-btn" (click)="togglePasswordVisibility()">
+          <lucide-icon [img]="showPassword() ? icons.EyeOff : icons.Eye" class="h-4 w-4"
             [style.color]="'var(--journal-gold)'">
           </lucide-icon>
         </button>
@@ -55,20 +38,12 @@
 
       @if(mode() === 'signup') {
       <div class="password-wrapper">
-        <input
-          [type]="showConfirmPassword() ? 'text' : 'password'"
-          placeholder="Confirm Password"
-          formControlName="confirmPassword"
-          autocomplete="new-password"
-          (keydown)="onKeydown($event)" />
+        <input [type]="showConfirmPassword() ? 'text' : 'password'" placeholder="Confirm Password"
+          formControlName="confirmPassword" autocomplete="new-password" (keydown)="onKeydown($event)" />
 
-        <button
-          type="button"
-          class="eye-btn"
-          (click)="toggleConfirmPasswordVisibility()">
-          <lucide-icon
-            [img]="showConfirmPassword() ? icons.EyeOff : icons.Eye"
-            class="h-4 w-4" [style.color]="'var(--journal-gold)'">
+        <button type="button" class="eye-btn" (click)="toggleConfirmPasswordVisibility()">
+          <lucide-icon [img]="showConfirmPassword() ? icons.EyeOff : icons.Eye" class="h-4 w-4"
+            [style.color]="'var(--journal-gold)'">
           </lucide-icon>
         </button>
       </div>
