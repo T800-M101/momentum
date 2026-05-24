@@ -144,13 +144,14 @@ export class JournalService {
    * Consume the NestJS analytics endpoint and update user statistics
    */
   async loadStats(): Promise<void> {
-    try {
-      const data = await firstValueFrom(
-        this.http.get<UserStats>(this.statsUrl, { withCredentials: true }),
-      );
-      this.statsSignal.set(data);
-    } catch (error) {
-      console.error('Failed to load user metrics from server:', error);
-    }
+  try {
+    const data = await firstValueFrom(
+      this.http.get<UserStats>(this.statsUrl)
+    );
+    this.statsSignal.set(data);
+  } catch (error) {
+    console.error('Failed to load user metrics from server:', error);
+
   }
+}
 }

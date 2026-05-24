@@ -17,14 +17,13 @@ export class AuthService {
 
   private readonly API_URL = environment.apiUrl;
 
-  // --- State Management con Signals ---
+  // --- State Management with Signals ---
   private _closing = signal(false);
   closing = this._closing.asReadonly();
 
   private _currentUser = signal<User | null>(null);
   currentUser = this._currentUser.asReadonly();
 
-  // The Access Token now lives protected here in RAM (Immune to XSS)
   private _accessToken = signal<string | null>(null);
   accessToken = this._accessToken.asReadonly();
 
@@ -33,15 +32,12 @@ export class AuthService {
   constructor() {
     effect(() => {
       const user = this.currentUser();
-
       if (user) {
         this.journalService.loadStats();
       }
     });
 
-    // The public profile (username/email) can persist in localStorage to avoid losing its visual state.
     const savedUser = localStorage.getItem('journal_user_profile');
-
     if (savedUser && savedUser !== 'undefined' && savedUser !== 'null') {
       try {
         this._currentUser.set(JSON.parse(savedUser));
@@ -55,27 +51,17 @@ export class AuthService {
     if (savedToken) {
       this._accessToken.set(savedToken);
     }
-
-    window.addEventListener('storage', (event) => {
-      if (event.key === null || event.key === 'journal_user_profile') {
-        if (!event.newValue) {
-          this.clearSessionData();
-          this.router.navigate(['/login']);
-        }
-      }
-    });
   }
 
   /**
-   * Send credentials to the NestJS API using secure cookies.
+   * Send credentials to the API and store the received tokens.
    */
   async login(identifier: string, password: string): Promise<boolean> {
     try {
       const response = await firstValueFrom(
         this.http.post<AuthResponse>(
           `${this.API_URL}/auth/login`,
-          { identifier, password },
-          { withCredentials: true }, // CRITICAL: Allows receiving and storing the HttpOnly Cookie
+          { identifier, password }
         ),
       );
 
@@ -83,13 +69,13 @@ export class AuthService {
       this.journalService.loadStats();
       return true;
     } catch (error) {
-      console.error('Authentication login transaction failed:', error);
+      console.error('Login failed:', error);
       return false;
     }
   }
 
   /**
-   * Register a new account and log in automatically.
+   * Register a new user and log in automatically.
    */
   async signup(
     userData: User & { password: string },
@@ -98,16 +84,14 @@ export class AuthService {
       const response = await firstValueFrom(
         this.http.post<AuthResponse>(
           `${this.API_URL}/auth/signup`,
-          userData,
-          { withCredentials: true }, // CRITICAL: Allows receiving the HttpOnly Cookie
+          userData
         ),
       );
 
       this.handleAuthSuccess(response);
       return { success: true };
     } catch (error: any) {
-      console.error('Registration signup transaction failed:', error);
-      const serverMessage = error.error?.message || 'An unexpected error occurred.';
+      const serverMessage = error.error?.message || 'Error occurred';
       return {
         success: false,
         message: Array.isArray(serverMessage) ? serverMessage[0] : serverMessage,
@@ -116,27 +100,24 @@ export class AuthService {
   }
 
   /**
-   * Try to silently retrieve the Access Token using the Rt Cookie.
-   * It is invoked automatically when the user presses F5.
+   * Attempt to retrieve a new Access Token using the stored Refresh Token.
    */
   async refreshSession(): Promise<boolean> {
-    if (this._accessToken()) return true;
+    const refreshToken = localStorage.getItem('journal_refresh_token');
+    if (!refreshToken) return false;
 
     try {
       const response = await firstValueFrom(
-        this.http.post<{ access_token: string }>(
+        this.http.post<{ access_token: string, refresh_token: string }>(
           `${this.API_URL}/auth/refresh`,
-          {},
-          { withCredentials: true },
+          { refreshToken }
         ),
       );
 
       if (response && response.access_token) {
         this._accessToken.set(response.access_token);
-        const savedUser = localStorage.getItem('journal_user_profile');
-        if (savedUser) {
-          this._currentUser.set(JSON.parse(savedUser));
-        }
+        localStorage.setItem('journal_token', response.access_token);
+        localStorage.setItem('journal_refresh_token', response.refresh_token);
         return true;
       }
       return false;
@@ -147,28 +128,26 @@ export class AuthService {
   }
 
   /**
-   * Destroy the local credentials and notify the backend.
+   * Notify the backend to invalidate the session and clear local data.
    */
   logout() {
     this._closing.set(true);
 
-    // We notify NestJS using normal headers (the interceptor will inject the Access Token)
-    this.http.post(`${this.API_URL}/auth/logout`, {}, { withCredentials: true }).subscribe({
-      next: () => console.log('Session cleared on remote database.'),
-      error: (err) => console.error('Failed to invalidate Refresh token remotely', err),
+    this.http.post(`${this.API_URL}/auth/logout`, {}).subscribe({
+      next: () => console.log('Session cleared on database.'),
+      error: (err) => console.error('Logout error', err),
     });
 
     setTimeout(() => {
       this.clearSessionData();
       this._closing.set(false);
+      this.router.navigate(['/login']);
     }, 800);
-    this.router.navigate(['/login']);
   }
-
-  // --- Internal Helping Routines ---
 
   private handleAuthSuccess(response: AuthResponse) {
     localStorage.setItem('journal_token', response.access_token);
+    localStorage.setItem('journal_refresh_token', response.refresh_token);
     localStorage.setItem('journal_user_profile', JSON.stringify(response.user));
 
     this._accessToken.set(response.access_token);
@@ -178,6 +157,8 @@ export class AuthService {
   private clearSessionData() {
     this._accessToken.set(null);
     this._currentUser.set(null);
+    localStorage.removeItem('journal_token');
+    localStorage.removeItem('journal_refresh_token');
     localStorage.removeItem('journal_user_profile');
   }
 

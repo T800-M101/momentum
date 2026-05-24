@@ -22,6 +22,7 @@ export class Login {
   private iconsService = inject(IconsService);
   private toastr = inject(ToastrService);
   icons = this.iconsService.icons;
+
   // --- Animation and UI Signals ---
   unlocking = signal(false);
   turning = signal(false);
