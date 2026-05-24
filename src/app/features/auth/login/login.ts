@@ -116,9 +116,11 @@ export class Login {
   // ── Login ──────────────────────────────────────────
   private async tryLogin() {
     const { username, password } = this.authForm.getRawValue();
+    const cleanUsername = username.trim();
+    const cleanPassword = password.trim();
 
     try {
-      const ok = await this.authService.login(username, password);
+      const ok = await this.authService.login(cleanUsername, cleanPassword);
 
       if (ok) {
         this.executeSuccessAnimation();
@@ -233,6 +235,6 @@ export class Login {
   }
 
   forgotPassword():void {
-    
+
   }
 }

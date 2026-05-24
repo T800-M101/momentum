@@ -29,6 +29,9 @@
             placeholder="Email"
             formControlName="email"
             autocomplete="off"
+            autocorrect="off"
+            autocapitalize="none"
+            spellcheck="false"
             (keydown)="onKeydown($event)"
           />
           @if(authForm.controls.email.invalid && authForm.controls.email.touched) {
@@ -43,6 +46,9 @@
           placeholder="Username / email"
           formControlName="username"
           autocomplete="off"
+          autocorrect="off"
+          autocapitalize="none"
+          spellcheck="false"
           (keydown)="onKeydown($event)"
         />
         @if(authForm.controls.username.invalid && authForm.controls.username.touched) {
@@ -58,6 +64,9 @@
             placeholder="Password"
             formControlName="password"
             autocomplete="new-password"
+            autocorrect="off"
+            autocapitalize="none"
+            spellcheck="false"
             (keydown)="onKeydown($event)"
           />
           <button
