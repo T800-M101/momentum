@@ -37,61 +37,35 @@ export class AuthService {
       }
     });
 
-    const savedUser = localStorage.getItem('journal_user_profile');
-    if (savedUser && savedUser !== 'undefined' && savedUser !== 'null') {
-      try {
-        this._currentUser.set(JSON.parse(savedUser));
-      } catch (e) {
-        console.error('Error parsing user', e);
-        localStorage.removeItem('journal_user_profile');
-      }
-    }
+    try {
+      const savedUser = localStorage.getItem('journal_user_profile');
+      if (savedUser) this._currentUser.set(JSON.parse(savedUser));
 
-    const savedToken = localStorage.getItem('journal_token');
-    if (savedToken) {
-      this._accessToken.set(savedToken);
+      const savedToken = localStorage.getItem('journal_token');
+      if (savedToken) this._accessToken.set(savedToken);
+    } catch (e) {
+      console.error('Error inicializando estado:', e);
+      this.clearSessionData();
     }
   }
 
   /**
    * Send credentials to the API and store the received tokens.
    */
-  // async login(identifier: string, password: string): Promise<boolean> {
-  //   try {
-  //     const response = await firstValueFrom(
-  //       this.http.post<AuthResponse>(
-  //         `${this.API_URL}/auth/login`,
-  //         { identifier, password }
-  //       ),
-  //     );
+  async login(identifier: string, password: string): Promise<boolean> {
+    try {
+      const response = await firstValueFrom(
+        this.http.post<AuthResponse>(`${this.API_URL}/auth/login`, { identifier, password }),
+      );
 
-  //     this.handleAuthSuccess(response);
-  //     this.journalService.loadStats();
-  //     return true;
-  //   } catch (error) {
-  //     console.error('Login failed:', error);
-  //     return false;
-  //   }
-  // }
-  async login(identifier: string, password: string): Promise<any> {
-  console.log("URL de destino:", `${this.API_URL}/auth/login`); // ¿Aparece esto?
-
-  // Vamos a usar un fetch nativo de JS en lugar de Angular HttpClient
-  // para descartar problemas de interceptores
-  try {
-    const response = await fetch(`${this.API_URL}/auth/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ identifier, password })
-    });
-
-    const data = await response.json();
-    console.log("Respuesta desde el servidor:", data); // ¡Esto debe aparecer!
-    return data;
-  } catch (err) {
-    console.error("Error crítico en fetch:", err);
+      this.handleAuthSuccess(response);
+      this.journalService.loadStats();
+      return true;
+    } catch (error) {
+      console.error('Login failed:', error);
+      return false;
+    }
   }
-}
 
   /**
    * Register a new user and log in automatically.
@@ -101,10 +75,7 @@ export class AuthService {
   ): Promise<{ success: boolean; message?: string }> {
     try {
       const response = await firstValueFrom(
-        this.http.post<AuthResponse>(
-          `${this.API_URL}/auth/signup`,
-          userData
-        ),
+        this.http.post<AuthResponse>(`${this.API_URL}/auth/signup`, userData),
       );
 
       this.handleAuthSuccess(response);
@@ -122,46 +93,57 @@ export class AuthService {
    * Attempt to retrieve a new Access Token using the stored Refresh Token.
    */
   async refreshSession(): Promise<boolean> {
-  const refreshToken = localStorage.getItem('journal_refresh_token');
-  if (!refreshToken) return true;
+    const refreshToken = localStorage.getItem('journal_refresh_token');
+    if (!refreshToken) return true;
 
-  try {
-    const response = await firstValueFrom(
-      this.http.post<{ access_token: string, refresh_token: string }>(
-        `${this.API_URL}/auth/refresh`,
-        { refreshToken }
-      ),
-    );
+    try {
+      const response = await firstValueFrom(
+        this.http.post<{ access_token: string; refresh_token: string }>(
+          `${this.API_URL}/auth/refresh`,
+          { refreshToken },
+        ),
+      );
 
-    if (response && response.access_token) {
-      this._accessToken.set(response.access_token);
-      localStorage.setItem('journal_token', response.access_token);
-      localStorage.setItem('journal_refresh_token', response.refresh_token);
+      if (response && response.access_token) {
+        this._accessToken.set(response.access_token);
+        localStorage.setItem('journal_token', response.access_token);
+        localStorage.setItem('journal_refresh_token', response.refresh_token);
+      }
+      return true;
+    } catch (error) {
+      console.error('Refresh token failed, user must login:', error);
+      this.clearSessionData();
+      return true;
     }
-    return true;
-  } catch (error) {
-    console.error('Refresh token failed, user must login:', error);
-    this.clearSessionData();
-    return true;
   }
-}
 
   /**
    * Notify the backend to invalidate the session and clear local data.
    */
+  // logout() {
+  //   this._closing.set(true);
+
+  //   this.http.post(`${this.API_URL}/auth/logout`, {}).subscribe({
+  //     next: () => console.log('Session cleared on database.'),
+  //     error: (err) => console.error('Logout error', err),
+  //   });
+
+  //   setTimeout(() => {
+  //     this.clearSessionData();
+  //     this._closing.set(false);
+  //     this.router.navigate(['/login']);
+  //   }, 800);
+  // }
   logout() {
     this._closing.set(true);
-
     this.http.post(`${this.API_URL}/auth/logout`, {}).subscribe({
-      next: () => console.log('Session cleared on database.'),
-      error: (err) => console.error('Logout error', err),
+      next: () => console.log('Backend notificado'),
+      error: (err) => console.warn('Logout error', err),
     });
 
-    setTimeout(() => {
-      this.clearSessionData();
-      this._closing.set(false);
-      this.router.navigate(['/login']);
-    }, 800);
+    this.clearSessionData();
+    this._closing.set(false);
+    this.router.navigate(['/login']);
   }
 
   private handleAuthSuccess(response: AuthResponse) {
@@ -173,12 +155,19 @@ export class AuthService {
     this._currentUser.set(response.user);
   }
 
-  private clearSessionData() {
+  // private clearSessionData() {
+  //   this._accessToken.set(null);
+  //   this._currentUser.set(null);
+  //   localStorage.removeItem('journal_token');
+  //   localStorage.removeItem('journal_refresh_token');
+  //   localStorage.removeItem('journal_user_profile');
+  // }
+
+  clearSessionData() {
+    localStorage.clear();
     this._accessToken.set(null);
     this._currentUser.set(null);
-    localStorage.removeItem('journal_token');
-    localStorage.removeItem('journal_refresh_token');
-    localStorage.removeItem('journal_user_profile');
+    console.log('Sesión limpiada completamente');
   }
 
   async resetPassword(email: string): Promise<any> {
